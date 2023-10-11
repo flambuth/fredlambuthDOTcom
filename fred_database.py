@@ -9,6 +9,15 @@ def make_question_marks(cols):
     marks = marks[:-1]
     return marks
 
+def make_insert_query(table, col_names):
+    '''
+    Creates a SQLite3 friendly insert statement that can fit on any of the 4 tables stashed as an object variable.
+    '''
+    marks = make_question_marks(col_names)
+    col_string = ','.join(col_names)
+    insert_sql = f'''INSERT INTO {table} ({col_string}) VALUES ({marks}) '''
+    return insert_sql
+
 class DB_Table:
     '''
     This is an abstract table that should not be ever instatiated. I mean you could, but
@@ -25,7 +34,7 @@ class DB_Table:
         'artist_catalog',
         'track_catalog']
     table_schemas = {
-            'artist_catalog_NEW' : [
+            'artist_catalog' : [
                 ('art_id', 'TEXT'),
                 ('art_name', 'TEXT'),
                 ('followers', 'INTEGER'),
@@ -46,6 +55,7 @@ class DB_Table:
                 ('song_name', 'TEXT'),
                 ('first_appearance', 'datetime'),
                 ('img_url', 'TEXT'),],
+
 
             'daily_tracks' :[('position', 'INTEGER'),
                 ('art_id', 'TEXT'),

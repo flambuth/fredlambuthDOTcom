@@ -37,3 +37,12 @@ class Spotify_Request:
         #needs master_genre and first_appearance
         new_artist_values = [art_id, art_name, followers, genre, first_release, img_url]
         return new_artist_values
+'''
+auth_headers = {
+    "client_id": SPOTIPY_CLIENT_ID,
+    "response_type": "code",
+    "redirect_uri": "http://localhost:7777/callback",
+    "scope": "user-library-read"
+}
+'''  
+#webbrowser.open("https://accounts.spotify.com/authorize?" + urlencode(auth_headers))
