@@ -118,3 +118,29 @@ def new_genre_encounter(self, new_genre):
     else:
         return 'Other'
     
+#################
+def find_genre_gram(
+    genre_gram,
+    dictionary = master_genre_grams
+):
+    for key, value in dictionary.items():
+        if genre_gram in value:
+            return key
+    return None
+
+def inspect_genre(target_genre):
+    grams = target_genre.split(' ')
+
+    masters = [find_genre_gram(gram) for gram in grams]
+    good_masters= [i for i in masters if i != None]
+    genre_len = len(good_masters)
+    
+    if not good_masters:
+        return None
+    
+    if genre_len == 3:
+        return good_masters[2]
+    elif genre_len == 2:
+        return good_masters[1]
+    else:
+        return good_masters[0]
