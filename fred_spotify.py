@@ -27,6 +27,52 @@ def song_id_to_track_cat(song_id):
     }
     return track_dict
 
+##########
+#Artist Catalog
+
+def three_genre_fields(genre_list):
+
+    result = genre_list[:3]  # Get the first three elements
+    while len(result) < 3:
+        result.append(None)  
+    return result
+
+def three_img_fields(img_list):
+
+    result = img_list[:3]  
+    result = [i['url'][24:] for i in result]
+
+    # Fill with None if needed
+    while len(result) < 3:
+        result.append(None) 
+    return result
+
+def spot_json_to_list(spot_art_record):
+
+    genres = three_genre_fields(spot_art_record['genres'])
+    images = three_img_fields(spot_art_record['images'])
+
+    art_data = [
+        spot_art_record['id'],
+        spot_art_record['name'],
+        spot_art_record['followers']['total'],
+        genres[0],
+        genres[1],
+        genres[2],
+        images[0],
+        images[1],
+        images[2],
+    ]
+    return art_data
+
+def art_id_to_art_cat(artist_id):
+    spot_art_record = sp.artist(artist_id)
+    art_cat_record = spot_json_to_list(spot_art_record)
+    return art_cat_record
+
+###
+
+
 #Daily Stuff
 def today_top_chart(table_name):
     '''

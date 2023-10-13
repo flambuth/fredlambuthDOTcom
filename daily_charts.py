@@ -7,8 +7,10 @@ from fred_spotify import today_top_chart, JSON_to_listofDicts
 class Daily_Table:
     def __init__(self, table):
         self.table = table
-        self.latest_date = query_db(f'select MAX(date) from {self.table}')[0][0]
         self.col_names = [i[0] for i in  table_schemas[self.table]]
+        self.latest_date = query_db(f'select MAX(date) from {self.table}')[0][0]
+        self.latest_chart = query_db(f'select * from {self.table} limit 10')
+        self.latest_art_ids = [i[2] for i in self.latest_chart]
         #self.all_charts = query_db(f'select * from {table};')
         #self.art_names_in_charts = sorted(list(set([i[3] for i in self.all_charts])))
 
