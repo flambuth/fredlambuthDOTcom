@@ -1,5 +1,6 @@
 import sqlite3
 import json
+from genres import inspect_tri_genres
 #from daily_charts import make_insert_query
 
 database = 'fredlambuth.db'
@@ -25,6 +26,7 @@ table_schemas = {
             ('img_url_sml', 'TEXT NULL'),
             ('master_genre', 'TEXT NULL'),
             ('app_record_date', 'datetime'),],
+
         'track_catalog' : [
             ('art_name', 'TEXT'),
             ('album_id', 'TEXT'),
@@ -178,6 +180,7 @@ class Data_Definition:
 
     def insert_new_arts(self):
         '''
+        OCT10 was the API query date!
         Grabs the newly formated art cat entries made from art_ids found in teh old database
         Inserts these into the artist_catalog table of the new database.
         '''
@@ -250,7 +253,10 @@ def three_img_fields(img_list):
     return result
 
 def spot_json_to_list(spot_art_record):
-
+    '''
+    Given a JSON result from a request to the 'artist' Spotipy API endpoint,
+    returns a list of values that match the schema for artist_catalog
+    '''
     genres = three_genre_fields(spot_art_record['genres'])
     images = three_img_fields(spot_art_record['images'])
 
@@ -272,8 +278,9 @@ def harvest_migration_json(json_file):
     with open(json_file) as holder:
         big_mig_data = json.load(holder)
         big_mig_parts_list = [spot_json_to_list(i) for i in big_mig_data]
-        blank_master_genre = [sublist + [None] for sublist in big_mig_parts_list]
-        ready_for_db = [sublist + ['2023-10-10'] for sublist in blank_master_genre]
+        master_genre = [sublist + [inspect_tri_genres(sublist[3:6])] for sublist in big_mig_parts_list]
+        #2023-10-10 was the date the Spotify API records were requested
+        ready_for_db = [sublist + ['2023-10-10'] for sublist in master_genre]
     return ready_for_db
 #########################
 '''

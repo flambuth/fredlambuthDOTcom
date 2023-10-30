@@ -1,16 +1,16 @@
 import json
 import os
-import nltk
+from collections import Counter
 
 master_genre_grams = {
     'electronic' : ['electronic','house','techno','dub','chill','bass','beat','beats', 'breakbeat', 'electro-industrial','moog','rave','electronica','trance'
     ,'electro', 'clubbing', 'edm', 'club', 'ethnotronica','dnb','dubstep', 'downtempo','vaporwave'
     ,'aussietronica','jungle', 'uk_garage', 'breaks', 'lo-fi', 'idm','bassline','breakcore','indietronica','hi-nrg'],
     
-    'pop' : ['pop','dance', 'future', 'idol', 'wave', 'synth', 'glithcore','synthpop', 'anime score','electropop','chiptune', 'post-bop', 'darksynth','disco','post-disco','neo-synthpop','hard bop',
+    'pop' : ['pop','dance', 'future', 'idol', 'wave', 'synth', 'glithcore','synthpop', 'anime score','electropop','chiptune', 'post-bop', 'urbano', 'darksynth','disco','post-disco','neo-synthpop','hard bop',
     'bmore','romantic','nederpop','grimewave','glitch','nerdcore','sovietwave'],
     
-    'country' : ['country','bakersfield','tejano', 'rockabilly', 'stomp and holler', 'grass'],
+    'country' : ['country','bakersfield','tejano', 'rockabilly', 'stomp and holler', 'grass','nashville'],
     
     'funk' : ['hip','hop','hip hop', 'hip-hop','r&b','rap', 'funk', 'afrofuturism', 'bounce', 'afrobeat', 'brostep','footwork','souldies',
     'bboy','turntabilism','reggae','soul', 'groove','crunk','trap','motown'],
@@ -19,11 +19,11 @@ master_genre_grams = {
     
     'indie' : ['indie','emo', 'bubblegrunge','psychedelic','ectofolk','alternative','gaze','spacegrunge'] ,
     
-    'rock' : ['rock','metal', 'garage', 'invasion', 'surf', 'grunge', 'aggrotech','grindcore','industrial','gothabilly','americana','rock-and-roll','mod', 'rocksteady','proto-metal'],
+    'rock' : ['rock','metal', 'garage', 'invasion', 'surf', 'grunge', 'aggrotech','grindcore','industrial','gothabilly','americana','rock-and-roll','mod', 'rocksteady','proto-metal','neo-psychedelic'],
     
-    'old' : ['adult','bossa', 'classical', 'jazz', 'salsa', 'folk', 'vintage', 'early', 'chicha', 'standards', 'doo-wop','composition','norteno','operetta','nortena'
+    'old' : ['adult','bossa', 'classical', 'jazz', 'salsa', 'folk', 'vintage', 'early', 'chicha', 'standards', 'doo-wop','composition','norteno','operetta','nortena', 'roots',
     'exotica', 'blues','bebop', 'organ', 'bolero', 'tradicional', 'listening','mambo','swing','orchestra', 'era','2-step'
-    'grupera','chanson', 'boogaloo','bachata','ballroom', 'cubano','mexicano','cumbia','amazonica']
+    'grupera','chanson', 'boogaloo','bachata','ballroom', 'cubano','mexicano','cumbia','amazonica','gruperas']
     }
 
 
@@ -129,6 +129,9 @@ def find_genre_gram(
     return None
 
 def inspect_genre(target_genre):
+    if target_genre == None:
+        return None
+    
     grams = target_genre.split(' ')
 
     masters = [find_genre_gram(gram) for gram in grams]
@@ -144,3 +147,20 @@ def inspect_genre(target_genre):
         return good_masters[1]
     else:
         return good_masters[0]
+    
+def inspect_tri_genres(tri_genres):
+    '''
+    Given three genres from Spotify, return the most common inspect_genre result. 
+    Defaults to to the first index result if there is no count higher than 1 for each genre result
+    '''
+    if tri_genres.count(None) == 3:
+        return None
+
+    test_count = Counter(list(map(inspect_genre, tri_genres)))
+
+    if test_count[None] == 3:
+        return None
+
+    if test_count.most_common()[0][0] == None:
+        return test_count.most_common()[1][0]
+    return test_count.most_common()[0][0]
