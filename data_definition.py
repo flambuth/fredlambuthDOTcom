@@ -282,6 +282,9 @@ def harvest_migration_json(json_file):
         #2023-10-10 was the date the Spotify API records were requested
         ready_for_db = [sublist + ['2023-10-10'] for sublist in master_genre]
     return ready_for_db
+
+if __name__ == '__main__':
+    Data_Definition().initialize()
 #########################
 '''
 def insert_new_arts():
