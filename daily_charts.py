@@ -49,3 +49,16 @@ class Daily_Table:
         dict_today = JSON_to_listofDicts(json_today, self.table)
         listo_for_db = [list(i.values()) for i in dict_today]
         self.insert_new_daily(listo_for_db)
+
+def update_tables_daily():
+   
+   #avengers!
+    table1 = Daily_Table('daily_tracks')
+    table2 = Daily_Table('daily_artists')
+
+    #assemble!
+    table1.update_daily_table()
+    table2.update_daily_table()
+
+if __name__ == '__main__':
+    update_tables_daily()
