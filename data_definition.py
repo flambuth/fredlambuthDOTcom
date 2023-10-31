@@ -18,7 +18,7 @@ table_schemas = {
             ('art_id', 'TEXT'),
             ('art_name', 'TEXT'),
             ('followers', 'INTEGER'),
-            ('genre1', 'TEXT NULL'),
+            ('genre', 'TEXT NULL'),
             ('genre2', 'TEXT NULL'),
             ('genre3', 'TEXT NULL'),
             ('img_url', 'TEXT NULL'),
@@ -217,10 +217,10 @@ class Data_Definition:
 
     def initialize(self):
         '''
-        Incorporates all the prior functions into one to:
+        Encapsulates all the preceding functions into one:
             -create sqlite3 db file
-            -create 4 tables based on schema in self.____
-            -copies data from spotify.db into newly created db
+            -creates source tables by copying from the old sqlite DB
+            -creates the art_cat and track_cat table, from a migration file
         '''
         self.create_all_tables()
         tables = ['daily_tracks', 'daily_artists', 'recently_played']
