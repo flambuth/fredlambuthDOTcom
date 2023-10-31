@@ -62,4 +62,4 @@ class Recently_Played:
             conn.close()
 
 if __name__ == '__main__':
-    Recently_Played.write_current_track_to_db()
+    Recently_Played().write_current_track_to_db()
