@@ -66,6 +66,9 @@ def spot_json_to_list(spot_art_record):
     return art_data
 
 def art_id_to_art_cat(artist_id):
+    '''
+    Calls spotify API for artist info. Then processes the JSON result into a list fitting the art_cat schema.
+    '''
     spot_art_record = sp.artist(artist_id)
     art_cat_record = spot_json_to_list(spot_art_record)
     return art_cat_record
