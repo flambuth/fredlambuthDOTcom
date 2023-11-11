@@ -55,9 +55,12 @@ class Artist_Catalog:
         '''
         Checks ALL of the daily chart history for both chart types
         '''
+        count_basie = '3mATHi0690pFOIG0VhalBL'
         art_ids_in_tracks = [i[0] for i in query_db("select distinct art_id from daily_tracks")]
         art_ids_in_arts = [i[0] for i in query_db("select distinct art_id from daily_artists")]
         all_possible_ids = list(set(art_ids_in_tracks + art_ids_in_arts))
+        if count_basie in all_possible_ids:
+            all_possible_ids.remove(count_basie)
         return [i for i in all_possible_ids if i not in self.art_ids]
 
 
