@@ -75,14 +75,16 @@ def make_insert_query(table, col_names):
     insert_sql = f'''INSERT INTO {table} ({col_string}) VALUES ({marks}) '''
     return insert_sql
 
-def query_db(query):
+def query_db(
+        query,
+        db=database):
     '''
     Returns a set of .fetchall() restults from the db
 
     YOU NEED TO MIGRATE BEFORE THIS CAN WORK! (july 16,2022)
     '''
     try:
-        conn = sqlite3.connect(database)
+        conn = sqlite3.connect(db)
         cursor = conn.cursor()
         cursor.execute(query)
         results = cursor.fetchall()
@@ -94,11 +96,31 @@ def query_db(query):
         if (conn):
             conn.close()
 
+def harvest_migration_json(json_file):
 
+    with open(json_file) as holder:
+        big_mig_data = json.load(holder)
+        big_mig_parts_list = [spot_json_to_list(i) for i in big_mig_data]
+        master_genre = [sublist + [inspect_tri_genres(sublist[3:6])] for sublist in big_mig_parts_list]
+        #2023-10-10 was the date the Spotify API records were requested
+        ready_for_db = [sublist + ['2023-10-10'] for sublist in master_genre]
+    return ready_for_db
+
+def retrofit_old_art_cat_record(test_old):
+    '''
+    Accepts a list-type record from the old art_cat table
+    Returns one that fits the new schema with Nulls imputed for the missing extra genres and img_urls
+    '''
+    first_chunk = list(test_old[1:5])
+    app_record_date = test_old[6]
+    old_img = test_old[7][24:]
+    old_master_genre = test_old[-1]
+    new_record = first_chunk + [None, None] + [old_img] + [None, None] + [old_master_genre] + [app_record_date]
+    return new_record
 
 class Data_Definition:
     def __init__(self):
-        self.woah = 'this whole time I should have been using class variables'
+        self.db = database
 
     def make_create_query(self, table_name):
         '''
@@ -215,6 +237,26 @@ class Data_Definition:
         cursor.close()
         conn.close()
 
+    def migrate_old_records(self):
+        table = 'artist_catalog'
+        col_names = [i[0] for i in  table_schemas[table]]
+        query = make_insert_query(table, col_names)
+        sqliteConnection = sqlite3.connect(self.db)
+        cursor = sqliteConnection.cursor()
+        
+        old_query = 'select * from artist_catalog;'
+        old_records = query_db(old_query, 'my_spotipy.db')
+        ready_for_db = list(map(retrofit_old_art_cat_record, old_records))
+        now_ready = [i for i in ready_for_db if i[-1] < '2023-10-10']
+        
+        #executemany takes a lists of lists, not the usualy dictionary of lists
+        cursor.executemany(query, now_ready)
+
+        sqliteConnection.commit()
+        cursor.close()
+        sqliteConnection.close()
+        print('old art_cat records have been inserted')
+
     def initialize(self):
         '''
         Encapsulates all the preceding functions into one:
@@ -223,12 +265,13 @@ class Data_Definition:
             -creates the art_cat and track_cat table, from a migration file
         '''
         self.create_all_tables()
-        tables = ['daily_tracks', 'daily_artists', 'recently_played']
+        tables = ['daily_tracks', 'daily_artists', 'recently_played',]
         for i in tables:
             self.insert_from_old_db(i)
             print(f'created {i}')
         self.insert_new_arts()
         self.insert_track_cats()
+        self.migrate_old_records()
         print('Database is ready to go!')
 
 
@@ -273,32 +316,9 @@ def spot_json_to_list(spot_art_record):
     ]
     return art_data
 
-def harvest_migration_json(json_file):
 
-    with open(json_file) as holder:
-        big_mig_data = json.load(holder)
-        big_mig_parts_list = [spot_json_to_list(i) for i in big_mig_data]
-        master_genre = [sublist + [inspect_tri_genres(sublist[3:6])] for sublist in big_mig_parts_list]
-        #2023-10-10 was the date the Spotify API records were requested
-        ready_for_db = [sublist + ['2023-10-10'] for sublist in master_genre]
-    return ready_for_db
+
+##################################
 
 if __name__ == '__main__':
     Data_Definition().initialize()
-#########################
-'''
-def insert_new_arts():
-
-    ready_for_db = harvest_migration_json('big_migration.json')
-    new_insert_query = make_insert_query(
-        'artist_catalog',
-        [i[0] for i in obj.table_schemas['artist_catalog']]
-    )
-    conn = sqlite3.connect('fredlambuth.db')
-    cursor = conn.cursor()
-    conn.commit()
-    cursor.close()
-    conn.close()
-'''
-#with open('new_stuff.json') as json_file:
-#    new_art_cat_data = json.load(json_file)
