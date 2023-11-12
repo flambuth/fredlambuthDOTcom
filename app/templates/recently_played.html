@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<style>
+    /* Style for the card container */
+    .side_three {
+  height: 100vh;
+  width: 30%;
+  position: fixed;
+  z-index: 1;
+  top: 0;
+  left: 0;
+  background-color: #ad6868;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  margin-top: 75px; /* Add top margin */
+}
+
+.side_three a {
+  color: white;
+  padding: 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color on hover */
+.side_three a:hover {
+  background-color: #ddd;
+  color: rgb(143, 126, 126);
+}
+
+.content {
+  margin-left: 35%;
+  padding-left: 20px;
+}
+
+</style>
+
+<title>Recently Played</title>
+</head>
+<body>
+
+<div class="side_three">
+    <div class="container"> 
+    {% for track in last_three %}
+    <div class="rp_card">
+        <span class="label">{{ track.song_name }}</span> 
+        <div class="hex">
+            <a href="{{ track.song_link }}">
+                <div class="hex-background">
+                    <img src="{{ track.image }}">
+                </div>
+            </a>
+        </div>
+        <div class="container"> 
+            by:
+            <span class='label'>{{ track.art_name }}</span>
+        </div>
+    </div>
+    {% endfor %}
+    </div>
+</div>
+
+<div class="content">
+    <h2>H2 Level Headline</h2>
+    <p>I'll come up with something to put here.</p>
+</div>
+
+</body>
+</html>
+
+{% endblock %}

@@ -7,11 +7,11 @@ Base = declarative_base()
 class daily_tracks(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     position = db.Column(db.Integer)
-    art_id = db.Column(db.String(23))
-    #art_id = db.Column(
-    #    db.String(23),
-    #    db.ForeignKey('artist_catalog.id'),
-    #    nullable=False)
+    #art_id = db.Column(db.String(23))
+    art_id = db.Column(
+        db.String(23),
+        db.ForeignKey('artist_catalog.id'),
+        nullable=False)
     art_name = db.Column(db.String(150))
     album_name = db.Column(db.String(150))
     song_id = db.Column(db.String(23))
