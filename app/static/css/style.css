@@ -1,0 +1,56 @@
+.hex {
+    display: block;
+    margin: 0 auto;
+    position: relative;
+    width: 213px;
+    height: 185px; /* width * 0.866 */
+    background: #238a6b;
+    box-sizing: border-box;
+    -webkit-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+    -moz-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+  }
+
+  .hex-background {
+    position: absolute;
+    top: 2px; /* equal to border thickness */
+    left: 2px; /* equal to border thickness */
+    width: 213px; /* container height - (border thickness * 2) */
+    height: 185px; /* container height - (border thickness * 2) */
+    -webkit-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+    -moz-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+  }
+
+  .hex img {
+    position: absolute;
+    width: 100%; 
+    height: 100%; 
+    object-fit: cover;
+    -webkit-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+    -moz-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
+  }
+
+  .rp_card-container {
+    display: flex;
+    justify-content: space-between;
+    /* Add any additional styling you want for the container */
+}
+
+/* Style for each card */
+.rp_card {
+    /* Add shadows to create the "card" effect */
+    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+    transition: 0.3s;
+    width: 100%; /* Adjust width based on your design and spacing preferences */
+    box-sizing: border-box;
+    margin-right: 16px; /* Add margin between cards */
+}
+
+/* On mouse-over, add a deeper shadow */
+.rp_card:hover {
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
+}
+
+/* Add some padding inside the card container */
+.rp_card_container {
+    padding: 2px 16px;
+}
