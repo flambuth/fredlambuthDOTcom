@@ -27,10 +27,10 @@ def recent_stuff():
         #'traffic_count' : str(len(rps_since_last_daily))
     }
 
-    return render_template('recently_played.html', **context)
+    return render_template('spotify/recently_played.html', **context)
 
-@bp.route('/daily')
-def daily_stuff():
+@bp.route('/daily/tracks')
+def daily_tracks_stuff():
     latest_daily_date = daily_tracks.query.order_by(daily_tracks.id.desc()).first().date
 
     tracks = daily_tracks.query.filter(
@@ -40,16 +40,34 @@ def daily_stuff():
             artist_catalog.genre,
             artist_catalog.genre2, 
             artist_catalog.master_genre, 
-            artist_catalog.img_url_mid)
+            artist_catalog.img_url_sml)
 
-    latest_tracks = daily_tracks.query.filter(daily_tracks.date == latest_daily_date).all()
-    latest_arts = daily_artists.query.filter(daily_artists.date == latest_daily_date).all()
 
     context = {
         'latest_date' : latest_daily_date,
         'tracks' : tracks,
-        'arts' : latest_arts
-
     }
 
-    return render_template('latest_daily.html', **context)
+    return render_template('spotify/latest_tracks.html', **context)
+
+@bp.route('/daily/artists')
+def daily_artists_stuff():
+    latest_daily_date = daily_artists.query.order_by(daily_artists.id.desc()).first().date
+
+    arts = daily_artists.query.filter(
+        daily_artists.date == latest_daily_date
+        ).join(artist_catalog, daily_artists.art_id==artist_catalog.art_id
+        ).add_columns(
+            artist_catalog.genre,
+            artist_catalog.genre2, 
+            artist_catalog.master_genre, 
+            artist_catalog.img_url_sml)
+
+
+
+    context = {
+        'latest_date' : latest_daily_date,
+        'artists' : arts
+    }
+
+    return render_template('spotify/latest_artists.html', **context)

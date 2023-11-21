@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/sidebar.css') }}">
+<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/recently_played.css') }}">
+
+<title>Recently Played</title>
+
+{% include 'spotify/spotify_sidebar.html' %}
+
+<div class="container"> 
+    <div class="row">
+        {% for track in last_three[::-1] %}
+        <div class="col rp_card">
+            <span class="white-pill">{{ track.song_name }}</span> 
+            <div class="hex">
+                <a href="{{ track.song_link }}">
+                    <div class="hex-background">
+                        <img src="{{ track.image }}">
+                    </div>
+                </a>
+            </div>
+            <div class="container" style="display: flex; justify-content: space-between;"> 
+                by<span class='white-pill'>{{ track.art_name }}</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}
