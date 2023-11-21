@@ -3,8 +3,22 @@
 {% block content %}
 
 <style>
-    /* Style for the card container */
-    .side_three {
+  /* Style for the white pill */
+  .hex-background img {
+    max-width: 100%;
+}
+
+  .white-pill {
+    background-color: white;
+    color: #333; /* You can adjust the text color as needed */
+    padding: 5px 10px; /* Adjust padding as needed */
+    border-radius: 20px; /* Adjust border radius as needed */
+    display: inline-block; /* Ensures the pill only takes up as much width as necessary */
+    margin-bottom: 5px; /* Add margin to separate pills */
+  }
+
+
+  .side_three {
   height: 100vh;
   width: 30%;
   position: fixed;
@@ -44,9 +58,9 @@
 
 <div class="side_three">
     <div class="container"> 
-    {% for track in last_three %}
+    {% for track in last_three[::-1] %}
     <div class="rp_card">
-        <span class="label">{{ track.song_name }}</span> 
+        <span class="white-pill">{{ track.song_name }}</span> 
         <div class="hex">
             <a href="{{ track.song_link }}">
                 <div class="hex-background">
@@ -54,9 +68,8 @@
                 </div>
             </a>
         </div>
-        <div class="container"> 
-            by:
-            <span class='label'>{{ track.art_name }}</span>
+        <div class="container" style="display: flex; justify-content: space-between;"> 
+            by<span class='white-pill'>{{ track.art_name }}</span>
         </div>
     </div>
     {% endfor %}

@@ -54,3 +54,28 @@
 .rp_card_container {
     padding: 2px 16px;
 }
+
+.pop {
+  background-color: rgb(240, 148, 217);
+}
+.elec {
+  background-color: rgb(127, 243, 252);
+}
+.rock {
+  background-color: rgb(214, 75, 11);
+}
+.punk {
+  background-color: rgb(118, 247, 85);
+}
+.hop {
+  background-color: rgb(143, 111, 130);
+}
+.indie {
+  background-color: rgb(146, 95, 175);
+}
+.old {
+  background-color: rgb(189, 184, 118);
+}
+.country {
+  background-color: rgb(214, 214, 205);
+}

@@ -1,0 +1,124 @@
+{% include 'base.html' %}
+
+{% block content %}
+<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/sidebar.css') }}">
+<title>Today's Spotify Stats</title>
+<style>
+
+.container {
+    display: flex; /* Use flexbox layout */
+    margin-left: 250px;
+  }
+
+  .list-group {
+    flex-grow: 1; /* Allow the list-group to grow and take up the remaining space */
+  }
+
+.circle {
+  width: 50px; /* Adjust the size of the circle as needed */
+  height: 50px; /* Same as width for a perfect circle */
+  background: linear-gradient(to bottom, #770010, #ff6694); /* Gradient background */
+  border-radius: 50%; /* Makes it a circle */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgb(229, 255, 221); /* Set the text color inside the circle */
+  font-weight: bold; /* Optional: Make the text bold */
+  font-size: 20px; /* Optional: Set the text size */
+  border: 2px solid white;
+  position: relative; /* Add this to make positioning the pseudo-element relative to the circle */
+  overflow: hidden; /* Hide overflowing content of pseudo-element */
+}
+
+.custom-width {
+    width: 150px; /* Adjust the width as needed to match the calendar's width */
+  }
+
+.image-container {
+    /* Ensure the container expands to accommodate the image */
+    width: 100%;
+    height: 120px;
+    text-align: center; /* Optionally center the image horizontally */
+    overflow: hidden;
+    }
+
+.with-border {
+          border: 2px solid #238a6b;
+        }
+
+
+</style>
+
+<aside>
+    <p> Menu </p>
+    <a href="javascript:void(0)">
+      <i class="fa fa-user-o" aria-hidden="true"></i>
+      My drive
+    </a>
+    <a href="javascript:void(0)">
+      <i class="fa fa-laptop" aria-hidden="true"></i>
+      Computers
+    </a>
+    <a href="javascript:void(0)">
+      <i class="fa fa-clone" aria-hidden="true"></i>
+      Shared with me
+    </a>
+    <a href="javascript:void(0)">
+      <i class="fa fa-star-o" aria-hidden="true"></i>
+      Starred
+    </a>
+    <a href="javascript:void(0)">
+      <i class="fa fa-trash-o" aria-hidden="true"></i>
+      Trash
+    </a>
+</aside>
+
+<div class="container">
+
+
+
+    <div class="list-group">
+        {% for track in tracks %}
+        
+        <div class="row align-items-center">
+            <div class="col-1">
+            <div class="circle">
+                <p>{{ track[0].position }}</p>
+            </div>
+            </div>
+            
+            <div class="col-2">
+            <img src="https://i.scdn.co/image/{{ track.img_url_mid }}" title="Que culazo!" class="with-border image-container">
+            </div>
+            
+            {% if track.master_genre == 'rock' %}
+            <div class="col-4 rock">
+        {% elif track.master_genre == 'pop' %}
+            <div class="col-4 pop">
+        {% elif track.master_genre == 'electronic' %}
+            <div class="col-4 elec">
+        {% elif track.master_genre == 'punk' %}
+            <div class="col-4 punk">
+        {% elif track.master_genre == 'hip hop' %}
+            <div class="col-4 hop">
+        {% elif track.master_genre == 'indie' %}
+            <div class="col-4 indie">
+        {% elif track.master_genre == 'old' %}
+            <div class="col-4 old">
+        {% elif track.master_genre == 'country' %}
+            <div class="col-4 country">
+        {% else %}
+            <div class="col-4">
+        {% endif %}
+            <a href="https://open.spotify.com/track/{{ track[0].song_id }}" class="list-group-item list-group-item-action">
+                {{ track[0].song_name }}
+                <p>by <b>{{ track[0].art_name }}</p></b>
+            </a>
+            {{ track.genre }} {% if track.genre2 is not none %}, {{ track.genre2 }}{% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
