@@ -39,7 +39,7 @@ class recently_played(db.Model):
     song_name = db.Column(db.String(150))
     song_link = db.Column(db.String(150))
     image = db.Column(db.String(150))
-    last_played = db.Column(db.String(150))
+    last_played = db.Column(db.String(50))
     def __repr__(self):
         return f'<recently_played for "{self.last_played}">'
     
