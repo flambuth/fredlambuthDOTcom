@@ -15,15 +15,15 @@ div.row.align-items-center {
 .circle {
     width: 40px; /* Adjust the size of the circle as needed */
     height: 40px; /* Same as width for a perfect circle */
-    background: linear-gradient(to bottom, #770010, #ff6694); /* Gradient background */
+    background: linear-gradient(to bottom, #00770a, #66ffa6); /* Gradient background */
     border-radius: 50%; /* Makes it a circle */
     display: flex;
     align-items: center;
     justify-content: center;
-    color: rgb(229, 255, 221); /* Set the text color inside the circle */
+    color: wheat; /* Set the text color inside the circle */
     font-weight: bold; /* Optional: Make the text bold */
     font-size: 20px; /* Optional: Set the text size */
-    border: 2px solid white;
+    border: 2px solid wheat;
     position: relative; /* Add this to make positioning the pseudo-element relative to the circle */
     overflow: hidden; /* Hide overflowing content of pseudo-element */
   }

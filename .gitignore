@@ -20,3 +20,5 @@
 /my_spotipy/*.ipynb
 /my_spotipy/*.json
 /my_spotipy/.cache-lambuth
+*.pyc 
+__pycache__

@@ -1,3 +1,13 @@
+body {
+  background-color: #192a30;
+}
+
+div.row.align-items-center {
+  /* Add inner box shadow to the div */
+  box-shadow: inset 0px 0px 10px rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 255, 128, 0.06); /* Reduce opacity of the background color */
+}
+
 .hex {
     display: block;
     margin: 0 auto;
@@ -84,3 +94,6 @@
     background-color: #ddd;
     color: rgb(143, 126, 126);
   }
+
+
+  row

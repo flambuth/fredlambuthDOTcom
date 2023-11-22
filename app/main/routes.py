@@ -4,7 +4,7 @@ from flask import render_template
 from app.models.charts import recently_played, daily_artists ,daily_tracks
 from app.models.artist_catalog import artist_catalog
 
-from datetime import datetime, timedelta, date
+from app.main.rp_funcs import past_24_hrs_rps, scan_for_art_cat_awareness
 
 
 #YOU CANT HAVE ANYTHING OUTSIDE OF DECORATED ROUTES! Do it somewhere else and import it.
@@ -17,14 +17,20 @@ def homepage():
     return render_template('homepage.html')
 
 @bp.route('/rp')
-def recent_stuff():
+def yesterday():
     three_ago = recently_played.query.all()[-3:]
-    #rps_since_last_daily = recently_played.query.filter(db.func.date(recently_played.last_played) == latest_date_obj).all()
+    yesterday_records = past_24_hrs_rps()
+    song_count_yesterday = len(yesterday_records)
+    distinct_arts = len(list(set([i.art_name for i in yesterday_records])))
+    known, unknown = scan_for_art_cat_awareness()
 
 
     context = {
         'last_three' : three_ago,
-        #'traffic_count' : str(len(rps_since_last_daily))
+        'yesterday_song_count' : song_count_yesterday,
+        'distinct_arts' : distinct_arts,
+        'known':known,
+        'unknown':unknown,
     }
 
     return render_template('spotify/recently_played.html', **context)
