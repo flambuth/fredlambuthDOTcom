@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/sidebar.css') }}">
+<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/spotify.css') }}">
+
+<title>Recently Played</title>
+
+{% include 'spotify/spotify_sidebar.html' %}
+
+<style>
+    .outer-row {
+        background-color: #1a865d;
+        border-radius: 2%;
+        border: 2px solid #073a33;
+    }
+
+    .whitie {
+        color: aliceblue;
+    }
+
+    .row:first-child {
+display: flex;
+flex-direction: column;
+}
+</style>
+
+<br>
+<div class="container" style="padding-left: 22%;">
+    <div class="row align-items-center">
+        <h2 class="whitie">Spotify Stats from the Past 24 Hours</h2>
+        <p>A sliding 24 hour window look into what I've been listening to</p>
+    </div>
+
+    <div class="container outer-row">
+        <div class="row mt-2 mb-2">
+            <h5>Last Three Songs I Listened To:</h5>
+        </div>
+        <div class="row align-items-center mb-3" style="background-color: #0f1f19;">
+            {% for track in last_three[::-1] %}
+            <div class="col rp_card">
+                <span class="white-pill">{{ track.song_name }}</span> 
+                <div class="hex">
+                    <a href="{{ track.song_link }}">
+                        <div class="hex-background">
+                            <img src="{{ track.image }}">
+                        </div>
+                    </a>
+                </div>
+                <div class="container" style="display: flex; justify-content: space-between;"> 
+                    by<span class='white-pill'>{{ track.art_name }}</span>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    
+
+    <div class="row align-items-center">
+        <div class="col-6">
+            <h2>Songs count yesterday:</h2>
+        </div>
+        <div class="col-6">
+            <h2 style="color: aliceblue;">{{ yesterday_song_count }}</h2>
+        </div>
+    </div>
+
+    <div class="row align-items-center">
+        <div class="col-6">
+            <h2>Distinct artist count yesterday:</h2>
+        </div>
+        <div class="col-6">
+            <h2 class="whitie"">{{ distinct_arts }}</h2>
+        </div>
+    </div>
+
+    <div class="row align-items-center">
+        <div class="col-6">
+            <h2>Familiar Ones: <span class='whitie'>{{ known|length }}</span></h2>
+            <div class="grid-container">
+            {% for art_name in known %}
+                <div class="grid-item">{{ art_name }}</div>
+            {% endfor %}
+            </div>
+
+        </div>
+        <div class="col-6">
+            <h2>New Artist Names: <span class="whitie">{{ unknown|length }}</span></h2>
+            <div class="grid-container">
+                {% for art_name in unknown %}
+                    <div class="grid-item">{{ art_name }}</div>
+                {% endfor %}
+        </div>
+    </div>
+
+
+
+</div>
+
+
+{% endblock %}

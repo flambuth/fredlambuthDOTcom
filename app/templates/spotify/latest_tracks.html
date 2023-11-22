@@ -1,0 +1,69 @@
+{% include 'base.html' %}
+
+{% block content %}
+<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/sidebar.css') }}">
+<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/spotify.css') }}">
+
+<title>Today's Top Tracks</title>
+
+<style>
+    .container {
+  max-width: 59%;
+}
+</style>
+
+{% include 'spotify/spotify_sidebar.html' %}
+
+<div class="container">
+    <div class="col text-center" style="color: antiquewhite;">
+        <h2>Top 10 Tracks for {{ latest_date }}</h2>
+    </div>
+
+    <div class="list-group">
+        {% for track in tracks %}
+        
+        <div class="row align-items-center">
+            <div class="col-1">
+                <div class="circle">
+                    <p>{{ track[0].position }}</p>
+                </div>
+            </div>
+            
+            <div class="col-2">
+            <img src="https://i.scdn.co/image/{{ track.img_url_sml }}" title="Que culazo!" class="with-border image-container">
+            </div>
+            
+            {% if track.master_genre == 'rock' %}
+            <div class="col-4 rock">
+        {% elif track.master_genre == 'pop' %}
+            <div class="col-4 pop">
+        {% elif track.master_genre == 'electronic' %}
+            <div class="col-4 elec">
+        {% elif track.master_genre == 'punk' %}
+            <div class="col-4 punk">
+        {% elif track.master_genre == 'hip hop' %}
+            <div class="col-4 hop">
+        {% elif track.master_genre == 'indie' %}
+            <div class="col-4 indie">
+        {% elif track.master_genre == 'old' %}
+            <div class="col-4 old">
+        {% elif track.master_genre == 'country' %}
+            <div class="col-4 country">
+        {% else %}
+            <div class="col-4">
+        {% endif %}
+            <a href="https://open.spotify.com/track/{{ track[0].song_id }}" class="list-group-item list-group-item-action">
+                {{ track[0].song_name }}
+                <p>by <b>{{ track[0].art_name }}</p></b>
+            </a>
+            </div>
+
+            <div class="col-5 white-pill">
+                {{ track.genre }} {% if track.genre2 is not none %}, {{ track.genre2 }}{% endif %}
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
