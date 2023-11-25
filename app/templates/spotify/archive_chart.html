@@ -1,0 +1,101 @@
+{% include 'base.html' %}
+
+{% block content %}
+<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/sidebar.css') }}">
+<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/spotify.css') }}">
+
+{% include 'spotify/spotify_sidebar.html' %}
+
+<div class="container" style="max-width: 59%;">
+
+    <div class="col text-center" style="color: antiquewhite;">
+        <h2>Top 10 {{ chart_type }} for {{ date }}</h2>
+    </div>
+    
+    <div class="row justify-content-center">
+
+        <div class="col-2 text-center">
+            <a href="{{ url_for('main.tracks_prev',year=year, month=month, day=day) }}" class="btn btn-secondary">&lt</a>
+        </div>
+
+        <div class="col-2 text-center">
+            <a href="#" class="btn btn-secondary">&lt;</a>
+        </div>
+
+        <div class="col-4 text-center">
+            <h4>NAVIGATION</h4>
+        </div>
+
+        <div class="col-2 text-center">
+            <a href="#" class="btn btn-secondary">&gt;</a>
+        </div>
+
+        <div class="col-2 text-center">
+            <a href="#" class="btn btn-secondary">&gt;</a>
+        </div>
+    </div>
+
+    <div class="list-group">
+        {% for record in records %}
+        
+        <div class="row align-items-center">
+            <div class="col-1">
+                <div class="circle">
+                    <p>{{ record[0].position }}</p>
+                </div>
+            </div>
+            
+            <div class="col-2">
+            <img src="https://i.scdn.co/image/{{ record.img_url_sml }}" title="Que culazo!" class="with-border image-container">
+            </div>
+            
+            {% if record.master_genre == 'rock' %}
+            <div class="col-4 rock">
+        {% elif record.master_genre == 'pop' %}
+            <div class="col-4 pop">
+        {% elif record.master_genre == 'electronic' %}
+            <div class="col-4 elec">
+        {% elif record.master_genre == 'punk' %}
+            <div class="col-4 punk">
+        {% elif record.master_genre == 'hip hop' %}
+            <div class="col-4 hop">
+        {% elif record.master_genre == 'indie' %}
+            <div class="col-4 indie">
+        {% elif record.master_genre == 'old' %}
+            <div class="col-4 old">
+        {% elif record.master_genre == 'country' %}
+            <div class="col-4 country">
+        {% else %}
+            <div class="col-4">
+        {% endif %}
+
+        {% if chart_type == 'Tracks' %}
+            <a href="https://open.spotify.com/track/{{ record[0].song_id }}" class="list-group-item list-group-item-action">
+                {{ record[0].song_name }}
+                <p>by <b>{{ record[0].art_name }}</p></b>
+            </a>
+            </div>
+
+            <div class="col-5 white-pill">
+                {{ record.genre }} {% if record.genre2 is not none %}, {{ record.genre2 }}{% endif %}
+            </div>
+
+        {% elif chart_type == 'Artists' %}
+            <a href="https://open.spotify.com/artist/{{ record[0].art_id }}" class="list-group-item list-group-item-action">
+                <p><b>{{ record[0].art_name }}</p></b>
+            </a>
+            </div>
+
+            <div class="col-5 white-pill">
+                {{ record.genre }} {% if record.genre2 is not none %}, {{ record.genre2 }}{% endif %}
+            </div>
+
+        {% endif %}
+
+
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

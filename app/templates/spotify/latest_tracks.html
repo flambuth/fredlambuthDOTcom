@@ -15,9 +15,25 @@
 {% include 'spotify/spotify_sidebar.html' %}
 
 <div class="container">
-    <div class="col text-center" style="color: antiquewhite;">
-        <h2>Top 10 Tracks for {{ latest_date }}</h2>
+    <div class="row align-items-center">
+        <div class="col">
+          <a href="{{ url_for('main.tracks_prev', year=year, month=month_num, day=day ) }}" class="btn btn-primary" style="color: rgb(175, 255, 244);">
+            Spotify Archives
+          </a>
+        </div>
+    
+        <div class="col" style="color: antiquewhite;">
+            Top 10 Tracks for {{ latest_date }}
+        </div>
+    
+        <div class="col">
+          <a href="#" class="btn btn-primary" style="color: rgb(175, 255, 244);">
+            This Month's Top Artists
+          </a>
+        </div>
     </div>
+
+
 
     <div class="list-group">
         {% for track in tracks %}

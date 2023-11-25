@@ -26,7 +26,7 @@ flex-direction: column;
 </style>
 
 <br>
-<div class="container" style="padding-left: 22%;">
+<div class="container" style="max-width: 59%;">
     <div class="row align-items-center">
         <h2 class="whitie">Spotify Stats from the Past 24 Hours</h2>
         <p>A sliding 24 hour window look into what I've been listening to</p>
@@ -58,10 +58,10 @@ flex-direction: column;
 
     <div class="row align-items-center">
         <div class="col-6">
-            <h2>Songs count yesterday:</h2>
+            <h2>Song count yesterday:</h2>
         </div>
         <div class="col-6">
-            <h2 style="color: aliceblue;">{{ yesterday_song_count }}</h2>
+            <h2 class="white-pill" style="text-align: center;">{{ yesterday_song_count }}</h2>
         </div>
     </div>
 
@@ -69,12 +69,21 @@ flex-direction: column;
         <div class="col-6">
             <h2>Distinct artist count yesterday:</h2>
         </div>
-        <div class="col-6">
-            <h2 class="whitie"">{{ distinct_arts }}</h2>
+        <div class="col-6" style="text-align: center;">
+            <h2 class="white-pill">{{ distinct_arts }}</h2>
         </div>
     </div>
 
-    <div class="row align-items-center">
+    <div class="row align-items-center">  
+        <div class="col-6">
+            <h2>New Artist Names: <span class="whitie">{{ unknown|length }}</span></h2>
+            <div class="grid-container">
+                {% for art_name in unknown %}
+                    <div class="grid-item">{{ art_name }}</div>
+                {% endfor %}
+            </div>
+        </div>
+
         <div class="col-6">
             <h2>Familiar Ones: <span class='whitie'>{{ known|length }}</span></h2>
             <div class="grid-container">
@@ -82,18 +91,8 @@ flex-direction: column;
                 <div class="grid-item">{{ art_name }}</div>
             {% endfor %}
             </div>
-
-        </div>
-        <div class="col-6">
-            <h2>New Artist Names: <span class="whitie">{{ unknown|length }}</span></h2>
-            <div class="grid-container">
-                {% for art_name in unknown %}
-                    <div class="grid-item">{{ art_name }}</div>
-                {% endfor %}
         </div>
     </div>
-
-
 
 </div>
 
