@@ -59,43 +59,37 @@
 </head>
   <body>
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark navbar-dark-bg">
-            <a class="navbar-brand" href="#" id="homeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+
+        <nav class="navbar navbar-expand-lg navbar-dark-bg">
+            <div class="container-fluid">
+            <a class="navbar-brand" href="{{ url_for('main.homepage') }}" id="homeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <img src="{{ url_for('static', filename='favicon.ico') }}" alt="Favicon" class="navbar-favicon" title="Howdy!">
                 <span class="pill-text">FREDLAMBUTH</span>.com
             </a>
-            <div class="dropdown-menu" aria-labelledby="homeDropdown">
 
-                <a class="dropdown-item" href="fredlambuth.com">Home</a>
-                <a class="dropdown-item" href="fredlambuth.com/about_me">About Me</a>
-
-            </div>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="fredlambuth.com/dash"><i class="fas fa-chart-bar"></i>
-                            Dashboards</a>
+                        <a class="nav-link" href="{{ url_for( 'main.daily_artists_stuff' ) }}"><i class="fas fa-chart-bar"></i>
+                            Spotify Data</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="fredlambuth.com/blog"><i class="fas fa-book-open"></i>
                             Blog</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="fredlambuth.com/contact"><i class="fas fa-bullhorn"></i>
+                        <a class="nav-link" href="{{ url_for('main.contact') }}"><i class="fas fa-bullhorn"></i>
                             Contact</a>
                     </li>
+                </ul>
+            </div>
             </div>
         </nav>
+
     </header>
     <div >
         {% block content %} {% endblock %}
     </div>
-
-
 
   </body>
 </html>
