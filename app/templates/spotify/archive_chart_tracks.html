@@ -6,6 +6,8 @@
 
 {% include 'spotify/spotify_sidebar.html' %}
 
+<title>{{ chart_type}} Archives</title>
+
 <style>
     [type="date"] {
   background:#fff url(https://cdn1.iconfinder.com/data/icons/cc_mono_icon_set/blacks/16x16/calendar_2.png)  97% 50% no-repeat ;
@@ -32,29 +34,29 @@ input {
 
 <div class="container" style="max-width: 59%;">
 
-    <h1>Daily Tracks Archives</h1>
+    <h1 class="text-center">Daily Tracks Archives</h1>
 
     
     <div class="row justify-content-center">
 
         <div class="col-2 text-center">
-            <a href="{{ url_for('main.tracks_prev',year=date_back_1month.year, month=date_back_1month.strftime('%m'), day=date_back_1month.strftime('%d')) }}" class="btn btn-secondary">&lt</a>
+            <a href="{{ url_for('main.tracks_prev',year=date_back_1month.year, month=date_back_1month.strftime('%m'), day=date_back_1month.strftime('%d')) }}" class="btn btn-secondary"><<</a>
         </div>
 
         <div class="col-2 text-center">
-            <a href="{{ url_for('main.tracks_prev',year=year, month=month, day=day) }}" class="btn btn-secondary">&lt;</a>
+            <a href="{{ url_for('main.tracks_prev',year=date_back_1day.year, month=date_back_1day.strftime('%m'), day=date_back_1day.strftime('%d')) }}" class="btn btn-secondary">&lt;</a>
         </div>
 
         <div class="col-4 text-center">
-            <h4>NAVIGATION</h4>
+            <h4>{{ date_obj.isoformat() }}</h4>
         </div>
 
         <div class="col-2 text-center">
-            <a href="#" class="btn btn-secondary">&gt;</a>
+            <a href="{{ url_for('main.tracks_prev',year=date_fwd_1day.year, month=date_fwd_1day.strftime('%m'), day=date_fwd_1day.strftime('%d')) }}" class="btn btn-secondary">&gt;</a>
         </div>
 
         <div class="col-2 text-center">
-            <a href="#" class="btn btn-secondary">&gt;</a>
+            <a href="{{ url_for('main.tracks_prev',year=date_fwd_1month.year, month=date_fwd_1month.strftime('%m'), day=date_fwd_1month.strftime('%d')) }}" class="btn btn-secondary">>></a>
         </div>
     </div>
 

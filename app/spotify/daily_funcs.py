@@ -1,7 +1,7 @@
 from app.models.charts import daily_artists, daily_tracks
 from app.models.artist_catalog import artist_catalog
 
-from datetime import datetime, timedelta
+from datetime import timedelta
 
 def daily_chart_joined_art_cat(
         chart_model,
@@ -12,7 +12,7 @@ def daily_chart_joined_art_cat(
     '''
     results = chart_model.query.filter(
         chart_model.date == chart_date_obj
-        ).join(artist_catalog, chart_model.art_id==artist_catalog.art_id
+        ).outerjoin(artist_catalog, chart_model.art_id==artist_catalog.art_id
         ).add_columns(
             artist_catalog.genre,
             artist_catalog.genre2, 

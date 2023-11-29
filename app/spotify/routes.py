@@ -1,11 +1,11 @@
-from app.main import bp
+from app.spotify import bp
 #from app import db
 from flask import render_template, request
 from app.models.charts import recently_played, daily_artists ,daily_tracks
 #from app.models.artist_catalog import artist_catalog
 
-from app.main.rp_funcs import past_24_hrs_rps, scan_for_art_cat_awareness
-from app.main.daily_funcs import latest_daily_date, latest_daily_chart, archive_chart_context
+from app.spotify.rp_funcs import past_24_hrs_rps, scan_for_art_cat_awareness
+from app.spotify.daily_funcs import latest_daily_date, latest_daily_chart, archive_chart_context
 
 from datetime import datetime
 
@@ -13,13 +13,7 @@ from datetime import datetime
 #latest_daily_date = daily_tracks.query.order_by(daily_tracks.id.desc()).first().date
 #latest_date_obj = datetime.strptime(latest_daily_date, "%Y-%m-%d").date()
 
-@bp.route('/')
-def homepage():
-    return render_template('homepage.html')
 
-@bp.route('/contact')
-def contact():
-    return render_template('contact.html')
 
 @bp.route('/spotify/rp')
 @bp.route('/spotify/rp/')
@@ -43,7 +37,7 @@ def yesterday():
 
 @bp.route('/spotify/daily/tracks')
 @bp.route('/spotify/daily/tracks/')
-def daily_tracks_stuff():
+def latest_daily_tracks():
     latest_date = latest_daily_date(daily_tracks) 
     tracks = latest_daily_chart(daily_tracks)
 
@@ -59,12 +53,16 @@ def daily_tracks_stuff():
 
 @bp.route('/spotify/daily/artists')
 @bp.route('/spotify/daily/artists/')
-def daily_artists_stuff():
+def latest_daily_artists():
     latest_date = latest_daily_date(daily_artists)
     arts = latest_daily_chart(daily_artists)
+
     context = {
         'latest_date' : latest_date,
-        'artists' : arts
+        'artists' : arts,
+        'year': latest_date.year,
+        'month_num' : latest_date.month,
+        'day': latest_date.day,
     }
 
     return render_template('spotify/latest_artists.html', **context)
@@ -76,7 +74,7 @@ def tracks_prev(year, month, day):
         daily_tracks,
         date_obj
     )
-    return render_template('spotify/archive_chart.html', **context)
+    return render_template('spotify/archive_chart_tracks.html', **context)
 
 @bp.route('/spotify/daily/artists/<string:year>/<string:month>/<string:day>', methods=('GET','POST'))
 def arts_prev(year, month, day):
@@ -85,4 +83,4 @@ def arts_prev(year, month, day):
         daily_artists,
         date_obj
     )
-    return render_template('spotify/archive_chart.html', **context)
+    return render_template('spotify/archive_chart_artists.html', **context)
