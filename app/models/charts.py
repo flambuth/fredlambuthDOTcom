@@ -16,7 +16,7 @@ class daily_tracks(db.Model):
     album_name = db.Column(db.String(150))
     song_id = db.Column(db.String(23))
     song_name = db.Column(db.String(150))
-    date = db.Column(db.String(150))
+    date = db.Column(db.Date, nullable=False)
     def __repr__(self):
         return f'<daily_tracks for "{self.date}">'
 
@@ -29,7 +29,7 @@ class daily_artists(db.Model):
         nullable=False
     )
     art_name = db.Column(db.String(150))
-    date = db.Column(db.String(150))
+    date = db.Column(db.Date(), nullable=False)
     def __repr__(self):
         return f'<daily_artists for "{self.date}">'
 

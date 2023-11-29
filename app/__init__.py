@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, render_template
 from config import Config
 from config import SECRET_KEY
 
@@ -11,8 +11,17 @@ def create_app(config_class=Config):
 
     db.init_app(app)
 
-    from app.main import bp as main_bp
+    from app.spotify import bp as main_bp
     app.register_blueprint(main_bp)
+
+    @app.route('/')
+    def homepage():
+        return render_template('homepage.html')
+
+    @app.route('/contact')
+    def contact():
+        return render_template('contact.html')
+
     return app
 
 if __name__ == '__main__':

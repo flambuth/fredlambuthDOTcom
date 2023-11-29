@@ -18,7 +18,7 @@
     <div class="row align-items-center">
         <div class="col">
           <a href="{{ url_for('main.tracks_prev', year=year, month=month_num, day=day ) }}" class="btn btn-primary" style="color: rgb(175, 255, 244);">
-            Spotify Archives
+            Daily Tracks Archives
           </a>
         </div>
     
@@ -26,14 +26,7 @@
             Top 10 Tracks for {{ latest_date }}
         </div>
     
-        <div class="col">
-          <a href="#" class="btn btn-primary" style="color: rgb(175, 255, 244);">
-            This Month's Top Artists
-          </a>
-        </div>
     </div>
-
-
 
     <div class="list-group">
         {% for track in tracks %}
