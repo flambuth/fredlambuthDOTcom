@@ -1,6 +1,8 @@
 from app.models.charts import daily_artists, daily_tracks
 from app.models.artist_catalog import artist_catalog
+from app import db
 
+from sqlalchemy import func
 from datetime import timedelta
 
 def daily_chart_joined_art_cat(
@@ -68,3 +70,23 @@ def archive_chart_context(
         'date_fwd_1day' : date_obj + timedelta(days=1),
     }
     return context
+
+def top_ever_daily_artists(
+        num=10):
+    cream = db.session.query(
+    daily_artists.art_name,
+    func.count().label('Chart Days')
+    ).group_by(daily_artists.art_name
+    ).order_by(func.count().desc()
+    ).limit(num).all()
+    return cream
+
+def top_ever_daily_tracks(
+        num=10):
+    cream = db.session.query(
+    daily_tracks.song_name,
+    func.count().label('Chart Days')
+    ).group_by(daily_tracks.song_name
+    ).order_by(func.count().desc()
+    ).limit(num).all()
+    return cream

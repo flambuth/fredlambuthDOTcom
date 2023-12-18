@@ -1,5 +1,9 @@
 from app.models.charts import recently_played
 from app.models.artist_catalog import artist_catalog
+
+from app import db
+
+from sqlalchemy import func
 from datetime import datetime, timedelta
 
 def get_timeframe_of_rp_records(
@@ -37,3 +41,11 @@ def scan_for_art_cat_awareness():
     heard_of_em_names = [i.art_name for i in heard_of_em]
     not_heard_of_em_names = [i for i in yesterday_art_names if i not in heard_of_em_names]
     return heard_of_em_names, not_heard_of_em_names
+
+def rp_average_per_day():
+    result = db.session.query(
+    func.date(recently_played.last_played).label('play_date'),
+    func.count().label('record_count')
+    ).group_by('play_date').all()
+    daily_avg = sum(i[1] for i in result) / len(result) 
+    return int(daily_avg)

@@ -1,12 +1,10 @@
 from app.spotify import bp
-#from app import db
 from flask import render_template, request
 from app.models.charts import recently_played, daily_artists ,daily_tracks
-from app.models.artist_catalog import artist_catalog
 
-from app.spotify.rp_funcs import past_24_hrs_rps, scan_for_art_cat_awareness
-from app.spotify.daily_funcs import latest_daily_date, latest_daily_chart, archive_chart_context
-from app.spotify.art_cat_funcs import latest_art_cats, all_art_cats_starting_with, all_art_cats_in_master_genre
+from app.spotify.rp_funcs import past_24_hrs_rps, scan_for_art_cat_awareness, rp_average_per_day
+from app.spotify.daily_funcs import latest_daily_date, latest_daily_chart, archive_chart_context, top_ever_daily_artists, top_ever_daily_tracks
+from app.spotify.art_cat_funcs import latest_art_cats, all_art_cats_starting_with, all_art_cats_in_master_genre, art_cat_genre_group_counts
 
 from datetime import datetime
 
@@ -15,35 +13,61 @@ from datetime import datetime
 #latest_date_obj = datetime.strptime(latest_daily_date, "%Y-%m-%d").date()
 
 @bp.route('/spotify')
-def index():
+def spotify_landing_page():
 
     latest_5 = latest_art_cats()
+    top_5_arts = top_ever_daily_artists(5)
+    top_5_tracks = top_ever_daily_tracks(5)
+    daily_rp_avg = rp_average_per_day()
 
     context = {
         'latest_artists':latest_5,
+        'top_5_arts' : top_5_arts,
+        'top_5_tracks' : top_5_tracks,
+        'daily_rp_avg' : daily_rp_avg,
     }
-    return render_template('spotify/art_cat_homepage.html', **context)
+    return render_template('spotify/spotify_homepage.html', **context)
 
-@bp.route('/spotify/<string:letter>')
+
+###########################################
+#art_cat routes
+
+
+@bp.route('/spotify/art_cat/')
+@bp.route('/spotify/art_cat')
+def art_cat_landing_page(letter):
+    group_counts = art_cat_genre_group_counts()
+
+    context = {
+        'group_counts' : group_counts
+    }
+
+    return render_template('spotify/art_cat_index.html', **context)
+
+@bp.route('/spotify/art_cat/<string:letter>')
 def index_by_letter(letter):
     art_cat_index = all_art_cats_starting_with(letter)
-    print("art_cat_index:", art_cat_index)
+    
     context = {
         'art_cat_index' : art_cat_index
     }
 
-    return render_template('spotify/art_cat_index.html', **context)
+    return render_template('spotify/art_cat/art_cat_index.html', **context)
 
-@bp.route('/spotify/genre/<string:master_genre>')
+
+
+@bp.route('/spotify/art_cat/genre/<string:master_genre>')
+@bp.route('/spotify/art_cat/genre', defaults={'master_genre': None})
 def index_by_genre(master_genre):
-    art_cat_index = all_art_cats_in_master_genre(master_genre)
-    print("art_cat_index:", art_cat_index)
+    art_cat_index = all_art_cats_in_master_genre(master_genre)  
+
     context = {
-        'genre' : master_genre,
-        'art_cat_index' : art_cat_index
+        'genre': master_genre,
+        'art_cat_index': art_cat_index
     }
 
-    return render_template('spotify/art_cat_index.html', **context)
+    return render_template('spotify/art_cat/art_cat_index.html', **context)
+
 
 ###########################################
 @bp.route('/spotify/rp')

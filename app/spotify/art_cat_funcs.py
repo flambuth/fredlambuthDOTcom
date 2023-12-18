@@ -1,4 +1,6 @@
 from app.models.artist_catalog import artist_catalog
+from app import db
+
 from sqlalchemy import func
 
 #latest_art_cats = artist_catalog.query.order_by(artist_catalog.app_record_date.desc()).limit(5).all()
@@ -32,6 +34,26 @@ def all_art_cats_starting_with(letter):
     art_cat_results = start_with_letter + thes
     return art_cat_results
 
-def all_art_cats_in_master_genre(master_genre):
+def all_art_cats_in_master_genreOLD(master_genre):
     arts_in_the_genre = artist_catalog.query.filter(artist_catalog.master_genre==master_genre).order_by('art_name').all()
     return arts_in_the_genre
+
+def all_art_cats_in_master_genre(master_genre):
+    if master_genre is not None:
+        arts_in_the_genre = artist_catalog.query.filter(artist_catalog.master_genre == master_genre).order_by('art_name').all()
+    else:
+        arts_in_the_genre = artist_catalog.query.filter(artist_catalog.master_genre.is_(None)).order_by('art_name').all()
+
+    return arts_in_the_genre
+
+def art_cat_artist_count():
+    return artist_catalog.query.count()
+
+def art_cat_genre_group_counts():
+    genre_group_counts = db.session.query(
+        artist_catalog.master_genre,
+        func.count().label('Chart Days')
+        ).group_by(artist_catalog.master_genre
+        ).order_by(func.count().desc()
+        ).all()
+    return genre_group_counts

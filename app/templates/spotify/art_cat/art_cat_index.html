@@ -1,4 +1,4 @@
-{% extends 'spotify/art_cat_base.html' %}
+{% extends 'spotify/art_cat/art_cat_base.html' %}
 
 {% block content %}
 
@@ -29,7 +29,7 @@
     <div class="row">
         {% for item in art_cat_index %}
 
-        {% include 'spotify/art_cat_index_cards.html' %}
+        {% include 'spotify/art_cat/art_cat_index_cards.html' %}
         
         {% endfor %}
     </div>

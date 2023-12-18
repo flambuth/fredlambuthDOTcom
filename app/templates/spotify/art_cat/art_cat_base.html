@@ -1,6 +1,6 @@
 {% include 'base.html' %}
 
-{% set genres = ['electronic', 'pop', 'country', 'funk', 'punk', 'indie', 'rock', 'old', 'Other'] %}
+{% set genres = ['electronic', 'pop', 'country', 'funk', 'punk', 'indie', 'rock', 'old', none] %}
 {% set alpha = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] %}
 {% set non_alphas = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '@', '#', '$', '%', '&', '*', '!', '?', '+', '-', '['] %}
 <head>
@@ -71,10 +71,7 @@
 
 <div class="container-fluid text-center">
   <div class="myDiv">
-    <div class="centered-button">
-      <a href="https://fredlambuth.com/dash/art_search" class="btn btn-success" style="color: rgb(209, 240, 216);">Artist's History Dashboard</a>
-    </div>
-    <br>
+    <h2>Fred's Spotify Records Collection</h2>
     <!-- Genre List -->
     <ul id="genre_list" class="genre-list">
       {% for genre in genres %}
