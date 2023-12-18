@@ -40,11 +40,11 @@ input {
     <div class="row justify-content-center">
 
         <div class="col-2 text-center">
-            <a href="{{ url_for('main.tracks_prev',year=date_back_1month.year, month=date_back_1month.strftime('%m'), day=date_back_1month.strftime('%d')) }}" class="btn btn-secondary"><<</a>
+            <a href="{{ url_for('spotify.tracks_prev',year=date_back_1month.year, month=date_back_1month.strftime('%m'), day=date_back_1month.strftime('%d')) }}" class="btn btn-secondary"><<</a>
         </div>
 
         <div class="col-2 text-center">
-            <a href="{{ url_for('main.tracks_prev',year=date_back_1day.year, month=date_back_1day.strftime('%m'), day=date_back_1day.strftime('%d')) }}" class="btn btn-secondary">&lt;</a>
+            <a href="{{ url_for('spotify.tracks_prev',year=date_back_1day.year, month=date_back_1day.strftime('%m'), day=date_back_1day.strftime('%d')) }}" class="btn btn-secondary">&lt;</a>
         </div>
 
         <div class="col-4 text-center">
@@ -52,11 +52,11 @@ input {
         </div>
 
         <div class="col-2 text-center">
-            <a href="{{ url_for('main.tracks_prev',year=date_fwd_1day.year, month=date_fwd_1day.strftime('%m'), day=date_fwd_1day.strftime('%d')) }}" class="btn btn-secondary">&gt;</a>
+            <a href="{{ url_for('spotify.tracks_prev',year=date_fwd_1day.year, month=date_fwd_1day.strftime('%m'), day=date_fwd_1day.strftime('%d')) }}" class="btn btn-secondary">&gt;</a>
         </div>
 
         <div class="col-2 text-center">
-            <a href="{{ url_for('main.tracks_prev',year=date_fwd_1month.year, month=date_fwd_1month.strftime('%m'), day=date_fwd_1month.strftime('%d')) }}" class="btn btn-secondary">>></a>
+            <a href="{{ url_for('spotify.tracks_prev',year=date_fwd_1month.year, month=date_fwd_1month.strftime('%m'), day=date_fwd_1month.strftime('%d')) }}" class="btn btn-secondary">>></a>
         </div>
     </div>
 
