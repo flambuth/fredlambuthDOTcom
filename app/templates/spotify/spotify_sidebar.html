@@ -1,5 +1,10 @@
 <aside>
     <h3>Fred Lambuth's Spotify Data </h3>
+    <a href="{{ url_for('spotify.spotify_landing_page')  }}">
+      <i class="fa fa-home" aria-hidden="true"></i>
+      Spotify Home
+    </a>
+
     <a href="{{ url_for('spotify.yesterday')  }}">
       <i class="fa fa-clock" aria-hidden="true"></i>
       The Last 24 Hrs
@@ -15,9 +20,9 @@
       Top Artists
     </a>
 
-    <a href="{{ url_for('spotify.spotify_landing_page')  }}">
-      <i class="fa fa-calendar" aria-hidden="true"></i>
-    Recent-ish
+    <a href="{{ url_for('spotify.art_cat_landing_page')  }}">
+      <i class="fa fa-list" aria-hidden="true"></i>
+      Artist Catalog
     </a>
 
 </aside>

@@ -9,6 +9,26 @@ genres = ['electronic', 'pop', 'country', 'hip hop', 'punk', 'indie', 'rock', 'o
 alphas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 non_alphas =  non_alphas = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '@', '#', '$', '%', '&', '*', '!', '?', '+', '-', '[']
 
+def get_one_artist(art_name):
+    '''
+    Get just one art_cat record
+    '''
+    uno_art_cat = (
+        artist_catalog.query.filter(artist_catalog.art_name == art_name
+        ).first())
+    return uno_art_cat
+
+def random_artist_in_genre(genre):
+    '''
+    Adds some randomness to pick from one genre.
+    '''
+    rando = (
+    artist_catalog.query.filter(artist_catalog.master_genre == genre
+    ).order_by(func.random()
+    ).limit(1).first()
+    )
+    return rando
+
 def latest_art_cats(num=5):
     latest_acs = artist_catalog.query.order_by(artist_catalog.app_record_date.desc()).limit(num).all()
     return latest_acs
@@ -34,9 +54,6 @@ def all_art_cats_starting_with(letter):
     art_cat_results = start_with_letter + thes
     return art_cat_results
 
-def all_art_cats_in_master_genreOLD(master_genre):
-    arts_in_the_genre = artist_catalog.query.filter(artist_catalog.master_genre==master_genre).order_by('art_name').all()
-    return arts_in_the_genre
 
 def all_art_cats_in_master_genre(master_genre):
     if master_genre is not None:
@@ -47,6 +64,9 @@ def all_art_cats_in_master_genre(master_genre):
     return arts_in_the_genre
 
 def art_cat_artist_count():
+    '''
+    Integer count of all unique artists in the art_cat model
+    '''
     return artist_catalog.query.count()
 
 def art_cat_genre_group_counts():
@@ -57,3 +77,11 @@ def art_cat_genre_group_counts():
         ).order_by(func.count().desc()
         ).all()
     return genre_group_counts
+
+def genre_landing_thruples():
+    counts = art_cat_genre_group_counts()
+    genre_img_urls = [random_artist_in_genre(i[0]).img_url_mid for i in counts]
+    thruples = list(zip(
+    [i[0] for i in counts], [i[1] for i in counts], genre_img_urls
+    ))
+    return thruples

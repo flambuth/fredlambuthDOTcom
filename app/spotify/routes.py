@@ -3,8 +3,8 @@ from flask import render_template, request
 from app.models.charts import recently_played, daily_artists ,daily_tracks
 
 from app.spotify.rp_funcs import past_24_hrs_rps, scan_for_art_cat_awareness, rp_average_per_day
-from app.spotify.daily_funcs import latest_daily_date, latest_daily_chart, archive_chart_context, top_ever_daily_artists, top_ever_daily_tracks
-from app.spotify.art_cat_funcs import latest_art_cats, all_art_cats_starting_with, all_art_cats_in_master_genre, art_cat_genre_group_counts
+import app.spotify.daily_funcs as daily_funcs 
+from app.spotify.art_cat_funcs import latest_art_cats, all_art_cats_starting_with, all_art_cats_in_master_genre, genre_landing_thruples
 
 from datetime import datetime
 
@@ -13,11 +13,12 @@ from datetime import datetime
 #latest_date_obj = datetime.strptime(latest_daily_date, "%Y-%m-%d").date()
 
 @bp.route('/spotify')
+@bp.route('/spotify/')
 def spotify_landing_page():
 
     latest_5 = latest_art_cats()
-    top_5_arts = top_ever_daily_artists(5)
-    top_5_tracks = top_ever_daily_tracks(5)
+    top_5_arts = daily_funcs.top_ever_daily_artists(5)
+    top_5_tracks = daily_funcs.top_ever_daily_tracks(5)
     daily_rp_avg = rp_average_per_day()
 
     context = {
@@ -35,21 +36,22 @@ def spotify_landing_page():
 
 @bp.route('/spotify/art_cat/')
 @bp.route('/spotify/art_cat')
-def art_cat_landing_page(letter):
-    group_counts = art_cat_genre_group_counts()
+def art_cat_landing_page():
+    thruples = genre_landing_thruples()
 
     context = {
-        'group_counts' : group_counts
+        'thruples' : thruples
     }
 
-    return render_template('spotify/art_cat_index.html', **context)
+    return render_template('spotify/art_cat/art_cat_landing.html', **context)
 
 @bp.route('/spotify/art_cat/<string:letter>')
 def index_by_letter(letter):
     art_cat_index = all_art_cats_starting_with(letter)
     
     context = {
-        'art_cat_index' : art_cat_index
+        'art_cat_index' : art_cat_index,
+        'letter' : letter
     }
 
     return render_template('spotify/art_cat/art_cat_index.html', **context)
@@ -59,7 +61,7 @@ def index_by_letter(letter):
 @bp.route('/spotify/art_cat/genre/<string:master_genre>')
 @bp.route('/spotify/art_cat/genre', defaults={'master_genre': None})
 def index_by_genre(master_genre):
-    art_cat_index = all_art_cats_in_master_genre(master_genre)  
+    art_cat_index = all_art_cats_in_master_genre(master_genre)
 
     context = {
         'genre': master_genre,
@@ -68,6 +70,18 @@ def index_by_genre(master_genre):
 
     return render_template('spotify/art_cat/art_cat_index.html', **context)
 
+
+
+@bp.route('/spotify/art_cat/profile/<string:art_name>')
+def art_cat_profile(art_name):
+    art_cat_index = all_art_cats_in_master_genre(master_genre)
+
+    context = {
+        'genre': master_genre,
+        'art_cat_index': art_cat_index
+    }
+
+    return render_template('spotify/art_cat/art_cat_index.html', **context)
 
 ###########################################
 @bp.route('/spotify/rp')
@@ -95,8 +109,8 @@ def yesterday():
 @bp.route('/spotify/daily/tracks')
 @bp.route('/spotify/daily/tracks/')
 def latest_daily_tracks():
-    latest_date = latest_daily_date(daily_tracks) 
-    tracks = latest_daily_chart(daily_tracks)
+    latest_date = daily_funcs.latest_daily_date(daily_tracks) 
+    tracks = daily_funcs.latest_daily_chart(daily_tracks)
 
     context = {
         'latest_date' : latest_date,
@@ -111,8 +125,8 @@ def latest_daily_tracks():
 @bp.route('/spotify/daily/artists')
 @bp.route('/spotify/daily/artists/')
 def latest_daily_artists():
-    latest_date = latest_daily_date(daily_artists)
-    arts = latest_daily_chart(daily_artists)
+    latest_date = daily_funcs.latest_daily_date(daily_artists)
+    arts = daily_funcs.latest_daily_chart(daily_artists)
 
     context = {
         'latest_date' : latest_date,
@@ -127,7 +141,7 @@ def latest_daily_artists():
 @bp.route('/spotify/daily/tracks/<string:year>/<string:month>/<string:day>', methods=('GET','POST'))
 def tracks_prev(year, month, day):
     date_obj = datetime.strptime(f'{year}-{month}-{day}', "%Y-%m-%d").date()
-    context = archive_chart_context(
+    context = daily_funcs.archive_chart_context(
         daily_tracks,
         date_obj
     )
@@ -136,7 +150,7 @@ def tracks_prev(year, month, day):
 @bp.route('/spotify/daily/artists/<string:year>/<string:month>/<string:day>', methods=('GET','POST'))
 def arts_prev(year, month, day):
     date_obj = datetime.strptime(f'{year}-{month}-{day}', "%Y-%m-%d").date()
-    context = archive_chart_context(
+    context = daily_funcs.archive_chart_context(
         daily_artists,
         date_obj
     )

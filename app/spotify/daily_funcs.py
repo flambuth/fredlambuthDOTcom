@@ -90,3 +90,31 @@ def top_ever_daily_tracks(
     ).order_by(func.count().desc()
     ).limit(num).all()
     return cream
+
+def artist_days_on_charts(art_name):
+    art_days = daily_artists.query.filter(daily_artists.art_name == art_name).all()
+    return art_days
+
+def find_streaks_in_dates(list_of_dateObjs):
+    streaks = {}
+    current_streak_start = None
+
+    for date in list_of_dateObjs:
+        #starts the loop
+        if current_streak_start is None:
+            current_streak_start = date
+            current_streak_length = 1
+        #if the next values is jsut one day forward since the last, streak goes up 1 and loop moves on
+        elif date == current_streak_start + timedelta(days=current_streak_length):
+            current_streak_length += 1
+        else:
+            #the end of a streak writes to a dictionary. key is streak_start_date, value is the length of days the streak was
+            streaks[current_streak_start.isoformat()] = current_streak_length
+            current_streak_start = date
+            current_streak_length = 1
+
+    # Add the last streak to the dictionary if there is one
+    if current_streak_start is not None:
+        streaks[current_streak_start.isoformat()] = current_streak_length
+
+    return streaks
