@@ -1,19 +1,34 @@
 
-<div class="col-md-3 my-item">
+<style>
+    .my-item {
+        transition: box-shadow 0.3s ease;
+    }
+
+    .my-item:hover {
+        box-shadow: inset 0 0 50px rgba(0, 0, 0, 0.5); /* Adjust the shadow color and size as needed */
+    }
+
+    .card-img-top {
+        max-height: 250px; /* Adjust the maximum height of the image */
+        object-fit: cover;
+    }
+</style>
+
+<div class="col-md-3">
     <div class="card" style="width: 18rem;">
         <img src="https://i.scdn.co/image/{{ item.img_url_mid }}" class="card-img-top my-image" alt="{{ item.art_name }}">
-        <div class="card-body">
+        <div class="card-body my-item">
             
             {% if item.master_genre == 'rock' %}
                 <h3 class="my-item-header rock">{{ item.art_name }}</h3>
             {% elif item.master_genre == 'pop' %}
                 <h3 class="my-item-header pop">{{ item.art_name }}</h3>
             {% elif item.master_genre == 'electronic' %}
-                <h3 class="my-item-header elec">{{ item.art_name }}</h3>
+                <h3 class="my-item-header electronic">{{ item.art_name }}</h3>
             {% elif item.master_genre == 'punk' %}
                 <h3 class="my-item-header punk">{{ item.art_name }}</h3>
             {% elif item.master_genre == 'funk' %}
-                <h3 class="my-item-header hop">{{ item.art_name }}</h3>
+                <h3 class="my-item-header funk">{{ item.art_name }}</h3>
             {% elif item.master_genre == 'indie' %}
                 <h3 class="my-item-header indie">{{ item.art_name }}</h3>
             {% elif item.master_genre == 'old' %}
@@ -25,7 +40,6 @@
             {% endif %}
 
             <p class="card-text">{{ item.genre }}</p>
-            <p class="card-text">{{ item.master_genre }}</p>
             <p class="card-text">{{ item.followers }}</p>
             <p class="card-text">{{ item.app_record_date }}</p>
         </div>
