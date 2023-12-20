@@ -4,7 +4,7 @@ from app.models.charts import recently_played, daily_artists ,daily_tracks
 
 from app.spotify.rp_funcs import past_24_hrs_rps, scan_for_art_cat_awareness, rp_average_per_day
 import app.spotify.daily_funcs as daily_funcs 
-from app.spotify.art_cat_funcs import latest_art_cats, all_art_cats_starting_with, all_art_cats_in_master_genre, genre_landing_thruples
+import app.spotify.art_cat_funcs as ac_funcs
 
 from datetime import datetime
 
@@ -16,7 +16,7 @@ from datetime import datetime
 @bp.route('/spotify/')
 def spotify_landing_page():
 
-    latest_5 = latest_art_cats()
+    latest_5 = ac_funcs.latest_art_cats()
     top_5_arts = daily_funcs.top_ever_daily_artists(5)
     top_5_tracks = daily_funcs.top_ever_daily_tracks(5)
     daily_rp_avg = rp_average_per_day()
@@ -37,7 +37,7 @@ def spotify_landing_page():
 @bp.route('/spotify/art_cat/')
 @bp.route('/spotify/art_cat')
 def art_cat_landing_page():
-    thruples = genre_landing_thruples()
+    thruples = ac_funcs.genre_landing_thruples()
 
     context = {
         'thruples' : thruples
@@ -47,7 +47,7 @@ def art_cat_landing_page():
 
 @bp.route('/spotify/art_cat/<string:letter>')
 def index_by_letter(letter):
-    art_cat_index = all_art_cats_starting_with(letter)
+    art_cat_index = ac_funcs.all_art_cats_starting_with(letter)
     
     context = {
         'art_cat_index' : art_cat_index,
@@ -61,7 +61,7 @@ def index_by_letter(letter):
 @bp.route('/spotify/art_cat/genre/<string:master_genre>')
 @bp.route('/spotify/art_cat/genre', defaults={'master_genre': None})
 def index_by_genre(master_genre):
-    art_cat_index = all_art_cats_in_master_genre(master_genre)
+    art_cat_index = ac_funcs.all_art_cats_in_master_genre(master_genre)
 
     context = {
         'genre': master_genre,
@@ -72,16 +72,17 @@ def index_by_genre(master_genre):
 
 
 
-@bp.route('/spotify/art_cat/profile/<string:art_name>')
-def art_cat_profile(art_name):
-    art_cat_index = all_art_cats_in_master_genre(master_genre)
+@bp.route('/spotify/art_cat/artist/<string:art_id>')
+def art_cat_profile(art_id):
+    profile_context = ac_funcs.art_cat_profile(art_id)
 
-    context = {
-        'genre': master_genre,
-        'art_cat_index': art_cat_index
-    }
+    return render_template('spotify/art_cat/art_cat_profile.html', **profile_context)
 
-    return render_template('spotify/art_cat/art_cat_index.html', **context)
+
+
+
+
+
 
 ###########################################
 @bp.route('/spotify/rp')
