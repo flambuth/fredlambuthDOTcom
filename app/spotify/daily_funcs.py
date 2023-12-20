@@ -91,30 +91,84 @@ def top_ever_daily_tracks(
     ).limit(num).all()
     return cream
 
-def artist_days_on_charts(art_name):
-    art_days = daily_artists.query.filter(daily_artists.art_name == art_name).all()
+def artist_days_on_charts(
+        art_name,
+        chart_type):
+    '''
+    uses the actual model object as the chart_type parameter
+
+    art_name is just the string title of the artist
+    '''
+    art_days = chart_type.query.filter(chart_type.art_name == art_name).all()
     return art_days
 
+def artist_days_on_both_charts(
+        art_name
+    ):
+    tracks_days = artist_days_on_charts(art_name, daily_tracks)
+    arts_days = artist_days_on_charts(art_name, daily_artists)
+    return tracks_days + arts_days
+
+def notable_tracks(
+        art_name
+    ):
+    '''
+    Returns a list of strings for each unique song in the daily_tracks for the given artist
+    Returns None if there aren't any track hits for the given artist
+    '''
+    track_hits = artist_days_on_charts(
+        art_name,
+        daily_tracks
+    )
+
+    if track_hits:
+        track_titles = [i.song_name for i in track_hits]
+    else:
+        return None
+
+    return list(set(track_titles))
+
+def is_one_hit_wonder(
+        art_name
+    ):
+    has_art_days = artist_days_on_charts(art_name, daily_artists)
+    if has_art_days:
+        return False
+    
+    track_hits = notable_tracks(art_name)
+    if len(track_hits) > 1:
+        return False
+    else:
+        return 'One Hit Wonder'
+
+
+
 def find_streaks_in_dates(list_of_dateObjs):
+    '''
+    Given a list of datetime objects, returns a dictionary with all the streaks as key pairs.
+    start date is key, length in days as integer is the value
+    '''
     streaks = {}
     current_streak_start = None
 
     for date in list_of_dateObjs:
-        #starts the loop
+        # starts the loop
         if current_streak_start is None:
             current_streak_start = date
             current_streak_length = 1
-        #if the next values is jsut one day forward since the last, streak goes up 1 and loop moves on
+        # if the next values is just one day forward since the last, streak goes up 1 and the loop moves on to the next iterable
         elif date == current_streak_start + timedelta(days=current_streak_length):
             current_streak_length += 1
         else:
-            #the end of a streak writes to a dictionary. key is streak_start_date, value is the length of days the streak was
-            streaks[current_streak_start.isoformat()] = current_streak_length
+            # the end of a streak writes to a dictionary. key is streak_start_date, value is the length of days the streak was
+            if current_streak_length > 1:  # Add this condition to exclude streaks of just one day
+                streaks[current_streak_start.isoformat()] = current_streak_length
             current_streak_start = date
             current_streak_length = 1
 
-    # Add the last streak to the dictionary if there is one
-    if current_streak_start is not None:
+    # Add the last streak to the dictionary if there is one and it's not just one day
+    if current_streak_start is not None and current_streak_length > 1:
         streaks[current_streak_start.isoformat()] = current_streak_length
 
     return streaks
+

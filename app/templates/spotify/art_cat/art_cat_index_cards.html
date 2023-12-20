@@ -16,6 +16,7 @@
 
 <div class="col-md-3">
     <div class="card" style="width: 18rem;">
+        <a href="{{ url_for('spotify.art_cat_profile', art_id=item.art_id) }}">
         <img src="https://i.scdn.co/image/{{ item.img_url_mid }}" class="card-img-top my-image" alt="{{ item.art_name }}">
         <div class="card-body my-item">
             
@@ -43,5 +44,6 @@
             <p class="card-text">{{ item.followers }}</p>
             <p class="card-text">{{ item.app_record_date }}</p>
         </div>
+        </a>
     </div>
 </div>
