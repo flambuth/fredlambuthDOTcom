@@ -2,19 +2,13 @@ from app.models.artist_catalog import artist_catalog
 from app import db
 from app.spotify.daily_funcs import artist_days_on_both_charts, find_streaks_in_dates, notable_tracks, is_one_hit_wonder
 
-from sqlalchemy import func
+from sqlalchemy import func, or_
 
 #latest_art_cats = artist_catalog.query.order_by(artist_catalog.app_record_date.desc()).limit(5).all()
 
-genres = ['electronic', 'pop', 'country', 'hip hop', 'punk', 'indie', 'rock', 'old', 'Other']
-alphas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
+genres = ['electronic', 'pop', 'country', 'funk', 'punk', 'indie', 'rock', 'old', 'Other']
+#alphas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 non_alphas =  non_alphas = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '@', '#', '$', '%', '&', '*', '!', '?', '+', '-', '[']
-
-
-
-def latest_art_cats(num=5):
-    latest_acs = artist_catalog.query.order_by(artist_catalog.app_record_date.desc()).limit(num).all()
-    return latest_acs
 
 def possible_alphas(art_cats_model):
     '''
@@ -25,6 +19,10 @@ def possible_alphas(art_cats_model):
     unique_chars = list(set(all_letters))
     return sorted(unique_chars, key=lambda x: (not x.isalpha(), x))
 
+
+
+############
+#Indexing functions, Alpha, master_genre, and sub-genre
 def all_art_cats_starting_with(letter):
     
     start_with_letter = artist_catalog.query.filter(artist_catalog.art_name.startswith(letter)).order_by('art_name').all()
@@ -46,6 +44,33 @@ def all_art_cats_in_master_genre(master_genre):
 
     return arts_in_the_genre
 
+def art_cats_with_this_genre(searched_genre):
+    search_term_lower = searched_genre.lower()  # Convert search term to lowercase
+
+    matching_arts = (
+        artist_catalog.query
+        .filter(
+            or_(
+                func.lower(artist_catalog.genre).like(f"%{search_term_lower}%"),
+                func.lower(artist_catalog.genre2).like(f"%{search_term_lower}%"),
+                func.lower(artist_catalog.genre3).like(f"%{search_term_lower}%")
+            )
+        )
+        .all()
+    )
+    return matching_arts
+
+
+
+############
+#Homepage Level Statistics
+def latest_art_cats(num=5):
+    '''
+    Last five artists added to the art_cat table
+    '''
+    latest_acs = artist_catalog.query.order_by(artist_catalog.app_record_date.desc()).limit(num).all()
+    return latest_acs
+
 def art_cat_artist_count():
     '''
     Integer count of all unique artists in the art_cat model
@@ -53,6 +78,9 @@ def art_cat_artist_count():
     return artist_catalog.query.count()
 
 def art_cat_genre_group_counts():
+    '''
+    Returns the 9 genres with their count of unique artists in each 'master_genre'
+    '''
     genre_group_counts = db.session.query(
         artist_catalog.master_genre,
         func.count().label('Chart Days')
@@ -72,6 +100,12 @@ def genre_landing_thruples():
     ))
     return thruples
 
+####################
+#Search stuff
+def art_cat_name_search(search_term):
+    like_arts_blob = artist_catalog.art_name.like(f"%{search_term}%")
+    like_arts = artist_catalog.query.filter(like_arts_blob).order_by('art_name').all()
+    return like_arts
 
 #####################
 #single art_cat functions
@@ -136,3 +170,5 @@ def art_cat_profile(art_id):
     }
 
     return art_profile_context
+
+
