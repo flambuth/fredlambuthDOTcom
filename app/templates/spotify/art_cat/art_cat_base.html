@@ -72,7 +72,7 @@
 
 <div class="container-fluid text-center">
   <div class="myDiv">
-    <h2>Fred's Spotify Records Collection</h2>
+    <h3 style="color: wheat;">Fred's Spotify Records Collection</h3>
     <!-- Genre List -->
     <ul id="genre_list" class="genre-list">
       {% for genre in genres %}
@@ -90,7 +90,13 @@
         </a>
       {% endfor %}
     </ul>
-    
+
+    <form method="POST">
+      <p style="color: antiquewhite;">
+        {{ form.search_term.label }}
+        {{ form.search_term(size=20) }}
+      </p>
+    </form>
   </div>
 </div>
     
