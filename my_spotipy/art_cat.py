@@ -9,23 +9,30 @@ from daily_charts import Daily_Table
 from fred_spotify import art_id_to_art_cat
 from genres import inspect_tri_genres
 
+today_date = date.today()
+today_string = today_date.strftime('%Y-%m-%d')
 
-def new_entry(art_id):
+def new_entry(
+        art_id,
+        corrected_entry=False,
+        ):
     '''
     Returns a dictionary that has all the necessary fields to be an entry in the artist catalog
     Makes a Spotify API each time. 
     '''
     artist_data = art_id_to_art_cat(art_id)
 
-    today_date = date.today()
-    today_string = today_date.strftime('%Y-%m-%d')
-
     tri_genres = artist_data[3:6]
     artist_data.append(inspect_tri_genres(tri_genres))
 
     artist_data.append(today_string)
 
-    #my_spobj.first_appearance = self.find_first_appearance(art_id)
+    #by default, new_entry means a first entry or a latest revision,
+    #so the corrected_entry parameter defaults to False
+    if corrected_entry==True:
+        artist_data.append(False)
+    else:
+        artist_data.append(True)
 
     return artist_data
 
@@ -63,7 +70,6 @@ class Artist_Catalog:
             all_possible_ids.remove(count_basie)
         return [i for i in all_possible_ids if i not in self.art_ids]
 
-
     def add_to_catalog(
             self, 
             art_ids):
@@ -82,12 +88,61 @@ class Artist_Catalog:
         cursor.close()
         sqliteConnection.close()
 
+    def add_records_to_catalog(
+            self, 
+            art_records):
+        '''
+        Accepts processed art_record dicts and inserts them into the artist_catalog table
+        '''
+        query = make_insert_query(self.table, self.col_names)
+        sqliteConnection = sqlite3.connect(database)
+        cursor = sqliteConnection.cursor()
+        #executemany takes a lists of lists, not the usualy dictionary of lists
+        cursor.executemany(query, art_records)
+            
+        sqliteConnection.commit()
+        cursor.close()
+        sqliteConnection.close()
+
     def scan_charts_and_insert(self):
+        '''
+        Job that looks through both daily charts to find if any art_ids there are not present
+        in the artist catalog. If one or more is found, they are added to the catalog
+        with the .add_to_catalog() method
+        '''
         new_art_ids = self.ids_not_in_art_cat()
         if new_art_ids:
             self.add_to_catalog(new_art_ids)
         else:
             return 'No New Artists in Charts.'
+        
+    def refreshed_artist_catalog(self):
+        '''
+        Using all the art_ids in the current art_cat table as the iterable,
+        the new_entry function calls the Spotify API to get new values for each
+        art_id. 
+        Uses todays date as the value for 'app_record_date'
+
+        Takes about 3 minutes to make 970 API requests
+
+        with open(csv_path, 'w', newline='') as csv_file:
+            csv_writer = csv.writer(csv_file)
+            csv_writer.writerows(todays_art_cat)
+        '''
+        art_ids = self.art_ids
+        todays_art_cat = list(map(new_entry, art_ids))
+        return todays_art_cat
+    
+    def add_refreshed_records_to_art_cat(self):
+        '''
+        Encapsulates functions that:
+            make SPotify API call for each art_id in art_cat
+            process each API return into an art_cat record dict
+            adds the art_cat record into the art_cat table
+        '''
+        new_a_c = self.refreshed_artist_catalog()
+        self.add_records_to_catalog(new_a_c)
+        return f'{today_string} is now the latest app_record_date for all entries'
         
 
 if __name__ == '__main__':

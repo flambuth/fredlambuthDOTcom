@@ -25,7 +25,9 @@ table_schemas = {
             ('img_url_mid', 'TEXT NULL'),
             ('img_url_sml', 'TEXT NULL'),
             ('master_genre', 'TEXT NULL'),
-            ('app_record_date', 'datetime'),],
+            ('app_record_date', 'datetime'),
+            ('is_current', 'BOOLEAN')
+            ],
 
         'track_catalog' : [
             ('art_name', 'TEXT'),
@@ -45,6 +47,7 @@ table_schemas = {
             ('song_id', 'TEXT'),
             ('song_name', 'TEXT'),
             ('date', 'datetime'),],
+
         'daily_artists':[('position', 'INTEGER'),
             ('art_id', 'TEXT'),
             ('art_name', 'TEXT'),
@@ -54,7 +57,8 @@ table_schemas = {
             ('song_name', 'TEXT'),
             ('song_link', 'TEXT'),
             ('image', 'TEXT'),
-            ('last_played', 'TEXT'),]}
+            ('last_played', 'TEXT'),]
+                }
 
 #functions to make the SQLITE queries that do the CRUD operations
 def make_question_marks(cols):
@@ -79,9 +83,7 @@ def query_db(
         query,
         db=database):
     '''
-    Returns a set of .fetchall() restults from the db
-
-    YOU NEED TO MIGRATE BEFORE THIS CAN WORK! (july 16,2022)
+    My cheap db interface
     '''
     try:
         conn = sqlite3.connect(db)
