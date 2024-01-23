@@ -31,14 +31,18 @@ def song_id_to_track_cat(song_id):
 #Artist Catalog
 
 def three_genre_fields(genre_list):
-
+    '''
+    Imputes a None value if there is not enough genre tags in the list
+    '''
     result = genre_list[:3]  # Get the first three elements
     while len(result) < 3:
         result.append(None)  
     return result
 
 def three_img_fields(img_list):
-
+    '''
+    Imputes null values if there is less than 3 image values
+    '''
     result = img_list[:3]  
     result = [i['url'][24:] for i in result]
 

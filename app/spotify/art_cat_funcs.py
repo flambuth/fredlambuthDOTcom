@@ -25,9 +25,11 @@ def possible_alphas(art_cats_model):
 #Indexing functions, Alpha, master_genre, and sub-genre
 def all_art_cats_starting_with(letter):
     
-    start_with_letter = artist_catalog.query.filter(artist_catalog.art_name.startswith(letter)).order_by('art_name').all()
+    start_with_letter = artist_catalog.get_current_records().filter(
+        artist_catalog.art_name.startswith(letter)
+            ).order_by('art_name').all()
 
-    thes = artist_catalog.query.filter(
+    thes = artist_catalog.get_current_records().filter(
         func.substring(artist_catalog.art_name,0,5)=='The '
         ).filter(func.substring(artist_catalog.art_name,6,-1).startswith(letter)
                 ).order_by('art_name').all()
@@ -38,9 +40,9 @@ def all_art_cats_starting_with(letter):
 
 def all_art_cats_in_master_genre(master_genre):
     if master_genre is not None:
-        arts_in_the_genre = artist_catalog.query.filter(artist_catalog.master_genre == master_genre).order_by('art_name').all()
+        arts_in_the_genre = artist_catalog.get_current_records().filter(artist_catalog.master_genre == master_genre).order_by('art_name').all()
     else:
-        arts_in_the_genre = artist_catalog.query.filter(artist_catalog.master_genre.is_(None)).order_by('art_name').all()
+        arts_in_the_genre = artist_catalog.get_current_records().filter(artist_catalog.master_genre.is_(None)).order_by('art_name').all()
 
     return arts_in_the_genre
 
@@ -48,7 +50,7 @@ def art_cats_with_this_genre(searched_genre):
     search_term_lower = searched_genre.lower()  # Convert search term to lowercase
 
     matching_arts = (
-        artist_catalog.query
+        artist_catalog.get_current_records()
         .filter(
             or_(
                 func.lower(artist_catalog.genre).like(f"%{search_term_lower}%"),
