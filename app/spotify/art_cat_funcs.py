@@ -1,4 +1,4 @@
-from app.models.artist_catalog import artist_catalog
+from app.models.catalogs import artist_catalog
 from app import db
 from app.spotify.daily_funcs import artist_days_on_both_charts, find_streaks_in_dates, notable_tracks, is_one_hit_wonder
 
@@ -6,7 +6,7 @@ from sqlalchemy import func, or_
 
 #latest_art_cats = artist_catalog.query.order_by(artist_catalog.app_record_date.desc()).limit(5).all()
 
-genres = ['electronic', 'pop', 'country', 'funk', 'punk', 'indie', 'rock', 'old', 'Other']
+genres = ['electronic', 'pop', 'country', 'funk', 'punk', 'indie', 'rock', 'old', 'other']
 #alphas = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 non_alphas =  non_alphas = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '@', '#', '$', '%', '&', '*', '!', '?', '+', '-', '[']
 
@@ -40,9 +40,15 @@ def all_art_cats_starting_with(letter):
 
 def all_art_cats_in_master_genre(master_genre):
     if master_genre is not None:
-        arts_in_the_genre = artist_catalog.get_current_records().filter(artist_catalog.master_genre == master_genre).order_by('art_name').all()
+        arts_in_the_genre = artist_catalog.get_current_records().filter(
+            artist_catalog.master_genre == master_genre
+            ).order_by('art_name'
+                       ).all()
     else:
-        arts_in_the_genre = artist_catalog.get_current_records().filter(artist_catalog.master_genre.is_(None)).order_by(artist_catalog.art_name).all()
+        arts_in_the_genre = artist_catalog.get_current_records().filter(
+            artist_catalog.master_genre.is_(None)
+            ).order_by(artist_catalog.art_name
+                       ).all()
 
 
     return arts_in_the_genre
@@ -96,7 +102,7 @@ def genre_landing_thruples():
     '''
     Returns 9 tuples. Each have a master genre, number of unique artists, and a random artist img_url for teh genre
     '''
-    counts = art_cat_genre_group_counts()
+    counts = artist_catalog.count_active_records_by_genre()
     genre_img_urls = [random_artist_in_genre(i[0]).img_url_mid for i in counts]
     thruples = list(zip(
     [i[0] for i in counts], [i[1] for i in counts], genre_img_urls

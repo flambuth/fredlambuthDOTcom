@@ -22,6 +22,8 @@ def new_entry(
     '''
     artist_data = art_id_to_art_cat(art_id)
 
+    #takes the three genre tags from spotify, evalutes each for a 'master_genre'
+    #then picks the most common one, or the first one if there is a tie.
     tri_genres = artist_data[3:6]
     artist_data.append(inspect_tri_genres(tri_genres))
 

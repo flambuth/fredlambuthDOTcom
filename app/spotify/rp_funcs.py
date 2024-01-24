@@ -1,5 +1,5 @@
 from app.models.charts import recently_played
-from app.models.artist_catalog import artist_catalog
+from app.models.catalogs import artist_catalog
 
 from app import db
 

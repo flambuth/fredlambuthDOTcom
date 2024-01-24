@@ -1,5 +1,6 @@
 from app.extensions import db
 from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import func
 #from .main import daily_tracks
 
 Base = declarative_base()
@@ -29,6 +30,23 @@ class artist_catalog(db.Model):
     @classmethod
     def get_inactive_records(cls):
         return cls.query.filter(cls.is_current.is_(None)).all()
+
+    @classmethod
+    def count_active_records_by_genre(cls):
+        '''
+        Returns the count of active records for each genre
+        '''
+        active_genre_counts = db.session.query(
+            cls.master_genre,
+            func.count().label('Active Records')
+        ).filter(
+            cls.is_current.is_(True)
+        ).group_by(
+            cls.master_genre
+        ).order_by(
+            func.count().desc()
+        ).all()
+        return active_genre_counts
 
     def __repr__(self):
         return f'<art_cat_entry "{self.art_name}">'

@@ -221,6 +221,9 @@ class Data_Definition:
         conn.close()
 
     def insert_track_cats(self):
+        '''
+        I think this is just for that Oct10 migration i was working on.
+        '''
         with open('tracks_data.json') as holder:
             track_data = json.load(holder)
 
@@ -240,6 +243,11 @@ class Data_Definition:
         conn.close()
 
     def migrate_old_records(self):
+        '''
+        This is definitely for that old stuff. We should put it
+        in a seperate module when adding old records into the
+        scd2 type of the 'artist_catalog' table
+        '''
         table = 'artist_catalog'
         col_names = [i[0] for i in  table_schemas[table]]
         query = make_insert_query(table, col_names)

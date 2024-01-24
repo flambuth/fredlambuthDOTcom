@@ -5,10 +5,11 @@ from collections import Counter
 master_genre_grams = {
     'electronic' : ['electronic','house','techno','dub','chill','bass','beat','beats', 'breakbeat', 'electro-industrial','moog','rave','electronica','trance'
     ,'electro', 'clubbing', 'edm', 'club', 'ethnotronica','dnb','dubstep', 'downtempo','vaporwave'
-    ,'aussietronica','jungle', 'uk_garage', 'breaks', 'lo-fi', 'idm','bassline','breakcore','indietronica','hi-nrg'],
+    ,'aussietronica','jungle', 'uk_garage', 'breaks', 'lo-fi', 'idm','bassline','breakcore','indietronica','hi-nrg'
+    ,'chillhop'],
     
     'pop' : ['pop','dance', 'future', 'idol', 'wave', 'synth', 'glithcore','synthpop', 'anime score','electropop','chiptune', 'post-bop', 'urbano', 'darksynth','disco','post-disco','neo-synthpop','hard bop',
-    'bmore','romantic','nederpop','grimewave','glitch','nerdcore','sovietwave'],
+    'bmore','romantic','nederpop','grimewave','glitch','nerdcore','sovietwave', 'electroclash'],
     
     'country' : ['country','bakersfield','tejano', 'rockabilly', 'stomp and holler', 'grass','nashville'],
     
@@ -141,6 +142,8 @@ def inspect_genre(target_genre):
     if not good_masters:
         return None
     
+    #selects the last word in a genre to be the deciding word
+    #example: (2)acoutic blues = blues, (3)east la rap = rap, (1)rock = rock
     if genre_len == 3:
         return good_masters[2]
     elif genre_len == 2:
@@ -154,12 +157,12 @@ def inspect_tri_genres(tri_genres):
     Defaults to to the first index result if there is no count higher than 1 for each genre result
     '''
     if tri_genres.count(None) == 3:
-        return None
+        return 'other'
 
     test_count = Counter(list(map(inspect_genre, tri_genres)))
 
     if test_count[None] == 3:
-        return None
+        return 'other'
 
     if test_count.most_common()[0][0] == None:
         return test_count.most_common()[1][0]

@@ -17,7 +17,14 @@
 <div class="col-md-3">
     <div class="card" style="width: 18rem;">
         <a href="{{ url_for('spotify.art_cat_profile', art_id=item.art_id) }}">
+
+    {% if item.img_url_mid == '' %}
+        <img src="{{ url_for('static', filename='/img/fallback.jpeg') }}" class="card-img-top my-image" alt="{{ item.art_name }}">
+    {% else %}
+    <!-- Fallback image from the static folder -->
         <img src="https://i.scdn.co/image/{{ item.img_url_mid }}" class="card-img-top my-image" alt="{{ item.art_name }}">
+    {% endif %}
+
         <div class="card-body my-item">
             
             {% if item.master_genre == 'rock' %}
