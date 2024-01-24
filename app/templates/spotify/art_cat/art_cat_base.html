@@ -1,6 +1,6 @@
 {% include 'base.html' %}
 
-{% set genres = ['electronic', 'pop', 'country', 'funk', 'punk', 'indie', 'rock', 'old', none] %}
+{% set genres = ['electronic', 'pop', 'country', 'funk', 'punk', 'indie', 'rock', 'old', 'other'] %}
 {% set alpha = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'] %}
 {% set non_alphas = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '@', '#', '$', '%', '&', '*', '!', '?', '+', '-', '['] %}
 <head>
@@ -66,13 +66,16 @@
 }
 
     </style>
+    
     <title>Fred's Record Collection</title>
     <link rel="stylesheet" href="path/to/font-awesome/css/font-awesome.min.css">
     </head>
 
 <div class="container-fluid text-center">
   <div class="myDiv">
+    <a href="{{ url_for( 'spotify.art_cat_landing_page' ) }}">
     <h3 style="color: wheat;">Fred's Spotify Records Collection</h3>
+    </a>
     <!-- Genre List -->
     <ul id="genre_list" class="genre-list">
       {% for genre in genres %}

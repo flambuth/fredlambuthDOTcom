@@ -6,6 +6,7 @@ from app.spotify.forms import CourseForm
 from app.spotify.rp_funcs import past_24_hrs_rps, scan_for_art_cat_awareness, rp_average_per_day
 import app.spotify.daily_funcs as daily_funcs 
 import app.spotify.art_cat_funcs as ac_funcs
+import app.spotify.track_cat_funcs as track_funcs
 
 from datetime import datetime
 
@@ -94,11 +95,11 @@ def index_by_genre(master_genre):
     if request.method == 'POST':
         return redirect(url_for('spotify.index_by_search', search_term=form.search_term.data))
     
-    if master_genre in ac_funcs.genres:
-        art_cat_index = ac_funcs.all_art_cats_in_master_genre(master_genre)
-    
+    if (master_genre in ac_funcs.genres)|(master_genre is None) :
+        art_cat_index = ac_funcs.all_art_cats_in_master_genre(master_genre)    
     else:
         art_cat_index = ac_funcs.art_cats_with_this_genre(master_genre)
+
     context = {
         'genre': master_genre,
         'art_cat_index': art_cat_index,
@@ -122,10 +123,24 @@ def index_by_search(search_term):
 
     return render_template('spotify/art_cat/art_cat_search.html', **context)
 
+###########################################
+#track_cat routes
 
+@bp.route('/spotify/track_cat/<string:letter>')
+def index_tracks_by_letter(letter):
+    
+    track_index = track_funcs.all_tracks_starting_with(letter)
+    
+    context = {
+        'track_index' : track_index,
+        'letter' : letter,
+    }
+
+    return render_template('spotify/track_cat/track_index.html', **context)
 
 
 ###########################################
+#rp routes
 @bp.route('/spotify/rp')
 @bp.route('/spotify/rp/')
 def yesterday():

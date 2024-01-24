@@ -9,6 +9,9 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
         client_secret=SPOTIPY_CLIENT_SECRET,
         redirect_uri=SPOTIPY_REDIRECT_URI))
 
+####
+#Track Catalog
+
 def song_id_to_track_cat(song_id):
     '''
     Accepts a song_id, requests the JSON from Spotify, returns a dictionary ready for the track_catalog table
@@ -26,6 +29,7 @@ def song_id_to_track_cat(song_id):
         'app_record_date' : hoy_string,
     }
     return track_dict
+
 
 ##########
 #Artist Catalog

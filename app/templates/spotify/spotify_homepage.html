@@ -55,10 +55,7 @@ flex-direction: column;
                         {{ new_artist.art_name }}
                       </div></a>
                       <div class="col-sm-3">
-                        {{ new_artist.genre }}
-                      </div>
-                      <div class="col-sm-3">
-                        {{ new_artist.app_record_date }}
+                        {{ new_artist.genre }}{% if new_artist.genre2 %}, {{ new_artist.genre2 }}{% endif %}
                       </div>
                     
                     </div>
