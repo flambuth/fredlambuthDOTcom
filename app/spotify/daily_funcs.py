@@ -12,14 +12,21 @@ def daily_chart_joined_art_cat(
     '''
     attaches genre and image data from the art_cat table to the daily chart
     '''
+    #subquery is needed to filter down to latest art_cat record when joining
+    #to the daily chart
+    subquery = artist_catalog.get_current_records().subquery()
+
     results = chart_model.query.filter(
         chart_model.date == chart_date_obj
-        ).outerjoin(artist_catalog, chart_model.art_id==artist_catalog.art_id
+        ).outerjoin(
+            subquery, 
+            chart_model.art_id==subquery.c.art_id
         ).add_columns(
-            artist_catalog.genre,
-            artist_catalog.genre2, 
-            artist_catalog.master_genre, 
-            artist_catalog.img_url_sml)
+        subquery.c.genre,
+        subquery.c.genre2,
+        subquery.c.master_genre,
+        subquery.c.img_url_sml
+        )
     return results
 
 def latest_daily_date(chart_model):

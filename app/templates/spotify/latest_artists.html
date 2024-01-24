@@ -67,7 +67,7 @@
             </div>
 
             <div class="col-5 white-pill">
-                {{ artist.genre }} {% if artist.genre2 is not none %}, {{ artist.genre2 }}{% endif %}
+                {{ artist.genre }}{% if artist.genre2 %}, {{ artist.genre2 }}{% endif %}
             </div>
         </div>
         {% endfor %}

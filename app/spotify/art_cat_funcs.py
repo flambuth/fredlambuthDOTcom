@@ -42,7 +42,8 @@ def all_art_cats_in_master_genre(master_genre):
     if master_genre is not None:
         arts_in_the_genre = artist_catalog.get_current_records().filter(artist_catalog.master_genre == master_genre).order_by('art_name').all()
     else:
-        arts_in_the_genre = artist_catalog.get_current_records().filter(artist_catalog.master_genre.is_(None)).order_by('art_name').all()
+        arts_in_the_genre = artist_catalog.get_current_records().filter(artist_catalog.master_genre.is_(None)).order_by(artist_catalog.art_name).all()
+
 
     return arts_in_the_genre
 
@@ -70,14 +71,14 @@ def latest_art_cats(num=5):
     '''
     Last five artists added to the art_cat table
     '''
-    latest_acs = artist_catalog.query.order_by(artist_catalog.app_record_date.desc()).limit(num).all()
+    latest_acs = artist_catalog.query.order_by(artist_catalog.id.desc()).limit(num).all()
     return latest_acs
 
 def art_cat_artist_count():
     '''
     Integer count of all unique artists in the art_cat model
     '''
-    return artist_catalog.query.count()
+    return artist_catalog.get_current_records().count()
 
 def art_cat_genre_group_counts():
     '''
@@ -105,6 +106,9 @@ def genre_landing_thruples():
 ####################
 #Search stuff
 def art_cat_name_search(search_term):
+    '''
+    Needs to deal with nulls
+    '''
     like_arts_blob = artist_catalog.art_name.like(f"%{search_term}%")
     like_arts = artist_catalog.query.filter(like_arts_blob).order_by('art_name').all()
     return like_arts

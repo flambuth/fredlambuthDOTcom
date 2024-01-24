@@ -17,11 +17,18 @@ class artist_catalog(db.Model):
     img_url_sml = db.Column(db.String(150))
     master_genre = db.Column(db.String(150))
     app_record_date = db.Column(db.String(150))
-    is_current = db.Column(db.Integer)
+    is_current = db.Column(db.Boolean)
 
+    #use this one in the views so that there are not duplicates of each artist
+    #this will trim it down to the latest record
     @classmethod
     def get_current_records(cls):
         return cls.query.filter_by(is_current=True)
+    
+    #this one is the archival view of non_current records
+    @classmethod
+    def get_inactive_records(cls):
+        return cls.query.filter(cls.is_current.is_(None)).all()
 
     def __repr__(self):
         return f'<art_cat_entry "{self.art_name}">'

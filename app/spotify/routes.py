@@ -94,11 +94,11 @@ def index_by_genre(master_genre):
     if request.method == 'POST':
         return redirect(url_for('spotify.index_by_search', search_term=form.search_term.data))
     
-    if master_genre in ac_funcs.genres:
-        art_cat_index = ac_funcs.all_art_cats_in_master_genre(master_genre)
-    
+    if (master_genre in ac_funcs.genres)|(master_genre is None) :
+        art_cat_index = ac_funcs.all_art_cats_in_master_genre(master_genre)    
     else:
         art_cat_index = ac_funcs.art_cats_with_this_genre(master_genre)
+
     context = {
         'genre': master_genre,
         'art_cat_index': art_cat_index,
