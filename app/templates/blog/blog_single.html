@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<style>
+    body {
+    background-color: black;
+    color: white; /* Set text color to white */
+    }
+
+    section {
+    background-color: #144b3a;
+    padding: 2%;
+    border-bottom: 3px solid #0049a9; /* Darker bottom border color */
+    border-right: 1px solid #000c77;   /* Slightly darker right border color */
+    }
+
+    .date-pill {
+            background-color: #fff; /* Replace with your desired background color */
+            color: #082513; /* Replace with your desired text color */
+            border-radius: 15px; /* Adjust the border-radius as needed for the pill shape */
+            padding: 5px 10px; /* Adjust padding for spacing inside the pill */
+            display: inline-block; /* Ensures the pill shape only takes up as much space as needed */
+        }
+
+    .container {
+        padding: 5px;
+    }
+
+</style>
+
+<div class="container">
+
+        <h3>{% block title %} Fred Lambuth's Public Web Log{% endblock %}</h3>
+
+    <hr>
+
+    {% for post in posts %}
+    <img src="{{url_for('static', filename='/blog_pics/pic_' + post.id|string + '.jpg')}}" width="360" title="Rando off the street.">
+    <section>  
+      <h4> <b>{{ post.title }}</b></h4>
+      <small class="date-pill">{{ post.post_date }}</small>
+    </section>
+    <p>{% autoescape false %} {{ post.content | replace('\n', '<br>') }} {% endautoescape %}</p>
+  {% endfor %}
+
+    <hr>
+
+
+{% if next_post %}
+      <span>
+          <a class='next-post' href="{{url_for('blog.blog_single', id=next_post.id ) }}">
+              {{ 'Next' }}
+          </a>
+      </span>
+{% endif %}
+||
+{% if prev_post %}
+      <span>
+          <a class='prev-post' href="{{url_for('blog.blog_single', id=prev_post.id ) }}">
+              {{ 'Previous' }}
+          </a>
+      </span>
+{% endif %}
+</div>
+<br>
+</div>
+
+
+{% endblock %}

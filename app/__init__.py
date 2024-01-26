@@ -14,6 +14,9 @@ def create_app(config_class=Config):
     from app.spotify import bp as main_bp
     app.register_blueprint(main_bp)
 
+    from app.blog import bp as blog_bp
+    app.register_blueprint(blog_bp)
+
     @app.route('/')
     def homepage():
         return render_template('homepage.html')

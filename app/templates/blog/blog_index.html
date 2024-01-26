@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<head>
+    <style>
+
+
+        .col-left {
+            width: 11%
+        }
+        .col-right {
+            width: 89%
+        }
+
+        .image-container {
+        max-height: 300px; /* Set the maximum height for the container */
+        overflow: hidden; /* Hide any content that overflows the container */
+        }
+
+        .image-container img {
+        width: 100%;
+        height: auto;
+        object-fit: cover;
+        transform: translateY(-30%); /* Vertically center the image */
+        }
+
+        .row.content {
+        background: linear-gradient(to bottom, #518d7a, #0e3022); /* Gradient from top to bottom */
+        border-radius: 10%;
+        padding: 20px;
+        display: flex; /* Use flexbox for centering */
+        flex-direction: column; /* Stack content vertically */
+        align-items: center; /* Center content horizontally */
+        text-align: center;
+        border: 3px solid rgb(29, 179, 141);
+    }
+
+        .row.content p {
+            color: aliceblue;
+        }
+
+        .circular-image {
+    border-radius: 50%;
+    width: 80px; /* You can adjust the width as needed */
+    height: 80px; /* You can adjust the height as needed */
+    object-fit: cover; /* Ensures the image covers the entire circular space */
+    border: 3px solid #238a6b;
+    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.5); /* Add the drop shadow */
+}
+
+        .date-pill {
+            background-color: #082513; /* Replace with your desired background color */
+            color: #fff; /* Replace with your desired text color */
+            border-radius: 15px; /* Adjust the border-radius as needed for the pill shape */
+            padding: 5px 10px; /* Adjust padding for spacing inside the pill */
+            display: inline-block; /* Ensures the pill shape only takes up as much space as needed */
+        }
+        
+        .pagination-container {
+    text-align: center; /* Center-align the content */
+        }
+
+        .pagination {
+            display: inline-block; /* Display pagination links inline */
+            font-size: 18px; /* Adjust the font size as needed */
+        }
+
+            .background-wrapper {
+        background-image: url("{{url_for('static', filename='img/bg6.jpg')}}");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-position: center center;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        min-height: 100vh;
+        position: relative; /* Add relative positioning to create a stacking context */
+    }
+
+        .background-wrapper::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(18, 24, 21, 0.8);
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .container,
+        .footer,
+        .pagination-container {
+            position: relative;
+            z-index: 2; /* Higher value for elements that should be on top */
+        }
+
+    </style>
+    <title>Fred's Blog</title>
+</head>
+
+<div class="container">
+    {% for post in posts %}
+    <section>
+        <div class="row" style="background-color: antiquewhite; border-radius: 9%; color: #082513; border: 3px solid #238a6b;">
+            <div class="col-left">
+                <img src="{{url_for('static', filename='/blog_pics/pic_' + post.id|string + '.jpg')}}" width="80" title="Rando off the street." class="circular-image">
+            </div>
+            <div class="col-right">
+                <a href="{{url_for('blog.blog_single', id=post.id ) }}">
+                <h4> <b>{{ post.title }}</b></h4></a>
+                <small class="date-pill">{{ post.post_date }}</small>
+                <p>{{ post.content|truncate(150) }}...</p>
+            </div>
+        </div>
+    </section>
+{% endfor %}
+</div>
+
+
+
+{% endblock %}

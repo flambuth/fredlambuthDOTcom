@@ -67,6 +67,18 @@ body {
         flex-grow: 1; /* Allow the list-group to grow and take up the remaining space */
       }
     
+            /* Custom styles for the list group item */
+      .custom-list-item {
+        background-color: #e5f0e7; /* Set the default background color */
+        transition: background-color 0.3s ease; /* Add smooth transition effect */
+      }
+
+      /* Styles for the hover effect */
+      .custom-list-item:hover {
+        background-color: #83aaa8; /* Set the background color on hover */
+      }
+
+
     .custom-width {
         width: 150px; /* Adjust the width as needed to match the calendar's width */
       }
