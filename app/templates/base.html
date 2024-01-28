@@ -47,9 +47,7 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/"
     crossorigin="anonymous">
-    <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
+    
     <link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/style.css') }}">
     
     <link rel="apple-touch-icon" sizes="180x180"  href="{{url_for('static',filename='apple-touch-icon.png')}}">
@@ -62,35 +60,30 @@
 
         <nav class="navbar navbar-expand-lg navbar-dark-bg">
             <div class="container-fluid">
-            <a class="navbar-brand" href="{{ url_for('homepage') }}" id="homeDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <img src="{{ url_for('static', filename='favicon.ico') }}" alt="Favicon" class="navbar-favicon" title="Howdy!">
-                <span class="pill-text">FREDLAMBUTH</span>.com
-            </a>
+                <a class="navbar-brand" href="{{ url_for('homepage') }}" id="homeDropdown" role="button" aria-haspopup="true" aria-expanded="false">
+                    <img src="{{ url_for('static', filename='favicon.ico') }}" alt="Favicon" class="navbar-favicon" title="Howdy!">
+                    <span class="pill-text">FREDLAMBUTH</span>.com
+                </a>
 
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" id="spotifyDropdown" role="button"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Spotify Work
-                        </a>
-                    
-                        <div class="dropdown-menu" aria-labelledby="spotifyDropdown">
-                            <a class="dropdown-item" href="{{ url_for('spotify.spotify_landing_page') }}">Spotify Home</a>
-                            <a class="dropdown-item" href="{{ url_for('spotify.art_cat_landing_page') }}">Artist Catalog</a>
-                            <a class="dropdown-item" href="{{ url_for('spotify.track_cat_landing_page') }}">Track Catalog</a>
-                        </div>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="fredlambuth.com/blog"><i class="fas fa-book-open"></i>
-                            Blog</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ url_for('contact') }}"><i class="fas fa-bullhorn"></i>
-                            Contact</a>
-                    </li>
-                </ul>
-            </div>
+                <div class="collapse navbar-collapse" id="navbarNav">
+                    <ul class="navbar-nav ml-auto">
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('spotify.spotify_landing_page') }}"><i class="fas fa-book-open"></i>
+                                Spotify</a>
+                        </li>
+
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('blog.blog_landing_page') }}"><i class="fas fa-book-open"></i>
+                                Blog</a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link" href="{{ url_for('contact') }}"><i class="fas fa-bullhorn"></i>
+                                Contact</a>
+                        </li>
+                </div>    
             </div>
         </nav>
 

@@ -29,7 +29,7 @@ class blog_posts(db.Model):
         )
 
         #does a quick sort by changing the 2023-JAN string to a measurable date 
-        sorted_data = sorted(result, key=lambda x: datetime.strptime(x[0], '%Y-%b'))
+        sorted_data = sorted(result, key=lambda x: datetime.strptime(x[0], '%Y-%b'), reverse=True)
         return sorted_data
 
     def __repr__(self):

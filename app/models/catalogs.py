@@ -53,7 +53,24 @@ class artist_catalog(db.Model):
     
     def __str__(self):
         return f'Artist Catalog Entry For: "{self.art_name}">'
-    
+
+    @staticmethod
+    def find_name_in_art_cat(test_name):
+        '''
+        Accepts a test string to search in the art_name field of the artist catalog.
+        Returns None if nothing is found
+        '''
+        #input and art_cat.art_name are both lowered before evaluating for match
+        test_name_lowered = test_name.lower()
+        results = artist_catalog.query.filter(
+            func.lower(artist_catalog.art_name) == test_name_lowered
+    ).all()
+        if not results:
+            # Handle the case where no match is found
+            return None
+        
+        #returns the art_id if there is a match
+        return results[0].art_id
 
 class track_catalog(db.Model):
     id = db.Column(db.Integer, primary_key=True)

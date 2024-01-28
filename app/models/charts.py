@@ -23,6 +23,16 @@ class daily_tracks(db.Model):
     date = db.Column(db.Date, nullable=False)
     def __repr__(self):
         return f'<daily_tracks for "{self.date}">'
+    
+    @classmethod
+    def artist_days_on_chart(
+            cls,
+            art_id):
+        '''
+        Given an art_id returns the chart results if they are in the model
+        '''
+        art_days = cls.query.filter(cls.art_id == art_id).all()
+        return art_days
 
 class daily_artists(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -36,7 +46,24 @@ class daily_artists(db.Model):
     date = db.Column(db.Date(), nullable=False)
     def __repr__(self):
         return f'<daily_artists for "{self.date}">'
+    
+    @classmethod
+    def artist_days_on_chart(
+            cls,
+            art_id):
+        '''
+        Given an art_id returns the chart results if they are in the model
+        '''
+        art_days = cls.query.filter(cls.art_id == art_id).all()
+        return art_days
 
+
+
+
+
+
+###########
+#THIS MIGHT BE BETTER OF as a third module in the models library
 class recently_played(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     art_name = db.Column(db.String(150))
