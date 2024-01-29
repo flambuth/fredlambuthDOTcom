@@ -25,6 +25,10 @@ def create_app(config_class=Config):
     def contact():
         return render_template('contact.html')
 
+    from app.dash_plotlys.artist_history import Add_Dash_art_cat
+    Add_Dash_art_cat(app)
+
+
     return app
 
 if __name__ == '__main__':

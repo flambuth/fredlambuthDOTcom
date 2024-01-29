@@ -71,6 +71,18 @@ class artist_catalog(db.Model):
         
         #returns the art_id if there is a match
         return results[0].art_id
+    
+    @staticmethod
+    def art_id_to_art_cat(art_id):
+        '''
+        Takes an art_id, returns the art_cat record if there is one.
+        '''
+        result = artist_catalog.query.filter(artist_catalog.art_id==art_id).first()
+        if not result:
+            # Handle the case where no match is found
+            return None
+
+        return result
 
 class track_catalog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
