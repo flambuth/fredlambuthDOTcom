@@ -1,11 +1,12 @@
 from app.blog import bp
-from app.blog.forms import CourseForm
+from app.blog.forms import CourseForm, LoginForm
 from app.extensions import db
-from app.models.blog import blog_posts
+from app.models.blog import blog_posts, blog_users
+from urllib.parse import urlsplit
 
 from sqlalchemy import func, desc
-
-from flask import render_template, request, redirect, url_for
+from flask_login import current_user, login_user, logout_user
+from flask import render_template, request, redirect, url_for, flash
 
 
 #YOU CANT HAVE ANYTHING OUTSIDE OF DECORATED ROUTES! Do it somewhere else and import it.
@@ -23,6 +24,40 @@ def blog_landing_page():
         'latest_6_posts' : latest_6_posts,
     }
     return render_template('blog/blog_landing_page.html', **context)
+
+@bp.route('/blog/login', methods=['GET', 'POST'])
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('blog.blog_landing_page'))
+
+    form = LoginForm()
+
+    if form.validate_on_submit():
+        user = blog_users.query.filter_by(username=form.username.data).first()
+
+        #if there is no users of if the password doesn't check out
+        if user is None or not user.check_password(form.password.data):
+            flash('Invalid username or password')
+            return redirect(url_for('blog.login'))
+
+        #sets the 'current_user' variable to 'yes'
+        login_user(user, remember=form.remember_me.data)
+        next_page = request.args.get('next')
+        if not next_page or urlsplit(next_page).netloc != '':
+            next_page = url_for('blog.blog_landing_page')
+
+        return redirect(url_for('blog.blog_landing_page'))
+
+    return render_template('blog/blog_login.html', title='Sign In', form=form)
+
+@bp.route('/blog/logout', methods=['GET', 'POST'])
+def logout():
+    if request.method == 'POST':
+        logout_user()
+        flash('You have been logged out.')
+        return redirect(url_for('homepage'))
+
+    return render_template('blog/blog_logout.html')
 
 @bp.route('/blog/<string:year_month>')
 def blog_yearmonth_group(year_month):

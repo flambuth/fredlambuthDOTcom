@@ -116,7 +116,7 @@ def art_cat_name_search(search_term):
     Needs to deal with nulls
     '''
     like_arts_blob = artist_catalog.art_name.like(f"%{search_term}%")
-    like_arts = artist_catalog.query.filter(like_arts_blob).order_by('art_name').all()
+    like_arts = artist_catalog.get_current_records().filter(like_arts_blob).order_by('art_name').all()
     return like_arts
 
 #####################

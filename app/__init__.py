@@ -1,8 +1,13 @@
 from flask import Flask, render_template
+from flask_login import LoginManager
+from flask_migrate import Migrate
+
 from config import Config
 from config import SECRET_KEY
 
 from app.extensions import db
+
+login_manager = LoginManager()
 
 def create_app(config_class=Config):
     app = Flask(__name__, static_url_path='/static')
@@ -10,8 +15,10 @@ def create_app(config_class=Config):
     app.config['SECRET_KEY'] = SECRET_KEY
     #app.config['SERVER_NAME'] = 'localhost:5000'
 
+    login_manager.init_app(app)
 
     db.init_app(app)
+    migrate = Migrate(app, db)
 
     from app.spotify import bp as main_bp
     app.register_blueprint(main_bp)
