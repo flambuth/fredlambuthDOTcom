@@ -8,6 +8,8 @@ def create_app(config_class=Config):
     app = Flask(__name__, static_url_path='/static')
     app.config.from_object(config_class)
     app.config['SECRET_KEY'] = SECRET_KEY
+    #app.config['SERVER_NAME'] = 'localhost:5000'
+
 
     db.init_app(app)
 
@@ -25,10 +27,12 @@ def create_app(config_class=Config):
     def contact():
         return render_template('contact.html')
 
-    from app.dash_plotlys.artist_history import Add_Dash_art_cat
-    Add_Dash_art_cat(app)
-
-
+    #from app.dash_plotlys.artist_history import Add_Dash_art_cat
+    #Add_Dash_art_cat(app)
+    #with app.app_context():
+    from app.dash_plotlys.year_month_line_chart import Add_Dash_year_month
+    Add_Dash_year_month(app)
+        
     return app
 
 if __name__ == '__main__':

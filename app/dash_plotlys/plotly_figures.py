@@ -1,21 +1,18 @@
 import plotly.express as px
 
-def chart_scatter_plotly(chart_hits):
+def chart_scatter_plotly(
+        dates,
+        positions,
+        songs_or_arts,
+):
     '''
     Accepts a ACE.chart_hits object.
     Returns a plotly line figure
     '''
-    x_axis = [i.date for i in chart_hits]
-    y_axis = [i.position for i in chart_hits]
-    
-    if chart_hits and hasattr(chart_hits[0], 'song_name') and chart_hits[0].song_name:
-        color = [i.song_name for i in chart_hits]
-    else:
-        color = None
     fig = px.scatter(
-    x=x_axis,
-    y=y_axis,
-    color=color,
+    x=dates,
+    y=positions,
+    color=songs_or_arts,
     )
     
     fig.update_layout(yaxis=dict(autorange="reversed"))
@@ -26,4 +23,26 @@ def chart_scatter_plotly(chart_hits):
         yaxis_title="Chart Position",
         template='plotly_dark',
     )
+    return fig
+
+def year_month_line_chart(
+        dates,
+        positions,
+        art_names
+):
+    fig = px.line(
+    x=dates,
+    y=positions,
+    color=art_names,
+    )
+    print("Creating figure with x:", dates, "y:", positions, "colors:", art_names)
+    fig.update_layout(yaxis=dict(autorange="reversed"))
+
+    # Add titles to the x and y axes
+    fig.update_layout(
+        xaxis_title="",
+        yaxis_title="Chart Position",
+        template='plotly_dark',
+    )
+    
     return fig

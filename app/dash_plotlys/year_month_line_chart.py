@@ -2,35 +2,34 @@ from dash import Dash
 from dash import dcc
 from dash import html
 from dash import Input, Output
+from datetime import date
+
+#from dash import url
+from app.dash_plotlys.layouts import create_navbar, my_icon
 
 import dash_bootstrap_components as dbc
 from dash_bootstrap_templates import load_figure_template
+
+from app.dash_plotlys import data_sources, plotly_figures
 load_figure_template('LUX')
 
-from flask import request
+navbar = create_navbar()
 
-from app.dash_plotlys import layouts as layouts
-#from app.dash_plotlys.layouts import create_navbar, my_icon, notable_tracks_html, longest_artist_streak_html
-from app.dash_plotlys import data_sources, plotly_figures
-
-def Add_Dash_art_cat(flask_app):
-
+def Add_Dash_year_month(flask_app):
     dash_app = Dash(
         server=flask_app, name="art_cat", 
-        url_base_pathname="/dash/art_cat/",
+        url_base_pathname="/dash/months/",
         external_stylesheets=[dbc.themes.LUX])
-    
     dash_app.layout = html.Div(
         style={'backgroundColor': 'black'},
         children=[
             dcc.Location(id='url', refresh=False),
-            layouts.create_navbar(),
-            html.Div(id='my_output'),
+            navbar,
             #dcc.Store(id='artist_name_store'),  # Store component to hold the artist name
             dcc.Graph(
                 id="artist_history",
             ),
-            layouts.my_icon
+            my_icon
         ]
     )
     dash_app.title = 'My Listening History'
@@ -39,7 +38,6 @@ def Add_Dash_art_cat(flask_app):
     #the same id as the component ids in this dash callback.
     @dash_app.callback(
         Output(component_id='artist_history', component_property='figure'),
-        Output(component_id='my_output', component_property='children'),
         #Input(component_id='my_input', component_property='value'),
         Input('url', 'pathname'),  # This input captures the URL pathname
     )
@@ -48,24 +46,32 @@ def Add_Dash_art_cat(flask_app):
         This does all the HTML work that isn't done by the Dashboard itself imported from Chartsie
         '''
         #art_cat_data = char.art_cat_entry(input_art_name)[0]
-        input_art_id = pathname.split('/')[-1]
+        input_month = pathname.split('/')[-1]
+        input_year = pathname.split('/')[-2]
 
-        if input_art_id is None:
-            input_art_id = '41Q0HrwWBtuUkJc7C1Rp6K'
+        if input_month is None:
+            input_month = date.today().month - 1
+            input_year = date.today().year
 
-        art_cat_data = data_sources.Artist_Catalog_Enriched(input_art_id)
-        x,y,z = art_cat_data.scatter_plot_components()
+        month_arts = data_sources.Chart_Year_Month_Stats(input_year,input_month)
+        x,y,z=month_arts.line_chart_components()
+        fig = plotly_figures.year_month_line_chart(x,y,z)
 
-        fig_arts = plotly_figures.chart_scatter_plotly(x,y,z)
 
-        #if art_cat_data.track_hits:
-        #    fig_tracks = plotly_figures.chart_scatter_plotly(art_cat_data.track_hits)
+        
+        #if hits_data.art_spots == None:
+        #    fig = None
 
-        totem_div = layouts.artist_history_stats_html(art_cat_data)
-        if fig_arts is None:
+        
+
+    
+
+
+
+        if fig is None:
             placeholder_text = "No data available"
-            return dcc.Markdown(f"**{placeholder_text}**"), totem_div
+            return dcc.Markdown(f"**{placeholder_text}**")
         else:
-            return fig_arts, totem_div
+            return fig
         #return fig, totem_div
-    return dash_app.server
+    return dash_app

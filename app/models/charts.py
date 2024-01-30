@@ -1,6 +1,6 @@
 from app.extensions import db
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import func
+from sqlalchemy import func, extract
 
 from datetime import datetime, timedelta
 
@@ -23,7 +23,40 @@ class daily_tracks(db.Model):
     date = db.Column(db.Date, nullable=False)
     def __repr__(self):
         return f'<daily_tracks for "{self.date}">'
-    
+
+    @classmethod
+    def filter_by_year_month(cls, year, month):
+        '''
+        Filters the records for a particular year and month.
+        :param year: The year (integer)
+        :param month: The month (integer)
+        :return: Query result for the specified year and month
+        '''
+        return cls.query.filter(
+            extract('year', cls.date) == year,
+            extract('month', cls.date) == month
+        )
+
+    @classmethod
+    def hits_in_year_month(
+        cls,
+        year,
+        month,
+        n=5
+    ):
+        result = (
+        cls.filter_by_year_month(year, month)
+        .group_by(cls.art_name)
+        .with_entities(
+            cls.art_name,
+            func.sum(21 - cls.position).label('chart_power_sum')
+        )
+        .order_by(func.sum(21 - cls.position).desc())
+        .all()
+    )
+        return result[:n]
+
+
     @classmethod
     def artist_days_on_chart(
             cls,
@@ -34,6 +67,7 @@ class daily_tracks(db.Model):
         art_days = cls.query.filter(cls.art_id == art_id).all()
         return art_days
 
+    
 class daily_artists(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     position = db.Column(db.Integer)
@@ -46,7 +80,39 @@ class daily_artists(db.Model):
     date = db.Column(db.Date(), nullable=False)
     def __repr__(self):
         return f'<daily_artists for "{self.date}">'
-    
+
+    @classmethod
+    def filter_by_year_month(cls, year, month):
+        '''
+        Filters the records for a particular year and month.
+        :param year: The year (integer)
+        :param month: The month (integer)
+        :return: Query result for the specified year and month
+        '''
+        return cls.query.filter(
+            extract('year', cls.date) == year,
+            extract('month', cls.date) == month
+        )
+
+    @classmethod
+    def hits_in_year_month(
+        cls,
+        year,
+        month,
+        n=5
+    ):
+        result = (
+        cls.filter_by_year_month(year, month)
+        .group_by(cls.art_name)
+        .with_entities(
+            cls.art_name,
+            func.sum(21 - cls.position).label('chart_power_sum')
+        )
+        .order_by(func.sum(21 - cls.position).desc())
+        .all()
+    )
+        return result[:n]
+
     @classmethod
     def artist_days_on_chart(
             cls,
@@ -56,9 +122,6 @@ class daily_artists(db.Model):
         '''
         art_days = cls.query.filter(cls.art_id == art_id).all()
         return art_days
-
-
-
 
 
 
