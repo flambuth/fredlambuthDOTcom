@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/blog.css') }}">
+<head>
+
+    <title>Fred's Blog</title>
+
+<style>
+
+</style>
+</head>
+
+<body class="w3-dark-grey">
+
+
+<header class="w3-container w3-center w3-padding-32"> 
+    <h1><b>Fear and Loathing on The Internet</b></h1>
+    <p>Welcome to the public web log of <span class="w3-tag">Fred Lambuth</span></p>
+</header>
+
+<div class="container">
+    {% for post in posts %}
+    <section>
+        <div class="w3-row">
+            <div class="col-left">
+                <img src="{{url_for('static', filename='img/blog_pics/pic_' + post.id|string + '.jpg')}}" width="80" title="Rando off the street." class="circular-image">
+            </div>
+            <div class="col-right">
+                <a href="{{url_for('blog.blog_single', id=post.id ) }}">
+                <h4> <b>{{ post.title }}</b></h4></a>
+                <small class="date-pill">{{ post.post_date }}</small>
+                <p>{{ post.content|truncate(150) }}...</p>
+            </div>
+        </div>
+    </section>
+{% endfor %}
+</div>
+
+
+
+{% endblock %}

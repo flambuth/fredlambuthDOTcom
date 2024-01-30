@@ -1,12 +1,11 @@
 from app.spotify import bp
 from flask import render_template, request, redirect, url_for
 from app.models.charts import recently_played, daily_artists ,daily_tracks
+from app.models.catalogs import track_catalog
 
 from app.spotify.forms import CourseForm
-from app.spotify.rp_funcs import past_24_hrs_rps, scan_for_art_cat_awareness, rp_average_per_day
 import app.spotify.daily_funcs as daily_funcs 
 import app.spotify.art_cat_funcs as ac_funcs
-import app.spotify.track_cat_funcs as track_funcs
 
 from datetime import datetime
 
@@ -24,7 +23,7 @@ def spotify_landing_page():
     latest_5 = ac_funcs.latest_art_cats()
     top_5_arts = daily_funcs.top_ever_daily_artists(5)
     top_5_tracks = daily_funcs.top_ever_daily_tracks(5)
-    daily_rp_avg = rp_average_per_day()
+    daily_rp_avg = recently_played.rp_average_per_day()
 
     context = {
         'latest_artists':latest_5,
@@ -126,10 +125,22 @@ def index_by_search(search_term):
 ###########################################
 #track_cat routes
 
+@bp.route('/spotify/track_cat/', methods=('GET','POST'))
+@bp.route('/spotify/track_cat', methods=('GET','POST'))
+def track_cat_landing_page():
+
+    thruples = track_catalog.track_cat_landing_thruples()
+
+    context = {
+        'thruples' : thruples,
+    }
+
+    return render_template('spotify/track_cat/track_cat_landing.html', **context)
+
 @bp.route('/spotify/track_cat/<string:letter>')
 def index_tracks_by_letter(letter):
     
-    track_index = track_funcs.all_tracks_starting_with(letter)
+    track_index = track_catalog.all_tracks_starting_with(letter)
     
     context = {
         'track_index' : track_index,
@@ -148,10 +159,10 @@ def yesterday():
     Route to the recent template.
     '''
     three_ago = recently_played.query.all()[-3:]
-    yesterday_records = past_24_hrs_rps()
+    yesterday_records = recently_played.past_24_hrs_rps()
     song_count_yesterday = len(yesterday_records)
     distinct_arts = len(list(set([i.art_name for i in yesterday_records])))
-    known, unknown = scan_for_art_cat_awareness()
+    known, unknown = recently_played.scan_for_art_cat_awareness()
     context = {
         'last_three' : three_ago,
         'yesterday_song_count' : song_count_yesterday,

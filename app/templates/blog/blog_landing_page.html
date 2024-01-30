@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/blog.css') }}">
+
+<body class="w3-dark-grey">
+
+    <!-- w3-content defines a container for fixed size centered content, 
+    and is wrapped around the whole page content, except for the footer in this example -->
+<div class="w3-content" style="max-width:1400px">
+    
+    <!-- Header -->
+    <header class="w3-container w3-center w3-padding-32"> 
+      <h1><b>Fear and Loathing on The Internet</b></h1>
+      <p>Welcome to the public web log of <span class="w3-tag">Fred Lambuth</span></p>
+    </header>
+    
+    <!-- Grid -->
+    <div class="w3-row">
+    
+    
+        <!-- Blog entries -->
+        <div class="w3-col l8 s12">
+            <!-- Blog entry -->
+            {% for post in latest_6_posts[:3] %}
+            <div class="w3-card-4 w3-margin w3-teal">
+                
+                <div class="row">
+                    <div class="col-left">
+                        <a href="{{ url_for( 'blog.blog_single', id=post.id) }}">
+                        <img src="{{url_for('static', filename='img/blog_pics/pic_' + post.id|string + '.jpg')}}" width="80" title="Rando off the street." class="circular-image">
+                        </a>
+                    </div>
+                    <div class="col-right">
+                        <h3><b>{{ post.title }}</b></h3>
+                        <h5><span class="w3-opacity">{{ post.post_date }}</span></h5>
+                    </div>
+                </div>
+
+                <br>
+
+                <div class="w3-container center-text">
+                    <p>{% autoescape false %} {{ post.content | replace('\n', '<br>') | truncate(1500)}} {% endautoescape %}</p>
+                </div>
+            </div>
+            <hr>
+            {% endfor %}
+            <!-- END BLOG ENTRIES -->
+        </div>
+    
+        <!-- Introduction menu -->
+        <div class="w3-col l4">
+        <!-- About Card -->
+        <div class="w3-card w3-margin w3-margin-top">
+            <img src="{{url_for('static', filename='img/sailor.jpg')}}" title="CS2 Peter Grabnickas, a crew member of the USS Capelin, disappeared with the ship in the Celebes Sea near Indonesia on Dec 2, 1943. Photo taken two months before the submarine's last known sighting.">
+            <div class="w3-container w3-teal">
+            <h4><b>Fredrick W. Lambuth</b></h4>
+            <p>This is the blog! Each entry represents a sizable commit added to the main git branch. The first half of each post I talk about what I added. In the second half I review books of all types, video games, movies and podcasts. It's not much, but it's honest work.</p>
+            </div>
+        </div>
+        
+        <hr>
+        
+        <!-- Posts -->
+        <div class="w3-card w3-margin">
+            <div class="w3-container w3-padding w3-teal">
+            <h4>Archives</h4>
+            </div>
+            
+            <ul class="w3-ul w3-hoverable w3-white">
+
+            {% for year_month in year_month_index %}
+            
+            <li class="w3-padding-16">
+                <a href="{{url_for('blog.blog_yearmonth_group', year_month=year_month[0])}}">
+                <span class="w3-large">{{ year_month[0] }}</span><br>
+                <span>{{year_month[1]}} posts</span>
+                </a>
+            </li>
+            
+            {% endfor %}
+
+            </ul>
+        </div>
+        <hr> 
+        
+        <!-- END Introduction Menu -->
+        </div>
+    
+    <!-- END GRID -->
+    </div><br>
+    
+    <!-- END w3-content -->
+</div>
+    
+    
+    </body>
+
+{% endblock %}

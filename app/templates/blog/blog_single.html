@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/blog.css') }}">
+
+<body class="w3-black">
+
+<div class="container">
+
+        <h3>{% block title %} Fred Lambuth's Public Web Log{% endblock %}</h3>
+
+    <hr>
+
+    {% for post in posts %}
+    <div class="row">
+        <div class="col-4">
+            <img src="{{url_for('static', filename='img/blog_pics/pic_' + post.id|string + '.jpg')}}" width="360" title="Rando off the street.">
+        </div>
+        <div class="col-2">
+            <section>  
+                <h4> <b>{{ post.title }}</b></h4>
+                <small class="date-pill">{{ post.post_date }}</small>
+              </section>
+        </div>
+    </div>
+
+    <hr>
+
+    <p>{% autoescape false %} {{ post.content | replace('\n', '<br>') }} {% endautoescape %}</p>
+  {% endfor %}
+
+    <hr>
+
+
+{% if next_post %}
+      <span>
+          <a class='next-post' href="{{url_for('blog.blog_single', id=next_post.id ) }}">
+              {{ 'Next' }}
+          </a>
+      </span>
+{% endif %}
+||
+{% if prev_post %}
+      <span>
+          <a class='prev-post' href="{{url_for('blog.blog_single', id=prev_post.id ) }}">
+              {{ 'Previous' }}
+          </a>
+      </span>
+{% endif %}
+</div>
+<br>
+</div>
+
+
+{% endblock %}
