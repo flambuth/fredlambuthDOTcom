@@ -15,10 +15,7 @@
 <body class="w3-dark-grey">
 
 
-<header class="w3-container w3-center w3-padding-32"> 
-    <h1><b>Fear and Loathing on The Internet</b></h1>
-    <p>Welcome to the public web log of <span class="w3-tag">Fred Lambuth</span></p>
-</header>
+{% include 'blog/blog_header.html' %}
 
 <div class="container">
     {% for post in posts %}

@@ -43,6 +43,7 @@ def year_month_line_chart(
         xaxis_title="",
         yaxis_title="Chart Position",
         template='plotly_dark',
+        showlegend=False,
     )
     
     return fig

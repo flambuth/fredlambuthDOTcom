@@ -3,7 +3,7 @@ from wtforms import StringField, TextAreaField, IntegerField, PasswordField, Boo
 from wtforms.validators import InputRequired, Length, DataRequired
 
 
-class CourseForm(FlaskForm):
+class SearchForm(FlaskForm):
     '''
     Used in the blog search bar.
     '''

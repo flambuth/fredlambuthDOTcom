@@ -7,12 +7,18 @@ from sqlalchemy import func
 class Chart_Year_Month_Stats:
 
     def __init__(self, year, month):
-        self.top_5_in_tracks = daily_tracks.hits_in_year_month(year, month)
-        self.top_5_names_in_tracks = [i[0] for i in self.top_5_in_tracks]
+        #self.top_5_in_tracks = daily_tracks.hits_in_year_month(year, month)
+        #self.top_5_names_in_tracks = [i[0] for i in self.top_5_in_tracks]
 
+        #find the top5 artists names of the year-month set by the parameters
         self.top_5_in_arts = daily_artists.hits_in_year_month(year, month)
+        #lsit of 5 strings
         self.top_5_names_in_arts = [i[0] for i in self.top_5_in_arts]
-        self.arts_of_top5 = daily_artists.filter_by_year_month(year,month).filter(daily_artists.art_name.in_(self.top_5_names_in_arts)).all()
+
+        self.top_5_artcats = artist_catalog.get_current_records().filter(artist_catalog.art_name.in_(self.top_5_names_in_arts)).order_by(artist_catalog.art_name).all()
+
+        #filter down to the daily_arts charts that is just the top5
+        self.arts_of_top5 = daily_artists.filter_by_year_month(year,month).filter(daily_artists.art_name.in_(self.top_5_names_in_arts)).order_by(daily_artists.art_name).all()
 
     def line_chart_components(self):
         dates = [i.date for i in self.arts_of_top5]

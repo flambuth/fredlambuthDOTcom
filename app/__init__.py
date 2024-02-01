@@ -9,6 +9,9 @@ from app.extensions import db
 
 login_manager = LoginManager()
 
+#for spotify img links!
+#https://i.scdn.co/image/
+
 def create_app(config_class=Config):
     app = Flask(__name__, static_url_path='/static')
     app.config.from_object(config_class)
@@ -39,6 +42,9 @@ def create_app(config_class=Config):
     #with app.app_context():
     from app.dash_plotlys.year_month_line_chart import Add_Dash_year_month
     Add_Dash_year_month(app)
+
+    from app.dash_plotlys.artist_history import Add_Dash_art_cat
+    Add_Dash_art_cat(app)
         
     return app
 

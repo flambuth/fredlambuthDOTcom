@@ -17,7 +17,7 @@ def Add_Dash_art_cat(flask_app):
 
     dash_app = Dash(
         server=flask_app, name="art_cat", 
-        url_base_pathname="/dash/art_cat/",
+        url_base_pathname="/spotify/art_cat/artist/dash/",
         external_stylesheets=[dbc.themes.LUX])
     
     dash_app.layout = html.Div(

@@ -5,19 +5,21 @@
 <style>
 
 .spotify-icon-container {
-        display: flex;
-        justify-content: center;
-        margin-bottom: 2px;
-    }
+    display: flex;
+    justify-content: center;
+    align-items: center; /* Add this line for vertical centering */
+    margin-bottom: 2px;
+}
 
-    .spotify-icon-container a i {
-        color: limegreen;
-        transition: color 0.3s ease-in-out;
-    }
+.spotify-icon-container a i {
+    color: limegreen;
+    transition: color 0.3s ease-in-out;
+}
 
-    .spotify-icon-container a i:hover {
-        color: darkgreen; /* Adjust the desired darker color */
-    }
+.spotify-icon-container a i:hover {
+    color: darkgreen; /* Adjust the desired darker color */
+}
+
 
 </style>
 <link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/spotify.css') }}">
@@ -27,43 +29,50 @@
       <div class="row">
 
         <div class="col-lg-4">
-            <div class="card mb-4">
-                <div class="card-body text-center">
-                    <img src="https://i.scdn.co/image/{{ img_url_mid }}" alt="avatar"
-                        class="rounded-circle img-fluid" style="width: 150px;">
-                    <h5 class="my-3">{{ art_name }}</h5>
-                    {% if genre1 %}
-                        <p class="white-pill mb-0">
-                            <a href="{{ url_for('spotify.index_by_genre', master_genre=genre1) }}">
-                            {{ genre1 }}
-                            </a>
-                        </p>
-                    {% endif %}
-                    {% if genre2 %}
-                        <p class="white-pill mb-0">
-                            <a href="{{ url_for('spotify.index_by_genre', master_genre=genre2) }}">
-                            {{ genre2 }}
-                            </a>
-                        </p>
-                    {% endif %}
-                    {% if genre3 %}
-                        <p class="white-pill mb-0">
-                            <a href="{{ url_for('spotify.index_by_genre', master_genre=genre3) }}">
-                            {{ genre3 }}
-                            </a>
-                        </p>
-                    {% endif %}
+          <div class="card mb-4">
+              <div class="card-body text-center">
+                <img src="https://i.scdn.co/image/{{ img_url_mid }}" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                  <h5 class="my-3">{{ art_name }}</h5>
+                  {% if genre1 %}
+                      <p class="white-pill mb-0">
+                          <a href="{{ url_for('spotify.index_by_genre', master_genre=genre1) }}">
+                              {{ genre1 }}
+                          </a>
+                      </p>
+                  {% endif %}
+                  {% if genre2 %}
+                      <p class="white-pill mb-0">
+                          <a href="{{ url_for('spotify.index_by_genre', master_genre=genre2) }}">
+                              {{ genre2 }}
+                          </a>
+                      </p>
+                  {% endif %}
+                  {% if genre3 %}
+                      <p class="white-pill mb-0">
+                          <a href="{{ url_for('spotify.index_by_genre', master_genre=genre3) }}">
+                              {{ genre3 }}
+                          </a>
+                      </p>
+                  {% endif %}
+                  
+                  <hr>
+                  <div class="spotify-icon-container" style="margin-bottom: 10px; margin-right: 15px;">
+                    <a href="https://open.spotify.com/artist/{{ art_id }}" target="_blank" rel="noopener noreferrer">
+                        <i class="fab fa-spotify fa-3x"></i>
+                    </a>
                     
-                    <hr>
-                    <div class="spotify-icon-container">
-                        <a href="https://open.spotify.com/artist/{{ art_id }}" target="_blank" rel="noopener noreferrer">
-                            <i class="fab fa-spotify fa-3x"></i>
-                        </a>
-                    </div>
-                </div>
+                  </div>
+                  <p class="mb-0 ms-2">Spotify Artist URL</p>
+                  <div class="spotify-icon-container" style="margin-right: 5px;">
+                    <a href="http://127.0.0.1:5000/spotify/art_cat/artist/dash/{{ art_id }}" target="_blank" rel="noopener noreferrer">
+                      <i class="fas fa-chart-line fa-3x"></i>
+                    </a>
+                    
+                  </div>
+                  <p class="mb-0 ms-2">Artist Dashboard</p>
+              </div>
             </div>
-        </div>
-        
+      </div>
 
         <div class="col-lg-8">
           <div class="card mb-4">
@@ -154,8 +163,10 @@
             {% endif %}
 
           </div>
+
         </div>
+        
       </div>
     </div>
-  </section>
+</section>
 {% endblock %}
