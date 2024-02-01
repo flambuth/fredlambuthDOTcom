@@ -115,3 +115,30 @@ body {
           height: 100%;
           object-fit: cover;
       }
+
+      .spotify-icon-container {
+        display: flex;
+        justify-content: center;
+        align-items: center; /* Add this line for vertical centering */
+        margin-bottom: 2px;
+    }
+    
+    .spotify-icon-container a i {
+        color: limegreen;
+        transition: color 0.3s ease-in-out;
+    }
+    
+    .spotify-icon-container a i:hover {
+        color: darkgreen; /* Adjust the desired darker color */
+    }
+    
+    .list-group-item:hover {
+        background-color: #9fe2ce;  /* Change the background color on hover */
+        cursor: pointer;  /* Change the cursor on hover */
+    }
+    
+    .streak-item:hover {
+        /* Add any specific styles for hover state in the streak list */
+        background-color: aliceblue; /* Set the background color to transparent or the desired color */
+        cursor: default; /* Change the cursor back to default for the streak list items */
+    }

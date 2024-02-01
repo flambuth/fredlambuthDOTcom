@@ -22,6 +22,7 @@ def chart_scatter_plotly(
         xaxis_title="",
         yaxis_title="Chart Position",
         template='plotly_dark',
+        legend_title_text='',
     )
     return fig
 

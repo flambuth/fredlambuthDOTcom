@@ -177,6 +177,7 @@ def art_cat_profile(art_id):
         'last_appearance' : max(dates),
         'streaks':find_streaks_in_dates(dates),
 
+        #tuple! first is the track_name, second is the track_id for Spotify API
         'notable_tracks': notable_tracks(art_cat_obj.art_name),
         'is_one_hit_wonder': is_one_hit_wonder(art_cat_obj.art_name),
     }

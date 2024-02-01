@@ -16,22 +16,25 @@
 
 
 {% include 'blog/blog_header.html' %}
-
+<br>
 <div class="container">
     {% for post in posts %}
     <section>
-        <div class="w3-row">
-            <div class="col-left">
-                <img src="{{url_for('static', filename='img/blog_pics/pic_' + post.id|string + '.jpg')}}" width="80" title="Rando off the street." class="circular-image">
-            </div>
-            <div class="col-right">
+        <div class="w3-row w3-sand" style="border-radius: 18%;">
+            <div class="w3-col w3-teal">
                 <a href="{{url_for('blog.blog_single', id=post.id ) }}">
+                <img src="{{url_for('static', filename='img/blog_pics/pic_' + post.id|string + '.jpg')}}"  title="Rando off the street." class="circular-image">
+            </div>
+            <div class="w3-col">
+                
                 <h4> <b>{{ post.title }}</b></h4></a>
                 <small class="date-pill">{{ post.post_date }}</small>
-                <p>{{ post.content|truncate(150) }}...</p>
+                <hr>
+                <p class='w3-grey'>{{ post.content|truncate(350) }}...</p>
             </div>
         </div>
     </section>
+    <hr>
 {% endfor %}
 </div>
 

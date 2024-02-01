@@ -130,10 +130,11 @@ def notable_tracks(
 
     if track_hits:
         track_titles = [i.song_name for i in track_hits]
+        track_ids = [i.song_id for i in track_hits]
     else:
         return None
 
-    return list(set(track_titles))
+    return list(set(zip(track_titles, track_ids)))
 
 def is_one_hit_wonder(
         art_name

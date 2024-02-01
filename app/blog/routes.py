@@ -5,7 +5,7 @@ from app.models.blog import blog_posts, blog_users
 from urllib.parse import urlsplit
 
 from sqlalchemy import func, desc
-from flask_login import current_user, login_user, logout_user
+from flask_login import current_user, login_user, logout_user, login_required
 from flask import render_template, request, redirect, url_for, flash
 
 ###########################
@@ -25,18 +25,15 @@ def login():
             flash('Invalid username or password')
             return redirect(url_for('blog.login'))
 
-        #sets the 'current_user' variable to 'yes'
-        login_user(user, remember=form.remember_me.data)
-        next_page = request.args.get('next')
-        if not next_page or urlsplit(next_page).netloc != '':
-            next_page = url_for('blog.blog_landing_page')
-
-        return redirect(url_for('blog.blog_landing_page'))
+        else:
+            login_user(user, remember=form.remember_me.data)
+            next_page = request.args.get('next')
+            if not next_page or urlsplit(next_page).netloc != '':
+                next_page = url_for('blog.blog_landing_page')
+            return redirect(next_page)
 
     return render_template('blog/blog_login.html', title='Sign In', form=form)
 
-
-########################################################
 @bp.route('/blog/logout', methods=['GET', 'POST'])
 def logout():
     
@@ -47,6 +44,10 @@ def logout():
 
     return render_template('blog/blog_logout.html')
 
+
+
+
+#################################################
 @bp.route('/blog', methods=['GET', 'POST'])
 @bp.route('/blog/', methods=['GET', 'POST'])
 def blog_landing_page():
@@ -102,6 +103,7 @@ def blog_single(id):
     return render_template('blog/blog_single.html', **context)
 
 @bp.route('/blog/search/<string:search_term>', methods=('GET','POST'))
+@login_required
 def blog_index_search(search_term):
     searchform = SearchForm()
     if request.method == 'POST':

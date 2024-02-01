@@ -3,7 +3,6 @@ from dash import dcc
 from dash import html
 from dash import Input, Output
 from datetime import date, timedelta
-from flask import current_app
 
 #from dash import url
 from app.dash_plotlys.layouts import create_navbar, my_icon, artist_card_row
@@ -15,7 +14,6 @@ from app.dash_plotlys import data_sources, plotly_figures
 load_figure_template('LUX')
 
 navbar = create_navbar()
-
 
 def Add_Dash_year_month(flask_app):
     dash_app = Dash(
@@ -29,12 +27,15 @@ def Add_Dash_year_month(flask_app):
             navbar,
             dcc.DatePickerSingle(
                 id='date_picker',
-                placeholder='Select Date',
-                #date=date.today()-timedelta(days=30),
-
+                placeholder='Choose Month',
+                initial_visible_month='2023-12-01',
+                style={
+                    'margin': 'auto', 
+                    'display': 'block', 
+                    'textAlign': 'center',
+                    'width': '22%',},
             ),
-            #dcc.Store(id='artist_name_store'),  # Store component to hold the artist name
-            #html.Div(id='selected_month_info'),
+            
             dcc.Graph(
                 id="month_line_chart",
             ),
@@ -75,6 +76,8 @@ def Add_Dash_year_month(flask_app):
         if input_month is None:
             input_month = date.today().month - 1
             input_year = date.today().year
+
+        dash_app.layout['date_picker'].initial_visible_month = f'{input_year}-{input_month}-01'
 
         month_arts = data_sources.Chart_Year_Month_Stats(input_year,input_month)
         x,y,z=month_arts.line_chart_components()

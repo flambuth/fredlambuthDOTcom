@@ -4,21 +4,7 @@
 
 <style>
 
-.spotify-icon-container {
-    display: flex;
-    justify-content: center;
-    align-items: center; /* Add this line for vertical centering */
-    margin-bottom: 2px;
-}
 
-.spotify-icon-container a i {
-    color: limegreen;
-    transition: color 0.3s ease-in-out;
-}
-
-.spotify-icon-container a i:hover {
-    color: darkgreen; /* Adjust the desired darker color */
-}
 
 
 </style>
@@ -31,7 +17,7 @@
         <div class="col-lg-4">
           <div class="card mb-4">
               <div class="card-body text-center">
-                <img src="https://i.scdn.co/image/{{ img_url_mid }}" alt="avatar" class="rounded-circle img-fluid" style="width: 150px;">
+                <img src="https://i.scdn.co/image/{{ img_url_mid }}" alt="avatar" class="rounded-circle img-fluid with-border" style="width: 150px;">
                   <h5 class="my-3">{{ art_name }}</h5>
                   {% if genre1 %}
                       <p class="white-pill mb-0">
@@ -121,12 +107,12 @@
             <div class="col-md-6">
                 <div class="card mb-4 mb-md-0">
                     <div class="card-body">
-                        <p class="mb-4"><span class="text-primary font-italic me-1">Listening Streaks</span></p>
+                        <p class="mb-4"><span class="text me-1">Listening Streaks</span></p>
             
                         {% if streaks %}
                             <ul class="list-group">
                                 {% for date, length in streaks.items() %}
-                                    <li class="list-group-item d-flex justify-content-between" style="color: darkslategray;">
+                                    <li class="list-group-item d-flex justify-content-between streak-item" style="color: darkslategray;">
                                         <span>{{ date }}</span>
                                         <span>{{ length }} days</span>
                                     </li>
@@ -145,14 +131,14 @@
             <div class="col-md-6">
               <div class="card mb-4 mb-md-0">
                 <div class="card-body">
-                  <p class="mb-4"><span class="text-primary font-italic me-1">Favorite Tracks</span> 
+                  <p class="mb-4"><span class="text me-1">Favorite Tracks</span> 
                   </p>
 
                   <ul class="list-group">
                     {% for track in notable_tracks %}
-                        <li class="list-group-item d-flex justify-content-between" style="color: darkslategray;">
-                            <span>{{ track }}</span>
-                        </li>
+                      <li class="list-group-item d-flex justify-content-between" style="color: darkslategray;">
+                        <span><a href="https://open.spotify.com/track/{{ track[1] }}" style="text-decoration: none; color: inherit;">{{ track[0] }}</a></span>
+                      </li>
                     {% endfor %}
                 </ul>
                   
