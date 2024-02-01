@@ -27,8 +27,10 @@ def Add_Dash_art_cat(flask_app):
             layouts.create_navbar(),
             html.Div(id='my_output'),
             #dcc.Store(id='artist_name_store'),  # Store component to hold the artist name
+            
             dcc.Graph(
                 id="artist_history",
+                config={'displayModeBar': False}
             ),
             layouts.my_icon
         ]

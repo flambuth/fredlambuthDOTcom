@@ -6,7 +6,7 @@ from sqlalchemy import func
 from werkzeug.security import check_password_hash, generate_password_hash
 
 def convert_to_iso_date(date_string):
-    return datetime.strptime(date_string, '%Y-%b-%d').isoformat()
+    return datetime.strptime(date_string, '%Y-%b-%d').isoformat()[:10]
 
 class blog_posts(db.Model):
     id = db.Column(db.Integer, primary_key=True)

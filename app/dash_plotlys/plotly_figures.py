@@ -24,6 +24,7 @@ def chart_scatter_plotly(
         template='plotly_dark',
         legend_title_text='',
     )
+    
     return fig
 
 def year_month_line_chart(
@@ -45,6 +46,11 @@ def year_month_line_chart(
         yaxis_title="Chart Position",
         template='plotly_dark',
         showlegend=False,
+    )
+    fig.update_layout(
+        config=dict(
+            displayModeBar=False,
+        )
     )
     
     return fig

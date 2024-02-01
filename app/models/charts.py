@@ -29,6 +29,20 @@ class daily_tracks(db.Model):
     def get_latest_date():
         latest_date = db.session.query(func.max(daily_tracks.date)).scalar()
         return latest_date
+    
+    @classmethod
+    def top_n_tracks_that_day(
+        cls,
+        iso_date,
+        n=3):
+        '''
+        Returns n amount of 1-n songs on a given iso-date.
+        '''
+        print(f"Calling top_n_tracks_that_day with iso_date: {iso_date}")
+        top_n_songs = cls.query.filter(
+            cls.date == iso_date
+        ).all()[:n]
+        return top_n_songs
 
     @classmethod
     def filter_by_year_month(cls, year, month):

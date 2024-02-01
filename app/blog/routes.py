@@ -2,6 +2,8 @@ from app.blog import bp
 from app.blog.forms import SearchForm, LoginForm
 from app.extensions import db
 from app.models.blog import blog_posts, blog_users
+from app.models.charts import daily_tracks
+
 from urllib.parse import urlsplit
 
 from sqlalchemy import func, desc
@@ -94,10 +96,14 @@ def blog_single(id):
     else:
         prev_post = blog_posts.query.filter(blog_posts.id==id-1).all()[0]
 
+    top_3_songs = daily_tracks.top_n_tracks_that_day(post.iso_date)
+    print(top_3_songs)
+
     context = {
         'post' : post,
         'prev_post' : prev_post,
         'next_post' : next_post,
+        'top_3_songs' : top_3_songs,
         'form':searchform,
     }
     return render_template('blog/blog_single.html', **context)

@@ -5,6 +5,27 @@
 <title>Blog Post: {{ post.title }}</title>
 
 <link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/blog.css') }}">
+<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/spotify.css') }}">
+
+<style>
+    .list-group-item {
+        color: #000; /* Set the default text color when not hovered */
+        background-color: #fff; /* Set the default background color when not hovered */
+    }
+
+    .list-group-item:hover {
+        color: #fff; /* Set the text color when hovered */
+        background-color: #296c6e; /* Set the background color when hovered */
+    }
+
+    .list-group-item.list-group-item-primary {
+        color: #fff; /* Set the text color for the primary list group item when not hovered */
+        background-color: #007bff; /* Set the background color for the primary list group item when not hovered */
+    }
+
+
+</style>
+
 
 <body class="w3-black">
 
@@ -15,24 +36,27 @@
     <hr>
 
 
-    <div class="w3-row">
-        <div class="w3-col-4">
+    <div class="row">
+        <div class="col-md d-flex align-items-center justify-content-center">
             <img src="{{url_for('static', filename='img/blog_pics/pic_' + post.id|string + '.jpg')}}" width="360" title="Rando off the street.">
         </div>
-        <div class="w3-col-6"> <!-- Adjust the column width as needed -->
+        <div class="col"> <!-- Adjust the column width as needed -->
             <section class="text-end"> <!-- Use text-end class for right alignment -->
                 <h4><b>{{ post.title }}</b></h4>
                 <small class="date-pill">{{ post.post_date }}</small>
+                <div class="list-group">
+                    <h6 class="list-group-item list-group-item-primary">Top Tracks on {{ post.iso_date }}</h6>
+                    {% for track in top_3_songs %}
+                        <a href="https://open.spotify.com/track/{{ track.song_id }}" class="list-group-item">
+                            <b>{{ track.song_name }}</b> by <b>{{ track.art_name }}</b>
+                        </a>
+                    {% endfor %}
+                </div>
             </section>
         </div>
     </div>
-    
-
     <hr>
-
     <p>{% autoescape false %} {{ post.content | replace('\n', '<br>') }} {% endautoescape %}</p>
-
-
     <hr>
 
 
@@ -54,6 +78,8 @@
 </div>
 <br>
 </div>
+
+
 
 
 {% endblock %}

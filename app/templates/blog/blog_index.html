@@ -19,21 +19,26 @@
 <br>
 <div class="container">
     {% for post in posts %}
-    <section>
-        <div class="w3-row w3-sand" style="border-radius: 18%;">
-            <div class="w3-col w3-teal">
-                <a href="{{url_for('blog.blog_single', id=post.id ) }}">
-                <img src="{{url_for('static', filename='img/blog_pics/pic_' + post.id|string + '.jpg')}}"  title="Rando off the street." class="circular-image">
-            </div>
-            <div class="w3-col">
+    <div class="w3-card-4 w3-margin w3-pale-green ">
                 
-                <h4> <b>{{ post.title }}</b></h4></a>
-                <small class="date-pill">{{ post.post_date }}</small>
-                <hr>
-                <p class='w3-grey'>{{ post.content|truncate(350) }}...</p>
+        <div class="row w3-teal">
+            <div class="col-left">
+                <a href="{{ url_for( 'blog.blog_single', id=post.id) }}">
+                <img src="{{url_for('static', filename='img/blog_pics/pic_' + post.id|string + '.jpg')}}" width="80" title="Rando off the street." class="circular-image">
+                
+            </div>
+            <div class="col-right">
+                <h3><b>{{ post.title }}</b></h3></a>
+                <h5><span class="w3-opacity">{{ post.post_date }}</span></h5>
             </div>
         </div>
-    </section>
+
+        <br>
+
+        <div class="w3-container center-text">
+            <p>{% autoescape false %} {{ post.content | replace('\n', '<br>') | truncate(300)}} {% endautoescape %}</p>
+        </div>
+    </div>
     <hr>
 {% endfor %}
 </div>
