@@ -1,4 +1,4 @@
-from datetime import date, datetime, timedelta
+from datetime import timedelta
 
 def find_streaks_in_dates(dates):
     '''
