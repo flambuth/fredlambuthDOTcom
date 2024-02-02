@@ -39,11 +39,6 @@ class blog_posts(db.Model):
     
 class blog_users(UserMixin, db.Model):
     '''
-    hd = blog_users(
-    username='Honky_Dave',
-    email='dave@hotmail.com',
-    password_hash=blog_users.set_password('ladida')
-    )
 
     '''
     id = db.Column(db.Integer, primary_key=True)
