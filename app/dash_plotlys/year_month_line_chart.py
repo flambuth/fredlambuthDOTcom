@@ -38,6 +38,7 @@ def Add_Dash_year_month(flask_app):
             
             dcc.Graph(
                 id="month_line_chart",
+                config={'displayModeBar': False},
             ),
             html.Div(id='selected_month_info'),
             my_icon

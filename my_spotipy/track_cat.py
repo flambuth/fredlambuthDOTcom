@@ -72,3 +72,5 @@ class Track_Catalog:
         list_of_lists = [list(d.values()) for d in missing_track_cats]
         return list_of_lists
 
+if __name__ == '__main__':
+    Track_Catalog().scan_charts_and_insert()

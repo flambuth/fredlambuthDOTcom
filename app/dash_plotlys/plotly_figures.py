@@ -47,10 +47,6 @@ def year_month_line_chart(
         template='plotly_dark',
         showlegend=False,
     )
-    fig.update_layout(
-        config=dict(
-            displayModeBar=False,
-        )
-    )
+
     
     return fig

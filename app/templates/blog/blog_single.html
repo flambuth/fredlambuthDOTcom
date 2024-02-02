@@ -47,9 +47,12 @@
                 <div class="list-group">
                     <h6 class="list-group-item list-group-item-primary">Top Tracks on {{ post.iso_date }}</h6>
                     {% for track in top_3_songs %}
-                        <a href="https://open.spotify.com/track/{{ track.song_id }}" class="list-group-item">
+                        <a href="https://open.spotify.com/track/{{ track.song_id }}" class="list-group-item d-flex justify-content-between align-items-center">
+                        <div>
                             <b>{{ track.song_name }}</b> by <b>{{ track.art_name }}</b>
-                        </a>
+                        </div>
+
+                    </a>
                     {% endfor %}
                 </div>
             </section>
