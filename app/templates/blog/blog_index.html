@@ -15,26 +15,31 @@
 <body class="w3-dark-grey">
 
 
-<header class="w3-container w3-center w3-padding-32"> 
-    <h1><b>Fear and Loathing on The Internet</b></h1>
-    <p>Welcome to the public web log of <span class="w3-tag">Fred Lambuth</span></p>
-</header>
-
+{% include 'blog/blog_header.html' %}
+<br>
 <div class="container">
     {% for post in posts %}
-    <section>
-        <div class="w3-row">
+    <div class="w3-card-4 w3-margin w3-pale-green ">
+                
+        <div class="row w3-teal">
             <div class="col-left">
+                <a href="{{ url_for( 'blog.blog_single', id=post.id) }}">
                 <img src="{{url_for('static', filename='img/blog_pics/pic_' + post.id|string + '.jpg')}}" width="80" title="Rando off the street." class="circular-image">
+                
             </div>
             <div class="col-right">
-                <a href="{{url_for('blog.blog_single', id=post.id ) }}">
-                <h4> <b>{{ post.title }}</b></h4></a>
-                <small class="date-pill">{{ post.post_date }}</small>
-                <p>{{ post.content|truncate(150) }}...</p>
+                <h3><b>{{ post.title }}</b></h3></a>
+                <h5><span class="w3-opacity">{{ post.post_date }}</span></h5>
             </div>
         </div>
-    </section>
+
+        <br>
+
+        <div class="w3-container center-text">
+            <p>{% autoescape false %} {{ post.content | replace('\n', '<br>') | truncate(300)}} {% endautoescape %}</p>
+        </div>
+    </div>
+    <hr>
 {% endfor %}
 </div>
 

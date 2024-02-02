@@ -13,6 +13,7 @@ from datetime import datetime
 #latest_daily_date = daily_tracks.query.order_by(daily_tracks.id.desc()).first().date
 #latest_date_obj = datetime.strptime(latest_daily_date, "%Y-%m-%d").date()
 
+
 @bp.route('/spotify')
 @bp.route('/spotify/')
 def spotify_landing_page():
@@ -30,6 +31,7 @@ def spotify_landing_page():
         'top_5_arts' : top_5_arts,
         'top_5_tracks' : top_5_tracks,
         'daily_rp_avg' : daily_rp_avg,
+        
     }
     return render_template('spotify/spotify_homepage.html', **context)
 
@@ -148,6 +150,9 @@ def index_tracks_by_letter(letter):
     }
 
     return render_template('spotify/track_cat/track_index.html', **context)
+
+###############
+##this should let me distribute this variable to all the routes
 
 
 ###########################################

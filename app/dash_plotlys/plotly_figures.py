@@ -22,7 +22,9 @@ def chart_scatter_plotly(
         xaxis_title="",
         yaxis_title="Chart Position",
         template='plotly_dark',
+        legend_title_text='',
     )
+    
     return fig
 
 def year_month_line_chart(
@@ -35,7 +37,7 @@ def year_month_line_chart(
     y=positions,
     color=art_names,
     )
-    print("Creating figure with x:", dates, "y:", positions, "colors:", art_names)
+    #print("Creating figure with x:", dates, "y:", positions, "colors:", art_names)
     fig.update_layout(yaxis=dict(autorange="reversed"))
 
     # Add titles to the x and y axes
@@ -43,6 +45,8 @@ def year_month_line_chart(
         xaxis_title="",
         yaxis_title="Chart Position",
         template='plotly_dark',
+        showlegend=False,
     )
+
     
     return fig

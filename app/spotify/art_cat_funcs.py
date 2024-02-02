@@ -116,7 +116,7 @@ def art_cat_name_search(search_term):
     Needs to deal with nulls
     '''
     like_arts_blob = artist_catalog.art_name.like(f"%{search_term}%")
-    like_arts = artist_catalog.query.filter(like_arts_blob).order_by('art_name').all()
+    like_arts = artist_catalog.get_current_records().filter(like_arts_blob).order_by('art_name').all()
     return like_arts
 
 #####################
@@ -177,6 +177,7 @@ def art_cat_profile(art_id):
         'last_appearance' : max(dates),
         'streaks':find_streaks_in_dates(dates),
 
+        #tuple! first is the track_name, second is the track_id for Spotify API
         'notable_tracks': notable_tracks(art_cat_obj.art_name),
         'is_one_hit_wonder': is_one_hit_wonder(art_cat_obj.art_name),
     }

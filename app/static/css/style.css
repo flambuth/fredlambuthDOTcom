@@ -7,6 +7,40 @@
   margin-bottom: 5px; /* Add margin to separate pills */
 }
 
+.navbar {
+  border-bottom: 4px solid #238a6b;
+  z-index: 3;
+}
+
+.navbar-dark-bg {
+    background-color: #17241f; /* Use the hex color code for black */
+    }
+
+.navbar-brand {
+color: white; /* Set the text color to white */
+text-shadow: -2px -2px 0 blue, 2px 2px 0 red;
+}
+
+/* Custom styles for the pill shape */
+.pill-text {
+background-color: white;
+padding: 5px 15px; /* Adjust padding as needed for the desired shape */
+border-radius: 25px; /* Adjust the border radius for the pill shape */
+color: black; /* Set the text color to black */
+text-shadow: -2px -2px 0 rgb(121, 204, 252), 2px 2px 0 rgb(238, 124, 190);
+}
+
+
+/* Apply the hover effect to the favicon */
+.navbar-favicon:hover {
+    filter: invert(100%);
+}
+
+.navbar-nav .nav-link {
+color: wheat; /* Set the text color to white */
+}       
+
+
 .pop {
   background-color: rgb(253, 136, 224);
 }

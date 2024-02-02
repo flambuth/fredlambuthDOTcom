@@ -21,8 +21,28 @@ class daily_tracks(db.Model):
     song_id = db.Column(db.String(23))
     song_name = db.Column(db.String(150))
     date = db.Column(db.Date, nullable=False)
+    
     def __repr__(self):
         return f'<daily_tracks for "{self.date}">'
+    
+    @staticmethod
+    def get_latest_date():
+        latest_date = db.session.query(func.max(daily_tracks.date)).scalar()
+        return latest_date
+    
+    @classmethod
+    def top_n_tracks_that_day(
+        cls,
+        iso_date,
+        n=3):
+        '''
+        Returns n amount of 1-n songs on a given iso-date.
+        '''
+        print(f"Calling top_n_tracks_that_day with iso_date: {iso_date}")
+        top_n_songs = cls.query.filter(
+            cls.date == iso_date
+        ).all()[:n]
+        return top_n_songs
 
     @classmethod
     def filter_by_year_month(cls, year, month):
@@ -73,7 +93,7 @@ class daily_artists(db.Model):
     position = db.Column(db.Integer)
     art_id = db.Column(
         db.String(23),
-        db.ForeignKey('artist_catalog.id'),
+        db.ForeignKey('artist_catalog.id', name='fk_daily_artists_art_id'),  # Provide a unique name here
         nullable=False
     )
     art_name = db.Column(db.String(150))
