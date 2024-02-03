@@ -185,6 +185,6 @@ def blog_add_comment(post_id):
         db.session.commit()
 
         flash('Your comment has been added!', 'success')
-        return redirect(url_for('blog.blog_single', id=post_id))
+        return redirect(url_for('blog.blog_single', post_id=post_id))
 
     return render_template('blog/blog_add_comment.html', post=post, form=form)

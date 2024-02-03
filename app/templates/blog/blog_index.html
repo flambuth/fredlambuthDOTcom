@@ -23,7 +23,7 @@
                 
         <div class="row w3-teal">
             <div class="col-left">
-                <a href="{{ url_for( 'blog.blog_single', id=post.id) }}">
+                <a href="{{ url_for( 'blog.blog_single', post_id=post.id) }}">
                 <img src="{{url_for('static', filename='img/blog_pics/pic_' + post.id|string + '.jpg')}}" width="80" title="Rando off the street." class="circular-image">
                 
             </div>

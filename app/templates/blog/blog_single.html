@@ -40,9 +40,15 @@
             <img src="{{url_for('static', filename='img/blog_pics/pic_' + post.id|string + '.jpg')}}" width="360" title="Rando off the street.">
         </div>
         <div class="col"> 
-            <section class="text-end"> 
-                <h4><b>{{ post.title }}</b></h4>
-                <small class="date-pill">{{ post.post_date }}</small>
+            <section class="text-end w3-teal w3-margin-top"> 
+                <h4 style="padding-left: 10px;"><b>{{ post.title }}</b></h4>
+                
+                <small style='padding-left: 10px;' class="date-pill">
+                    <a href="{{ url_for('spotify.tracks_prev', year=post.iso_date.split('-')[0], month=post.iso_date.split('-')[1], day=post.iso_date.split('-')[2]) }}">
+                        {{ post.post_date }}
+                    </a>
+                </small>
+                
                 <div class="list-group">
                     <h6 class="list-group-item list-group-item-primary">Top Tracks on {{ post.iso_date }}</h6>
                     {% for track in top_3_songs %}
