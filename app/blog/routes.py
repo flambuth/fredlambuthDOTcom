@@ -116,25 +116,25 @@ def blog_yearmonth_group(year_month):
     }
     return render_template('blog/blog_index.html', **context)
 
-@bp.route('/blog/post/<int:id>', methods=['GET', 'POST'])
-def blog_single(id):
+@bp.route('/blog/post/<int:post_id>', methods=['GET', 'POST'])
+def blog_single(post_id):
     searchform = SearchForm()
     if request.method == 'POST':
         return redirect(url_for('blog.blog_index_search', search_term=searchform.search_term.data))
     max_id = db.session.query(func.max(blog_posts.id)).all()[0][0]
-    if id==max_id:
+    if post_id==max_id:
         next_post=None
     else:
-        next_post = blog_posts.query.filter(blog_posts.id==id+1).all()[0]
-    post = blog_posts.query.filter(blog_posts.id==id).all()[0]
+        next_post = blog_posts.query.filter(blog_posts.id==post_id+1).all()[0]
+    post = blog_posts.query.filter(blog_posts.id==post_id).all()[0]
 
-    if id==1:
+    if post_id==1:
         prev_post=None
     else:
-        prev_post = blog_posts.query.filter(blog_posts.id==id-1).all()[0]
+        prev_post = blog_posts.query.filter(blog_posts.id==post_id-1).all()[0]
 
     top_3_songs = daily_tracks.top_n_tracks_that_day(post.iso_date)
-    print(top_3_songs)
+    post_comments = blog_comments.query.filter_by(post_id=post_id).all()
 
     context = {
         'post' : post,
@@ -142,6 +142,7 @@ def blog_single(id):
         'next_post' : next_post,
         'top_3_songs' : top_3_songs,
         'form':searchform,
+        'comments': post_comments,
     }
     return render_template('blog/blog_single.html', **context)
 
