@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, send_file
 from flask_login import LoginManager
 #from flask_migrate import Migrate
 
@@ -37,6 +37,26 @@ def create_app(config_class=Config):
     @app.route('/contact')
     def contact():
         return render_template('contact.html')
+
+
+    #break into new app
+    @app.route('/about_me')
+    def about_me():
+        return render_template('about_me.html')
+    
+    @app.route('/resume')
+    def serve_pdf():
+        filename = 'static/resume.pdf'
+        return send_file(filename, as_attachment=False)
+    
+    @app.route('/big_resume')
+    def serve_big_pdf():
+        filename = 'static/resume_AST.pdf'
+        return send_file(filename, as_attachment=False)
+
+    @app.route('/online_resume')
+    def big_resume():
+        return render_template('online_resume.html')
 
     #from app.dash_plotlys.artist_history import Add_Dash_art_cat
     #Add_Dash_art_cat(app)
