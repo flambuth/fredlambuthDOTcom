@@ -41,10 +41,11 @@ class blog_users(UserMixin, db.Model):
     '''
 
     '''
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True,autoincrement=True)
     username = db.Column(db.String(50), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
+
 
     @classmethod
     def set_password(cls, password):
@@ -60,3 +61,15 @@ class blog_users(UserMixin, db.Model):
 
     def __repr__(self):
         return f'<blog_user: "{self.username}">'
+    
+class blog_comments(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(500), nullable=False)
+    post_id = db.Column(db.Integer, db.ForeignKey('blog_posts.id'), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey('blog_users.id'), nullable=False)
+    post = db.relationship('blog_posts', backref=db.backref('comments', lazy=True))
+    user = db.relationship('blog_users', backref=db.backref('comments', lazy=True))
+    comment_date = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def __repr__(self):
+        return f'<Comment by {self.user.username} on post "{self.post.title}">'
