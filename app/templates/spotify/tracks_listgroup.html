@@ -28,7 +28,7 @@
         {% else %}
             <div class="col-4">
         {% endif %}
-            <a href="https://open.spotify.com/track/{{ track[0].song_id }}" class="list-group-item list-group-item-action">
+            <a href="https://open.spotify.com/track/{{ track[0].song_id }}" class="list-group-item list-group-item-action" title="Link to hear on Spotify">
                 {{ track[0].song_name }}
                 <p>by <b>{{ track[0].art_name }}</p></b>
             </a>

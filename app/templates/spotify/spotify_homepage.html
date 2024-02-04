@@ -28,8 +28,8 @@ flex-direction: column;
 <br>
 <div class="container" style="max-width: 59%;">
     <div class="row align-items-center">
-        <h2 class="whitie">Welcome to the Spotify section of the website!</h2>
-        <p>I'll explain later! I promise</p>
+        <h2 class="white">Welcome to the Spotify section of the website!</h2>
+        <p style="text-align: center;">Everyday I collect my listening data from Spotify. The 'Spotify' section is where I keep my records of what I was listening to on what day. On the sidebar you can find different timeframes of what I was listening to.</p>
     </div>
 
 
@@ -42,11 +42,11 @@ flex-direction: column;
         </div>
     </div>
 
-    <div class="row align-items-center">
+    <div class="row">
         <div class="col">
             <div class="jumbotron" style="color: #073a33;">
                 <div class="container">
-                  <h2><center>Newest additions:</h2>
+                  <h2>Newest additions:</h2>
               
                   {% for new_artist in latest_artists %}
                     <div class="row">
