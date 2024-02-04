@@ -257,6 +257,7 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
             color: #fff; /* Replace with your desired text color */
             border-radius: 15px; /* Adjust the border-radius as needed for the pill shape */
             padding: 5px 10px; /* Adjust padding for spacing inside the pill */
+            padding-left: 10px;
             display: inline-block; /* Ensures the pill shape only takes up as much space as needed */
 }
 
@@ -267,10 +268,10 @@ hr{border:0;border-top:1px solid #eee;margin:20px 0}
     width: 89%
 }
 
-.w3-badge,.w3-tag{background-color:#000;color:#fff;display:inline-block;padding-left:8px;padding-right:8px;text-align:center}.w3-badge{border-radius:50%}
+.w3-badge,.w3-tag{background-color:#000;color:#7dff62;display:inline-block;padding-left:8px;padding-right:8px;text-align:center}.w3-badge{border-radius:50%}
 
 .w3-tag:hover {
     color: #238a6b;  /* Invert color when hovered over */
-    background-color: pink;  /* Bright pink background when hovered over */
+    background-color: rgb(243, 218, 107);  /* Bright pink background when hovered over */
     transition: color 0.3s, background-color 0.3s;  /* Smooth transition effect */
 }

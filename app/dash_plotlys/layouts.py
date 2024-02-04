@@ -24,11 +24,9 @@ my_icon = html.Header([
 
 dash_links = dbc.DropdownMenu(
                             children=[
-                                dbc.DropdownMenuItem("Artist Catalog", href='https://fredlambuth.com/spotify/artists'),
-                                dbc.DropdownMenuItem("Twenty Four Hours each Month", href="https://fredlambuth.com/dash/24"),
-                                dbc.DropdownMenuItem("Top Artists of Each Month", href=f"https://fredlambuth.com/dash/{this_year}"),
-                                dbc.DropdownMenuItem("Artist Total Listening History", href="https://fredlambuth.com/dash/art_search"),
-                                dbc.DropdownMenuItem("Global Spotify Stats & Me", href="https://fredlambuth.com/dash/global"),
+                                dbc.DropdownMenuItem("Blog", href='https://fredlambuth.com/blog'),
+                                dbc.DropdownMenuItem("Spotify Stuff", href="https://fredlambuth.com/spotify"),
+                                dbc.DropdownMenuItem("Contact", href="https://fredlambuth.com/contact"),
                                     ],
                                 nav=True,
                                 in_navbar=True,
@@ -44,7 +42,7 @@ def create_navbar():
             " Fredlambuth.com",
         ],
         #href='url_for('homepage')',
-        href='#',
+        href="https://fredlambuth.com",
     )
 
     navbar = dbc.NavbarSimple(

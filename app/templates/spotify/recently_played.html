@@ -10,12 +10,14 @@
 
 <style>
     .outer-row {
-        background-color: #1a865d;
-        border-radius: 2%;
-        border: 2px solid #073a33;
-    }
+    background-color: #1a865d;
+    border-radius: 2%;
+    border: 2px solid #073a33;
+    margin-right: 0; /* Add this line to reset the right margin to 0 */
+}
 
-    .whitie {
+
+    .white {
         color: aliceblue;
     }
 
@@ -32,22 +34,22 @@ flex-direction: column;
         <p>A sliding 24 hour window look into what I've been listening to</p>
     </div>
 
-    <div class="container outer-row">
+    <div class="outer-row">
         <div class="row mt-2 mb-2">
             <h5>Last Three Songs I Listened To:</h5>
         </div>
-        <div class="row align-items-center mb-3" style="background-color: #0f1f19;">
+        <div class="row" style="background-color: #0f1f19; overflow-x: auto; white-space: nowrap;">
             {% for track in last_three[::-1] %}
-            <div class="col rp_card">
+            <div class="col rp_card" style="width: 200px; margin-right: 10px;">
                 <span class="white-pill">{{ track.song_name }}</span> 
                 <div class="hex">
                     <a href="{{ track.song_link }}">
                         <div class="hex-background">
-                            <img src="{{ track.image }}">
+                            <img src="{{ track.image }}" style="max-width: 100%; height: auto;">
                         </div>
                     </a>
                 </div>
-                <div class="container" style="display: flex; justify-content: space-between;"> 
+                <div style="display: flex; justify-content: space-between;"> 
                     by<span class='white-pill'>{{ track.art_name }}</span>
                 </div>
             </div>
@@ -55,6 +57,7 @@ flex-direction: column;
         </div>
     </div>
     
+    <hr>
 
     <div class="row align-items-center">
         <div class="col-6">
