@@ -1,5 +1,7 @@
 import plotly.express as px
 
+
+###########################
 def chart_scatter_plotly(
         dates,
         positions,
@@ -27,6 +29,8 @@ def chart_scatter_plotly(
     
     return fig
 
+
+######################
 def year_month_line_chart(
         dates,
         positions,
@@ -47,6 +51,63 @@ def year_month_line_chart(
         template='plotly_dark',
         showlegend=False,
     )
+
+    
+    return fig
+
+
+##############################
+#global dash figures
+def songs_line_chart(df):
+    '''
+    Returns a line chart of the input df. Uses
+    '''
+    df['name_artists'] = df['name'] + ' - ' + df['artists']
+
+    fig = px.line(
+        x=df.snapshot_date,
+        y=df.daily_rank,
+        color=df.name_artists,
+        template='plotly_dark',
+
+    )
+
+    fig.update_layout(
+        yaxis_title="Chart Position",
+        xaxis_title=" ",
+        height=880, 
+        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0.01, title_text='')
+    )
+    # Invert the y-axis
+    fig.update_yaxes(autorange="reversed",)
+
+    return fig
+
+def artists_hbar_chart(top_artist_tuples):
+    '''
+    Returns a line chart of the input df. Uses
+    '''
+
+    fig = px.bar(
+        y=[i[0] for i in top_artist_tuples],
+        x=[i[1] for i in top_artist_tuples],
+        color=[i[2] for i in top_artist_tuples],
+        orientation='h',
+        template='plotly_dark',
+        color_continuous_scale='darkmint',  # You can customize the color scale here
+        range_color=[0, 10],
+    )
+
+    fig.update_layout(
+        yaxis_title="",
+        xaxis_title="",
+        title='Most Chart Appearances',
+        
+    )
+
+    # Invert the y-axis
+    fig.update_yaxes(autorange="reversed")
+    fig.update(layout_coloraxis_showscale=False)
 
     
     return fig

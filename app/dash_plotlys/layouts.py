@@ -172,3 +172,5 @@ def artist_history_stats_html(art_cat_data):
     ])
     return totem_div
 
+#######################
+#GLOBAl Charts

@@ -1,6 +1,7 @@
 from collections import Counter
 import pandas as pd
-import plotly.express as px
+
+from app.dash_plotlys.plotly_figures import songs_line_chart, artists_hbar_chart
 
 country_codes = {
     'AR': 'Argentina',
@@ -103,47 +104,6 @@ class Chart_Data:
         filtered_df = df[df.spotify_id.isin(spotify_ids)]
         return filtered_df
 
-    def line_chart(self, df):
-        '''
-        Returns a line chart of the input df. Uses
-        '''
-        #df['name_artists'] = df['name'] + ' - ' + df['artists']
-
-        fig = px.line(
-            x=df.snapshot_date,
-            y=df.daily_rank,
-            color=df.name,
-            template='plotly_dark',
-
-        )
-
-        fig.update_layout(
-            yaxis_title="Chart Position",
-        )
-        # Invert the y-axis
-        fig.update_yaxes(autorange="reversed")
-
-        return fig
-    
-    def hbar_chart(self, top_artist_tuples):
-        '''
-        Returns a line chart of the input df. Uses
-        '''
-
-        fig = px.bar(
-            y = [i[0] for i in top_artist_tuples],
-            x = [i[1] for i in top_artist_tuples],
-            orientation='h'
-        )
-
-        fig.update_layout(
-            yaxis_title="Chart Position",
-        )
-        # Invert the y-axis
-        fig.update_yaxes(autorange="reversed")
-
-        return fig
-
     def top_n_names_in_df(self,n=10):
         
         '''
@@ -194,6 +154,10 @@ class Chart_Data:
     def get_sorted_featured_artists(self):
         return sorted(list(set(self.slice_artists_names()[1])))
 
+    def count_artist_unique_songs(self, artist_name):
+        song_count = self.df[self.df.artists.str.contains(artist_name)].name.nunique()
+        return song_count
+
     def get_top_n_artists(self, n=10):
         prims, secs = self.slice_artists_names()
         name_counter = Counter(prims)
@@ -204,7 +168,10 @@ class Chart_Data:
         secs_dict = {i[0]: i[1] for i in sec_name_counter.items()}
         name_counter.update(secs_dict)
 
-        return name_counter.most_common(n)
+        tuples = name_counter.most_common(n)
+
+        result_list = [(artist, count, self.count_artist_unique_songs(artist)) for artist, count in tuples]
+        return result_list
 
 class Country_Chart_Data(Chart_Data):
     '''
@@ -228,7 +195,7 @@ class Country_Chart_Data(Chart_Data):
             ]]
         
         # Generate line chart for top 10 songs in the country
-        self.fig_top10_song = self.line_chart(self.df_top_10_data)
+        self.fig_top10_song = songs_line_chart(self.df_top_10_data)
 
         # Compute today's top 10 songs for the country
         self.df_today_top10 = self.todays_top10()
@@ -240,4 +207,4 @@ class Country_Chart_Data(Chart_Data):
         # Get top 10 artists for the country
         self.top_10_artists = self.get_top_n_artists()
 
-        self.fig_top10_artists = self.hbar_chart(self.top_10_artists)
+        self.fig_top10_artists = artists_hbar_chart(self.top_10_artists)
