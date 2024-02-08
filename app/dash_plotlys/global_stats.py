@@ -2,91 +2,96 @@ from collections import Counter
 import pandas as pd
 import plotly.express as px
 
+country_codes = {
+    'AR': 'Argentina',
+    'AU': 'Australia',
+    'AT': 'Austria',
+    'BY': 'Belarus',
+    'BE': 'Belgium',
+    'BO': 'Bolivia',
+    'BR': 'Brazil',
+    'BG': 'Bulgaria',
+    'CA': 'Canada',
+    'CL': 'Chile',
+    'CO': 'Colombia',
+    'CR': 'Costa Rica',
+    'CZ': 'Czech Republic',
+    'DK': 'Denmark',
+    'DO': 'Dominican Republic',
+    'EC': 'Ecuador',
+    'EG': 'Egypt',
+    'SV': 'El Salvador',
+    'EE': 'Estonia',
+    'FI': 'Finland',
+    'FR': 'France',
+    'DE': 'Germany',
+    'GR': 'Greece',
+    'GT': 'Guatemala',
+    'HN': 'Honduras',
+    'HK': 'Hong Kong',
+    'HU': 'Hungary',
+    'IS': 'Iceland',
+    'IN': 'India',
+    'ID': 'Indonesia',
+    'IE': 'Ireland',
+    'IL': 'Israel',
+    'IT': 'Italy',
+    'JP': 'Japan',
+    'KZ': 'Kazakhstan',
+    'LV': 'Latvia',
+    'LT': 'Lithuania',
+    'LU': 'Luxembourg',
+    'MY': 'Malaysia',
+    'MX': 'Mexico',
+    'MA': 'Morocco',
+    'NL': 'Netherlands',
+    'NZ': 'New Zealand',
+    'NI': 'Nicaragua',
+    'NG': 'Nigeria',
+    'NO': 'Norway',
+    'PK': 'Pakistan',
+    'PA': 'Panama',
+    'PY': 'Paraguay',
+    'PE': 'Peru',
+    'PH': 'Philippines',
+    'PL': 'Poland',
+    'PT': 'Portugal',
+    'RO': 'Romania',
+    'SA': 'Saudi Arabia',
+    'SG': 'Singapore',
+    'SK': 'Slovakia',
+    'ZA': 'South Africa',
+    'KR': 'South Korea',
+    'ES': 'Spain',
+    'SE': 'Sweden',
+    'CH': 'Switzerland',
+    'TW': 'Taiwan',
+    'TH': 'Thailand',
+    'TR': 'Turkey',
+    'UA': 'Ukraine',
+    'AE': 'United Arab Emirates',
+    'GB': 'United Kingdom',
+    'US': 'United States',
+    'UY': 'Uruguay',
+    'VE': 'Venezuela',
+    'VN': 'Vietnam'
+}
+
 def cleaned_df(csv_name='universal_top_spotify_songs.csv'):
     '''
     csv_name = 'universal_top_spotify_songs.csv'
     '''
-    country_codes = {
-        'ZA': 'South Africa',
-        'VN': 'Vietnam',
-        'VE': 'Venezuela',
-        'UY': 'Uruguay',
-        'US': 'United States',
-        'UA': 'Ukraine',
-        'TW': 'Taiwan',
-        'TR': 'Turkey',
-        'TH': 'Thailand',
-        'SV': 'El Salvador',
-        'SK': 'Slovakia',
-        'SG': 'Singapore',
-        'SE': 'Sweden',
-        'SA': 'Saudi Arabia',
-        'RO': 'Romania',
-        'PY': 'Paraguay',
-        'PT': 'Portugal',
-        'PL': 'Poland',
-        'PK': 'Pakistan',
-        'PH': 'Philippines',
-        'PE': 'Peru',
-        'PA': 'Panama',
-        'NZ': 'New Zealand',
-        'NO': 'Norway',
-        'NL': 'Netherlands',
-        'NI': 'Nicaragua',
-        'NG': 'Nigeria',
-        'MY': 'Malaysia',
-        'MX': 'Mexico',
-        'MA': 'Morocco',
-        'LV': 'Latvia',
-        'LU': 'Luxembourg',
-        'LT': 'Lithuania',
-        'KZ': 'Kazakhstan',
-        'KR': 'South Korea',
-        'JP': 'Japan',
-        'IT': 'Italy',
-        'IS': 'Iceland',
-        'IN': 'India',
-        'IL': 'Israel',
-        'IE': 'Ireland',
-        'ID': 'Indonesia',
-        'HU': 'Hungary',
-        'HN': 'Honduras',
-        'HK': 'Hong Kong',
-        'GT': 'Guatemala',
-        'GR': 'Greece',
-        'GB': 'United Kingdom',
-        'FR': 'France',
-        'FI': 'Finland',
-        'ES': 'Spain',
-        'EG': 'Egypt',
-        'EE': 'Estonia',
-        'EC': 'Ecuador',
-        'DO': 'Dominican Republic',
-        'DK': 'Denmark',
-        'DE': 'Germany',
-        'CZ': 'Czech Republic',
-        'CR': 'Costa Rica',
-        'CO': 'Colombia',
-        'CL': 'Chile',
-        'CH': 'Switzerland',
-        'CA': 'Canada',
-        'BY': 'Belarus',
-        'BR': 'Brazil',
-        'BO': 'Bolivia',
-        'BG': 'Bulgaria',
-        'BE': 'Belgium',
-        'AU': 'Australia',
-        'AT': 'Austria',
-        'AR': 'Argentina',
-        'AE': 'United Arab Emirates'
-    }
+
     big_df = pd.read_csv(csv_name).dropna()
     big_df['country_string'] = big_df.country.map(country_codes)
     return big_df
 
 class Chart_Data:
-    def __init__(self, df):
-        self.df = df
+    def __init__(self, df=None):
+        if df is None:
+            self.df = cleaned_df()
+        else:
+            self.df = df
 
     def filter_country(self, country_string, df):
         '''
@@ -102,14 +107,33 @@ class Chart_Data:
         '''
         Returns a line chart of the input df. Uses
         '''
-        df['name_artists'] = df['name'] + ' - ' + df['artists']
+        #df['name_artists'] = df['name'] + ' - ' + df['artists']
 
         fig = px.line(
             x=df.snapshot_date,
             y=df.daily_rank,
-            color=df.name_artists,
+            color=df.name,
             template='plotly_dark',
 
+        )
+
+        fig.update_layout(
+            yaxis_title="Chart Position",
+        )
+        # Invert the y-axis
+        fig.update_yaxes(autorange="reversed")
+
+        return fig
+    
+    def hbar_chart(self, top_artist_tuples):
+        '''
+        Returns a line chart of the input df. Uses
+        '''
+
+        fig = px.bar(
+            y = [i[0] for i in top_artist_tuples],
+            x = [i[1] for i in top_artist_tuples],
+            orientation='h'
         )
 
         fig.update_layout(
@@ -143,7 +167,7 @@ class Chart_Data:
         latest_date = max(self.df.snapshot_date)
         today = self.df[self.df.snapshot_date == latest_date]
         today_top10 = today[today.daily_rank < 11]
-        return today_top10[['daily_rank', 'name', 'artists', 'popularity']]
+        return today_top10[['daily_rank', 'name', 'artists']]
 
     def slice_artists_names(self):
         '''
@@ -187,8 +211,8 @@ class Country_Chart_Data(Chart_Data):
     Depends on that Country_String. The csv only has the country codes
     '''
 
-    def __init__(self, country_string, big_df):
-        super().__init__(big_df)  # Call the constructor of the parent class
+    def __init__(self, country_string):
+        super().__init__()  # df will be set using cleaned_df() from the parent class
 
         # Filter the data for the specific country
         self.country = country_string
@@ -215,3 +239,5 @@ class Country_Chart_Data(Chart_Data):
 
         # Get top 10 artists for the country
         self.top_10_artists = self.get_top_n_artists()
+
+        self.fig_top10_artists = self.hbar_chart(self.top_10_artists)
