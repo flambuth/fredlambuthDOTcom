@@ -66,6 +66,9 @@ def create_app(config_class=Config):
 
     from app.dash_plotlys.artist_history import Add_Dash_art_cat
     Add_Dash_art_cat(app)
+
+    from app.dash_plotlys.global_dash import Add_Dash_global_view
+    Add_Dash_global_view(app)
         
     return app
 
