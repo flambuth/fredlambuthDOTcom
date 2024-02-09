@@ -63,25 +63,36 @@ def songs_line_chart(df):
     Returns a line chart of the input df. Uses
     '''
     df['name_artists'] = df['name'] + ' - ' + df['artists']
+    first_date = min(df.snapshot_date)
+    last_date = max(df.snapshot_date)
 
     fig = px.line(
         x=df.snapshot_date,
         y=df.daily_rank,
         color=df.name_artists,
         template='plotly_dark',
-
+        #title=f"The Top 10 Songs Since {first_date}"
     )
 
     fig.update_layout(
         yaxis_title="Chart Position",
         xaxis_title=" ",
         height=880, 
-        legend=dict(orientation="h", yanchor="bottom", y=1.02, xanchor="left", x=0.01, title_text='')
+        legend=dict(
+            orientation="v",
+            yanchor="bottom",
+            y=1.02,
+            xanchor="left",
+            x=0.01,
+            title_text=f"The Top 10 Songs from {first_date} - {last_date}",
+            traceorder="normal"  # Stack legend title on top of legend items
+        )
     )
     # Invert the y-axis
     fig.update_yaxes(autorange="reversed",)
 
     return fig
+
 
 def artists_hbar_chart(top_artist_tuples):
     '''

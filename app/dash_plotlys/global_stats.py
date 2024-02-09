@@ -93,6 +93,8 @@ class Chart_Data:
             self.df = cleaned_df()
         else:
             self.df = df
+        #iso_string of the latest date in the dataframe            
+        self.latest_date = max(self.df.snapshot_date)
 
     def filter_country(self, country_string, df):
         '''
