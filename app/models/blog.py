@@ -9,7 +9,7 @@ def convert_to_iso_date(date_string):
     return datetime.strptime(date_string, '%Y-%b-%d').isoformat()[:10]
 
 class blog_posts(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     title = db.Column(db.String(150))
     content = db.Column(db.Text)
     post_date = db.Column(db.String(20))
@@ -52,6 +52,21 @@ class blog_users(UserMixin, db.Model):
     @classmethod
     def set_password(cls, password):
         return generate_password_hash(password)
+
+    @classmethod
+    def change_password(cls, username, new_password):
+        user = cls.query.filter_by(username=username).first()
+
+        if user:
+            # Set the new hashed password
+            user.password_hash = cls.set_password(new_password)
+
+            # Commit the changes to the database
+            db.session.commit()
+
+            return True  # Password changed successfully
+        else:
+            return False  # User not found
 
     def check_password(self, password):
         return check_password_hash(self.password_hash, password)
