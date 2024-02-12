@@ -58,9 +58,7 @@ def create_app(config_class=Config):
     def big_resume():
         return render_template('online_resume.html')
 
-    #from app.dash_plotlys.artist_history import Add_Dash_art_cat
-    #Add_Dash_art_cat(app)
-    #with app.app_context():
+
     from app.dash_plotlys.year_month_line_chart import Add_Dash_year_month
     Add_Dash_year_month(app)
 
@@ -69,6 +67,9 @@ def create_app(config_class=Config):
 
     from app.dash_plotlys.global_dash import Add_Dash_global_view
     Add_Dash_global_view(app)
+
+    from app.dash_plotlys.global_dash_lite import Add_Dash_global_view_lite
+    Add_Dash_global_view_lite(app)
         
     return app
 

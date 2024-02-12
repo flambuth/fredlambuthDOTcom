@@ -16,7 +16,7 @@ dropdown_options = [{'label': category, 'value': category} for category in count
 def Add_Dash_global_view(flask_app):
     dash_app = Dash(
         server=flask_app, name="global", 
-        url_base_pathname="/spotify/global/",
+        url_base_pathname="/spotify/global_old/",
         external_stylesheets=[dbc.themes.LUX])
 # App layout
     dash_app.layout = html.Div([
@@ -56,14 +56,13 @@ def Add_Dash_global_view(flask_app):
         blob = global_stats.Country_Chart_Data(selected_country)
         
         top10_today_data = blob.df_today_top10
-        list_items = [
-            dbc.ListGroupItem([
-                html.Span(f"{row['daily_rank']}. ", style={'font-weight': 'bold'}),
-                html.Span(row['name'], style={'font-weight': 'bold'}),
-                html.Span(f" - {row['artists']}")
-            ])  
-            for index, row in top10_today_data.iterrows()
-        ]
+
+        list_items = top10_today_data.apply(lambda row: dbc.ListGroupItem([
+            html.Span(f"{row['daily_rank']}. ", style={'font-weight': 'bold'}),
+            html.Span(row['name'], style={'font-weight': 'bold'}),
+            html.Span(f" - {row['artists']}")
+        ]), axis=1).tolist()
+
 
         fig1 = blob.fig_top10_artists
         fig2 = blob.fig_top10_song
