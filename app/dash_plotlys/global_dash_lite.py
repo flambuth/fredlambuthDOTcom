@@ -16,7 +16,7 @@ dropdown_options = [{'label': category, 'value': category} for category in count
 def Add_Dash_global_view_lite(flask_app):
     dash_app = Dash(
         server=flask_app, name="global", 
-        url_base_pathname="/spotify/global2/",
+        url_base_pathname="/spotify/global/",
         external_stylesheets=[dbc.themes.LUX])
 # App layout
     dash_app.layout = html.Div([
