@@ -2,81 +2,12 @@ from collections import Counter
 import pandas as pd
 
 from app.dash_plotlys.plotly_figures import songs_line_chart, artists_hbar_chart
+import json
+import sqlite3
 
-country_codes = {
-    'AR': 'Argentina',
-    'AU': 'Australia',
-    'AT': 'Austria',
-    'BY': 'Belarus',
-    'BE': 'Belgium',
-    'BO': 'Bolivia',
-    'BR': 'Brazil',
-    'BG': 'Bulgaria',
-    'CA': 'Canada',
-    'CL': 'Chile',
-    'CO': 'Colombia',
-    'CR': 'Costa Rica',
-    'CZ': 'Czech Republic',
-    'DK': 'Denmark',
-    'DO': 'Dominican Republic',
-    'EC': 'Ecuador',
-    'EG': 'Egypt',
-    'SV': 'El Salvador',
-    'EE': 'Estonia',
-    'FI': 'Finland',
-    'FR': 'France',
-    'DE': 'Germany',
-    'GR': 'Greece',
-    'GT': 'Guatemala',
-    'HN': 'Honduras',
-    'HK': 'Hong Kong',
-    'HU': 'Hungary',
-    'IS': 'Iceland',
-    'IN': 'India',
-    'ID': 'Indonesia',
-    'IE': 'Ireland',
-    'IL': 'Israel',
-    'IT': 'Italy',
-    'JP': 'Japan',
-    'KZ': 'Kazakhstan',
-    'LV': 'Latvia',
-    'LT': 'Lithuania',
-    'LU': 'Luxembourg',
-    'MY': 'Malaysia',
-    'MX': 'Mexico',
-    'MA': 'Morocco',
-    'NL': 'Netherlands',
-    'NZ': 'New Zealand',
-    'NI': 'Nicaragua',
-    'NG': 'Nigeria',
-    'NO': 'Norway',
-    'PK': 'Pakistan',
-    'PA': 'Panama',
-    'PY': 'Paraguay',
-    'PE': 'Peru',
-    'PH': 'Philippines',
-    'PL': 'Poland',
-    'PT': 'Portugal',
-    'RO': 'Romania',
-    'SA': 'Saudi Arabia',
-    'SG': 'Singapore',
-    'SK': 'Slovakia',
-    'ZA': 'South Africa',
-    'KR': 'South Korea',
-    'ES': 'Spain',
-    'SE': 'Sweden',
-    'CH': 'Switzerland',
-    'TW': 'Taiwan',
-    'TH': 'Thailand',
-    'TR': 'Turkey',
-    'UA': 'Ukraine',
-    'AE': 'United Arab Emirates',
-    'GB': 'United Kingdom',
-    'US': 'United States',
-    'UY': 'Uruguay',
-    'VE': 'Venezuela',
-    'VN': 'Vietnam'
-}
+# Load the dictionary from the JSON file
+with open("country_codes.json", "r") as json_file:
+    country_codes = json.load(json_file)
 
 def cleaned_df(csv_name='universal_top_spotify_songs.csv'):
     '''
@@ -173,7 +104,10 @@ class Chart_Data:
         tuples = name_counter.most_common(n)
 
         result_list = [(artist, count, self.count_artist_unique_songs(artist)) for artist, count in tuples]
-        return result_list
+
+        cols = ['artist','appearances','unique_songs']
+        df = pd.DataFrame(result_list, columns=cols)
+        return df
 
 class Country_Chart_Data(Chart_Data):
     '''
@@ -210,3 +144,111 @@ class Country_Chart_Data(Chart_Data):
         self.top_10_artists = self.get_top_n_artists()
 
         self.fig_top10_artists = artists_hbar_chart(self.top_10_artists)
+
+class Country_Data(Chart_Data):
+    '''
+    Country's necessary data to display on the dashboard.
+    '''
+
+    def __init__(self, country_string):
+        super().__init__()  # df will be set using cleaned_df() from the parent class
+
+        # Filter the data for the specific country
+        self.country = country_string
+        self.df = self.filter_country(country_string, self.df)
+
+        # Compute top 10 songs for the country
+        self.df_top_10_songs = self.top_n_names_in_df()
+        #filters the self.df down to just any row that has a spotify song_id in this country's top 10 songs
+        self.df_top_10_data = self.filter_spotify_ids(
+            self.df_top_10_songs.spotify_id, self.df)[[
+                'daily_rank',
+                'name', 'artists',
+                'snapshot_date',
+            ]]
+
+        # Compute today's top 10 songs for the country
+        self.df_today_top10 = self.todays_top10()
+
+
+        # Get top 10 artists for the country
+        self.df_top_10_artists = self.get_top_n_artists()
+
+    def add_country_column(self):
+        '''
+        Add a 'country' column to all dataframes in the object.
+        '''
+        country_value = self.country
+
+        # Add 'country' column to each dataframe
+        self.df['country'] = country_value
+        self.df_top_10_songs['country'] = country_value
+        self.df_top_10_data['country'] = country_value
+        self.df_today_top10['country'] = country_value
+        self.df_top_10_artists['country'] = country_value
+
+
+#################################
+#data processing of the universal_top_spotify_songs.csv
+def initiate_db(country_names, db='global.db'):
+    conn = sqlite3.connect(db)
+
+    # Initialize the first country
+    first_country = country_names[0]
+    first_obj = Country_Data(first_country)
+    first_obj.add_country_column()
+    
+    # Insert data for the first country
+    first_obj.df_top_10_artists.to_sql('top_10_artists', conn, index=False, if_exists='replace')
+    first_obj.df_top_10_data.to_sql('top_10_song_data', conn, index=False, if_exists='replace')
+    first_obj.df_today_top10.to_sql('top_10_songs_today', conn, index=False, if_exists='replace')
+
+    # Append data for the remaining countries
+    append_data_for_countries(country_names[1:], conn)
+
+def append_data_for_countries(country_names, conn):
+    for country in country_names:
+        country_obj = Country_Data(country)
+        country_obj.add_country_column()
+
+        # Append data to the existing tables
+        country_obj.df_top_10_artists.to_sql('top_10_artists', conn, index=False, if_exists='append')
+        country_obj.df_top_10_data.to_sql('top_10_song_data', conn, index=False, if_exists='append')
+        country_obj.df_today_top10.to_sql('top_10_songs_today', conn, index=False, if_exists='append')
+
+def country_dash_dfs(country):
+    conn = sqlite3.connect('global.db')
+    tables = [
+    'top_10_artists',
+    'top_10_song_data',
+    'top_10_songs_today'
+]
+    queries = [f"SELECT * from {table} where country='{country}';" for table in tables]
+    
+    df_artists = pd.read_sql(queries[0],conn)
+    
+    #some songs feature too many artists and it warps the legend of the 
+    #plotly figure that is fed with this dataframe
+    df_song_data = pd.read_sql(queries[1],conn)
+    max_length = 100
+    df_song_data['artists'] = df_song_data['artists'].str.slice(0, max_length)
+    
+    df_songs_today = pd.read_sql(queries[2],conn)
+    return df_artists, df_song_data, df_songs_today
+
+class Country_Dash_Components:
+    def __init__(self, country_string):
+        self.country = country_string
+        self.df_top10_artists, self.df_top10_songs_data, self.df_top10_songs_today = country_dash_dfs(country_string)
+        self.fig_top10_artists = artists_hbar_chart(self.df_top10_artists)
+        self.fig_top10_song = songs_line_chart(self.df_top10_songs_data)
+'''
+class Country_Dash_Components:
+    conn = sqlite3.connect('global.db')
+    query = f"SELECT * from {table} where country='{test_country}';"
+    def __init__(self, country_string):
+        self.country = country_string
+        self.df_top10_song_data 
+        self.df_top10_songs_today
+        self.df_top10_artists
+'''
