@@ -58,6 +58,7 @@ def year_month_line_chart(
 
 ##############################
 #global dash figures
+
 def songs_line_chart(df):
     '''
     Returns a line chart of the input df. Uses
@@ -85,7 +86,9 @@ def songs_line_chart(df):
             xanchor="left",
             x=0.01,
             title_text=f"The Top 10 Songs from {first_date} - {last_date}",
-            traceorder="normal"  # Stack legend title on top of legend items
+            traceorder="normal",  # Stack legend title on top of legend items
+            itemsizing="constant",  # Ensure constant item size across legends
+            itemwidth=200  # Adjust the width of each legend item
         )
     )
     # Invert the y-axis
@@ -94,15 +97,15 @@ def songs_line_chart(df):
     return fig
 
 
-def artists_hbar_chart(top_artist_tuples):
+def artists_hbar_chart(df_top_artists):
     '''
     Returns a line chart of the input df. Uses
     '''
 
     fig = px.bar(
-        y=[i[0] for i in top_artist_tuples],
-        x=[i[1] for i in top_artist_tuples],
-        color=[i[2] for i in top_artist_tuples],
+        y=df_top_artists.artist,
+        x=df_top_artists.appearances,
+        color=df_top_artists.unique_songs,
         orientation='h',
         template='plotly_dark',
         color_continuous_scale='darkmint',  # You can customize the color scale here
