@@ -123,5 +123,19 @@ def artists_hbar_chart(df_top_artists):
     fig.update_yaxes(autorange="reversed")
     fig.update(layout_coloraxis_showscale=False)
 
-    
+    annotation_text = "Color Represents Unique Song Count"
+    annotation_x = 5  # X-coordinate of the annotation
+    annotation_y = 0  # Y-coordinate of the annotation
+
+    fig.add_annotation(
+        text=annotation_text,
+        x=annotation_x,
+        y=annotation_y,
+        #showarrow=True,
+        arrowhead=1,
+        ax=0,
+        ay=-30,
+        font=dict(size=8)
+    )
+
     return fig
