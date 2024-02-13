@@ -111,7 +111,8 @@ def JSON_to_listofDicts(
         for i in daily_results_JSON['items']:
             hit_record = {}
             hit_record['position'] = position
-            hit_record['art_id'] = i['id']
+            #on 13FEB2024, the .id field from the top_artists API endpoint was returning all the same art_id
+            hit_record['art_id'] = i['uri'][-22:]
             hit_record['art_name'] = i['name']
             hit_record['date'] = datetime.now().strftime("%Y-%m-%d")
             
