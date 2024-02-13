@@ -116,6 +116,7 @@ def artists_hbar_chart(df_top_artists):
         yaxis_title="",
         xaxis_title="",
         title='Most Chart Appearances',
+        xaxis=dict(range=[0, max(df_top_artists['appearances']) + 1]),  # Set the range_x parameter
         
     )
 
