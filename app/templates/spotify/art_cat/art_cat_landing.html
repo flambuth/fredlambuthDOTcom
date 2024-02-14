@@ -31,10 +31,11 @@
 </style>
 
 <title>Take A Look Around If You'd Like</title>
+<div class="container mt-5 text-center">
+    <h3 style="color: wheat;">Fred's Spotify Artists Collection</h3>
 
-<div class="container mt-5">
     <div class="row">
-
+        
         {% for cell in thruples %}
             <div class="col-md-4 mb-4">
                 <div class="card {% if cell.0 in ['rock', 'pop', 'electronic', 'punk', 'funk', 'indie', 'old', 'country'] %}{{ cell.0.lower() }}{% endif %}">

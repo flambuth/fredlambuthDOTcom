@@ -71,11 +71,10 @@
 
     </head>
 
+{% include 'spotify/spotify_header.html' %}
+
 <div class="container-fluid text-center">
   <div class="myDiv">
-    <a href="{{ url_for( 'spotify.art_cat_landing_page' ) }}">
-    <h3 style="color: wheat;">Fred's Spotify Artist Collection</h3>
-    </a>
     <!-- Genre List -->
     <ul id="genre_list" class="genre-list">
       {% for genre in genres %}
