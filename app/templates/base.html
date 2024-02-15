@@ -2,10 +2,20 @@
 <html lang="en">
   <head>
 
+
+
     <style>
-        /* Add a solid line at the bottom of the navbar */
-        
-        /* Other styles for your navbar here */
+  .navbar-toggler-icon {
+    background-color: #fff; 
+    border: 1px solid #fff; 
+    }
+
+
+    .navbar-toggler-icon::before {
+    content: '\2261'; /* Unicode character for three horizontal lines */
+    color: #000;
+    font-size: 24px; 
+  }
     </style>
       
     <!-- Required meta tags -->
@@ -38,29 +48,28 @@
                     <img src="{{ url_for('static', filename='favicon.ico') }}" alt="Favicon" class="navbar-favicon" title="Howdy!">
                     <span class="pill-text">FREDLAMBUTH</span>.com
                 </a>
-
+        
+                <!-- Add the toggler button here -->
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+        
                 <div class="collapse navbar-collapse" id="navbarNav">
                     <ul class="navbar-nav ml-auto">
-                
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('spotify.spotify_landing_page') }}"><i class="fab fa-spotify"></i>
-                                Spotify</a>
+                            <a class="nav-link" href="{{ url_for('spotify.spotify_landing_page') }}"><i class="fab fa-spotify"></i> Spotify</a>
                         </li>
-                
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('blog.blog_landing_page') }}"><i class="fas fa-book-open"></i>
-                                Blog</a>
+                            <a class="nav-link" href="{{ url_for('blog.blog_landing_page') }}"><i class="fas fa-book-open"></i> Blog</a>
                         </li>
-                
                         <li class="nav-item">
-                            <a class="nav-link" href="{{ url_for('contact') }}"><i class="fas fa-bullhorn"></i>
-                                Contact</a>
+                            <a class="nav-link" href="{{ url_for('contact') }}"><i class="fas fa-bullhorn"></i> Contact</a>
                         </li>
-                
-                    </ul> <!-- Close the <ul> element here -->
-                </div>    
+                    </ul>
+                </div>
             </div>
         </nav>
+        
 
     </header>
     <div >
