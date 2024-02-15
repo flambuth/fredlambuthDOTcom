@@ -3,90 +3,93 @@
 {% block content %}
 <link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/sidebar.css') }}">
 <link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/spotify.css') }}">
+<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/blog.css') }}">
 
 <title>Landing Page for Spotify Stuff</title>
 
 {% include 'spotify/spotify_header.html' %}
 
 <style>
-    .outer-row {
-        background-color: #1a865d;
-        border-radius: 2%;
-        border: 2px solid #073a33;
+    .image-container {
+        overflow: hidden;
+        height: 300px; /* Adjust the height as needed */
     }
 
-    .whitie {
-        color: aliceblue;
+    .image-container img {
+        width: 100%;
+        object-fit: cover;
     }
 
-    .row:first-child {
-display: flex;
-flex-direction: column;
-}
 </style>
 
-<br>
-<div class="container" style="max-width: 59%;">
-    <div class="row align-items-center">
-        <h2 class="white">Welcome to the Spotify section of the website!</h2>
-        <p style="text-align: center;">Everyday I collect my listening data from Spotify. The 'Spotify' section is where I keep my records of what I was listening to on what day. On the sidebar you can find different timeframes of what I was listening to.</p>
-    </div>
+<body style="background-color: #000c0a;">
 
-
-    <div class="row align-items-center">
-        <div class="col-6">
-            <h2>Average Song Count per Day:</h2>
-        </div>
-        <div class="col-6">
-            <h2 class="white-pill" style="text-align: center;">{{ daily_rp_avg }}</h2>
-        </div>
-    </div>
-
-    <div class="row">
-        <div class="col">
-            <div class="jumbotron" style="color: #073a33;">
-                <div class="container">
-                  <h2>Newest additions:</h2>
-              
-                  {% for new_artist in latest_artists %}
-                    <div class="row">
-                      <div class="col-sm-3 " style="border-radius: 15%;">
-                        <a href="https://open.spotify.com/artist/{{ new_artist.art_id }}">
-                        {{ new_artist.art_name }}
-                      </div></a>
-                      <div class="col-sm-3">
-                        {{ new_artist.genre }}{% if new_artist.genre2 %}, {{ new_artist.genre2 }}{% endif %}
-                      </div>
-                    
-                    </div>
-                  {% endfor %}
-                </div>
+<div class="w3-content" style="max-width:1400px; padding: 50px;">
+    <div class="w3-row">
+        <div class="w3-col l4" style="padding-right: 20px;">
+            <div class="w3-card w3-margin w3-margin-top">
+                <h2 style="margin-right: 30px;">Average Song Count per Day: <span class="white-pill">{{ daily_rp_avg }}</span></h2>
             </div>
-        </div>
-    </div>
-
-    <div class="row align-items-center">  
-        <div class="col-6">
-            <h2>Most Played Artists: </h2>
-            <div class="grid-container">
-                {% for art in top_5_arts %}
-                    <div class="grid-item">{{ art[0] }} <span class="whitie">{{ art[1] }}</span></div>
+            
+            <div >
+                <h2>Newest Additions:</h2>
+                
+                {% for new_artist in latest_artists %}
+                    <div class="row mb-3" style="background-color: #012b25; border-radius: 12%; border: solid 2px #028874;">
+                        <div class="col-md-2 d-flex align-items-center">
+                            <img src="https://i.scdn.co/image/{{ new_artist.img_url_sml }}" alt="Tiny Image" class="img-fluid">
+                        </div>
+                        <div class="col-md-10" style="color: wheat;">
+                            <a href="https://open.spotify.com/artist/{{ new_artist.art_id }}">
+                                <h5>{{ new_artist.art_name }}</h5>
+                            </a>
+                            <p>
+                                {% if new_artist.genre2 %}
+                                    <a href="{{ url_for('spotify.index_by_genre', master_genre=new_artist.genre) }}">{{ new_artist.genre }}</a>,
+                                    <a href="{{ url_for('spotify.index_by_genre', master_genre=new_artist.genre2) }}">{{ new_artist.genre2 }}</a>
+                                {% else %}
+                                    <a href="{{ url_for('spotify.index_by_genre', master_genre=new_artist.genre) }}">{{ new_artist.genre }}</a>
+                                {% endif %}
+                            </p>
+                            
+                        </div>
+                    </div>
                 {% endfor %}
             </div>
+            
         </div>
 
-        <div class="col-6">
-            <h2>Most Played Tracks: </h2>
-            <div class="grid-container">
-            {% for track in top_5_tracks %}
-                <div class="grid-item">{{ track[0] }} <span class="whitie">{{ track[1] }}</span></div>
-            {% endfor %}
+        <div class="w3-col l8 s12">
+            <div class="w3-card w3-margin w3-margin-top">
+                <div class="image-container">
+                    <img src="{{url_for('static', filename='img/detroit.jpg')}}" alt="Sailor" title="CS2 Peter Grabnickas, a crew member of the USS Capelin, disappeared with the ship in the Celebes Sea near Indonesia on Dec 2, 1943. Photo taken two months before the submarine's last known sighting.">
+                </div>
+                <div class="w3-container w3-teal">
+                    <h2>Welcome to the Spotify section of the website!</h2>
+                </div>
+                <p style="text-align: center;">Everyday I collect my listening data from Spotify. The 'Spotify' section is where I keep my records of what I was listening to on what day. On the sidebar, you can find different timeframes of what I was listening to.</p>
             </div>
+            
+
+            <div class="row">
+                <div class="w3-card w3-margin">
+                    <h2>Most Played Artists:</h2>
+                    {% for art in top_5_arts %}
+                        <div>{{ art[0] }} <span style="color: aliceblue;">{{ art[1] }}</span></div>
+                    {% endfor %}
+                </div>
+                
+                <div class="w3-card w3-margin">
+                    <h2>Most Played Tracks:</h2>
+                    {% for track in top_5_tracks %}
+                        <div>{{ track[0] }} <span style="color: aliceblue">{{ track[1] }}</span></div>
+                    {% endfor %}
+                </div>
+                
+            </div>
+            
         </div>
     </div>
-
 </div>
-
-
 
 {% endblock %}
