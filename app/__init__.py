@@ -1,6 +1,6 @@
 from flask import Flask, render_template, send_file
 from flask_login import LoginManager
-#from flask_migrate import Migrate
+#from flask_caching import Cache
 
 from config import Config
 from config import SECRET_KEY
@@ -21,11 +21,17 @@ def create_app(config_class=Config):
     login_manager.init_app(app)
     login_manager.login_view = 'blog.login'
 
+    #cache = Cache(app, config={'CACHE_TYPE':'simple'})
+
     db.init_app(app)
     #migrate = Migrate(app, db)
 
+    from app.spotify import cache
+    cache.init_app(app)
     from app.spotify import bp as main_bp
     app.register_blueprint(main_bp)
+    #from app.spotify import init_app as init_spotify_app
+    #init_spotify_app(app)
 
     from app.blog import bp as blog_bp
     app.register_blueprint(blog_bp)
@@ -65,8 +71,8 @@ def create_app(config_class=Config):
     from app.dash_plotlys.artist_history import Add_Dash_art_cat
     Add_Dash_art_cat(app)
 
-    from app.dash_plotlys.global_dash import Add_Dash_global_view
-    Add_Dash_global_view(app)
+    #from app.dash_plotlys.global_dash import Add_Dash_global_view
+    #Add_Dash_global_view(app)
 
     from app.dash_plotlys.global_dash_lite import Add_Dash_global_view_lite
     Add_Dash_global_view_lite(app)
