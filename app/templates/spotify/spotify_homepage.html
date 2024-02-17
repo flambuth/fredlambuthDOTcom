@@ -27,8 +27,8 @@
     padding: 10px;
 }
 
-.row.mb-3:hover {
-        background-color: #3a4002; /* Change the background color on hover */
+.w3-card:hover {
+        background-color: #1c1f03; /* Change the background color on hover */
         transition: background-color 0.3s ease; /* Add a smooth transition effect */
     }
 
@@ -74,7 +74,7 @@
         <div class="w3-col l8 s12">
             <div class="w3-card w3-margin w3-margin-top">
                 <div class="image-container">
-                    <img src="{{url_for('static', filename='img/detroit.jpg')}}" alt="Sailor" title="CS2 Peter Grabnickas, a crew member of the USS Capelin, disappeared with the ship in the Celebes Sea near Indonesia on Dec 2, 1943. Photo taken two months before the submarine's last known sighting.">
+                    <img src="{{url_for('static', filename='img/detroit.jpg')}}" alt="Unknown Detroit Bluesman" title="Robert Crumb cover of Unknown Detroist Bluesman. 1970.">
                 </div>
                 <div class="w3-container w3-teal">
                     <h2>Welcome to the Spotify section of the website!</h2>
@@ -84,18 +84,22 @@
             
 
             <div class="row">
+                <a href="{{ url_for('spotify.top_five_artist_plot') }}" title="Scatter Plot of Top 5 Artist History">
                 <div class="w3-card w3-margin">
                     <h2>Most Played Artists:</h2>
                     {% for art in top_5_arts %}
                         <div>{{ art[0] }} <span style="color: aliceblue;">{{ art[1] }}</span></div>
                     {% endfor %}
                 </div>
+                </a>
                 
+                <a href="{{ url_for('spotify.top_five_tracks_plot') }}" title="Scatter Plot of Top 5 Artist History">
                 <div class="w3-card w3-margin">
                     <h2>Most Played Tracks:</h2>
                     {% for track in top_5_tracks %}
                         <div>{{ track[0] }} <span style="color: aliceblue">{{ track[1] }}</span></div>
                     {% endfor %}
+                </a>
                 </div>
                 
             </div>

@@ -1,11 +1,14 @@
 from app.spotify import bp, cache
-from flask import render_template, request, redirect, url_for
+from flask import render_template, request, redirect, url_for, render_template_string
 from app.models.charts import recently_played, daily_artists ,daily_tracks
 from app.models.catalogs import track_catalog
 
+from app.dash_plotlys.plotly_figures import chart_scatter_plotly
+
 from app.spotify.forms import CourseForm
-import app.spotify.daily_funcs as daily_funcs 
+import app.spotify.daily_funcs as daily_funcs
 import app.spotify.art_cat_funcs as ac_funcs
+from app.spotify.plotly_figs import top_5_artists_fig, top_5_tracks_fig
 
 from datetime import datetime
 
@@ -13,6 +16,25 @@ from datetime import datetime
 #latest_daily_date = daily_tracks.query.order_by(daily_tracks.id.desc()).first().date
 #latest_date_obj = datetime.strptime(latest_daily_date, "%Y-%m-%d").date()
 
+@bp.route('/spotify/top_five_artists')
+def top_five_artist_plot():
+    '''
+    Temp install!
+    '''
+    fig = top_5_artists_fig()
+    html = fig.to_html()
+
+    return render_template_string(html)
+
+@bp.route('/spotify/top_five_tracks')
+def top_five_tracks_plot():
+    '''
+    No sidebar!
+    '''
+    fig = top_5_tracks_fig()
+    html = fig.to_html()
+
+    return render_template_string(html)
 
 @bp.route('/spotify')
 @bp.route('/spotify/')
