@@ -63,7 +63,9 @@ def songs_line_chart(df):
     '''
     Returns a line chart of the input df. Uses
     '''
-    df['name_artists'] = df['name'] + ' - ' + df['artists']
+    #df['name_truncated'] = df['name'].str.slice(0, 30)
+    df['name_truncated'] = df['name'].apply(lambda x: x[:40] if '(' not in x else x.split('(')[0][:40])
+    df['name_artists'] = df['name_truncated'] + ' - ' + df['artists']
     first_date = min(df.snapshot_date)
     last_date = max(df.snapshot_date)
 
@@ -88,7 +90,7 @@ def songs_line_chart(df):
             title_text=f"The Top 10 Songs from {first_date} - {last_date}",
             traceorder="normal",  # Stack legend title on top of legend items
             itemsizing="constant",  # Ensure constant item size across legends
-            itemwidth=200  # Adjust the width of each legend item
+            itemwidth=100  # Adjust the width of each legend item
         )
     )
     # Invert the y-axis

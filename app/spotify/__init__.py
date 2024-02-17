@@ -1,4 +1,5 @@
 from flask import Blueprint
+from app.spotify.cache import cache
 
 bp = Blueprint('spotify', __name__)
 

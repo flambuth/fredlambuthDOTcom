@@ -1,4 +1,4 @@
-from app.spotify import bp
+from app.spotify import bp, cache
 from flask import render_template, request, redirect, url_for
 from app.models.charts import recently_played, daily_artists ,daily_tracks
 from app.models.catalogs import track_catalog
@@ -159,6 +159,7 @@ def index_tracks_by_letter(letter):
 #rp routes
 @bp.route('/spotify/rp')
 @bp.route('/spotify/rp/')
+@cache.cached(timeout=3600)
 def yesterday():
     '''
     Route to the recent template.
