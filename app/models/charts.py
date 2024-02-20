@@ -153,7 +153,7 @@ class recently_played(db.Model):
     song_name = db.Column(db.String(150))
     song_link = db.Column(db.String(150))
     image = db.Column(db.String(150))
-    last_played = db.Column(db.String(50))
+    last_played = db.Column(db.DateTime)
 
     @classmethod
     def get_timeframe_of_rp_records(
@@ -162,12 +162,12 @@ class recently_played(db.Model):
             end_datetime
     ):
         '''
-        Accepts the string fromate of '2023-11-15T09:03:02'
-        Returns all the rp_records that are inside the start and endpoint.
+        Now takes datetimes! Because I changed the 'last_played' field to be a SQLAlchemy Datetime type instead of string!
+        2024_02_20
         '''
         timeframe_of_rps = cls.query.filter(
-        cls.last_played >= start_datetime.strftime('%Y-%m-%dT%H:%M:%S'),
-        cls.last_played <= end_datetime.strftime('%Y-%m-%dT%H:%M:%S')
+        cls.last_played >= start_datetime,#.strftime('%Y-%m-%dT%H:%M:%S'),
+        cls.last_played <= end_datetime#.strftime('%Y-%m-%dT%H:%M:%S')
         ).all()
         return timeframe_of_rps
     
@@ -177,7 +177,7 @@ class recently_played(db.Model):
         Uses get_timeframe_of_rp_records on a 24 hour timeframe that is ends 24 hours from the time the function is called
         '''
         latest_datetime = cls.query.order_by(cls.id.desc()).first().last_played
-        latest_datetime = datetime.strptime(latest_datetime, '%Y-%m-%dT%H:%M:%S')
+        #latest_datetime = datetime.strptime(latest_datetime, '%Y-%m-%dT%H:%M:%S')
         start_datetime =  latest_datetime - timedelta(hours=48)
         end_datetime = latest_datetime - timedelta(hours=24)
         rps_from_past24 = cls.get_timeframe_of_rp_records(start_datetime, end_datetime)
@@ -197,12 +197,34 @@ class recently_played(db.Model):
 
     @classmethod
     def rp_average_per_day(cls):
+        '''
+        This only goes back 100 days now, so this should be retitled to 100 day average
+        '''
+
         result = db.session.query(
         func.date(cls.last_played).label('play_date'),
         func.count().label('record_count')
         ).group_by('play_date').all()
         daily_avg = sum(i[1] for i in result) / len(result) 
         return int(daily_avg)
+
+    @classmethod
+    def latest_played_datetime(cls):
+        latest_record = cls.query.order_by(cls.last_played.desc()).first()
+        if latest_record:
+            return latest_record.last_played
+        else:
+            return None
+    
+    @classmethod
+    def get_rps_from_n_days_ago(cls, n):
+        delta = timedelta(days=n)
+        start_date = cls.latest_played_datetime() - delta
+        rps = cls.get_timeframe_of_rp_records(
+            start_date,
+            cls.latest_played_datetime()
+        )
+        return rps
 
     def __repr__(self):
         return f'<recently_played for "{self.last_played}">'

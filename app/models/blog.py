@@ -84,8 +84,10 @@ class blog_comments(db.Model):
     content = db.Column(db.String(500), nullable=False)
     post_id = db.Column(db.Integer, db.ForeignKey('blog_posts.id'), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey('blog_users.id'), nullable=False)
+
     post = db.relationship('blog_posts', backref=db.backref('comments', lazy=True))
     user = db.relationship('blog_users', backref=db.backref('comments', lazy=True))
+    
     comment_date = db.Column(db.DateTime, default=datetime.utcnow)
 
     def __repr__(self):
