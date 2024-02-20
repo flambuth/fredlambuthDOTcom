@@ -30,46 +30,46 @@
     .myDiv-nav a i {
       margin-right: 5px;
     }
-  </style>
+</style>
   
-  <div class="container-fluid text-center">
-    <div class="myDiv">
-      <a href="{{ url_for('spotify.spotify_landing_page') }}">
-        <h3 style="color: wheat;">Fred Lambuth's Spotify Data</h3>
+<div class="container-fluid text-center">
+  <div class="myDiv">
+    <a href="{{ url_for('spotify.spotify_landing_page') }}">
+      <h3 style="color: wheat;">Fred Lambuth's Spotify Data</h3>
+    </a>
+
+    <!-- Navigation Links -->
+    <nav class="myDiv-nav">
+      <a href="{{ url_for('spotify.yesterday') }}">
+        <i class="fa fa-clock" aria-hidden="true"></i>
+        The Last 24 Hrs
       </a>
-  
-      <!-- Navigation Links -->
-      <nav class="myDiv-nav">
-        <a href="{{ url_for('spotify.yesterday') }}">
-          <i class="fa fa-clock" aria-hidden="true"></i>
-          The Last 24 Hrs
-        </a>
-  
-        <a href="{{ url_for('spotify.latest_daily_tracks') }}">
-          <i class="fa fa-microphone" aria-hidden="true"></i>
-          Today's Tracks
-        </a>
-  
-        <a href="{{ url_for('spotify.latest_daily_artists') }}">
-          <i class="fa fa-address-book" aria-hidden="true"></i>
-          Today's Artists
-        </a>
-  
-        <a href="{{ url_for('spotify.art_cat_landing_page') }}">
-          <i class="fa fa-list" aria-hidden="true"></i>
-          Artist Catalog
-        </a>
-  
-        <a href="{{ url_for('spotify.track_cat_landing_page') }}">
-          <i class="fa fa-sign" aria-hidden="true"></i>
-          Track Catalog
-        </a>
-  
-        <a href="https://fredlambuth.com/spotify/global/">
-          <i class="fa fa-globe" aria-hidden="true"></i>
-          Global Stats
-        </a>
-      </nav>
-    </div>
+
+      <a href="{{ url_for('spotify.latest_daily_tracks') }}">
+        <i class="fa fa-microphone" aria-hidden="true"></i>
+        Today's Tracks
+      </a>
+
+      <a href="{{ url_for('spotify.latest_daily_artists') }}">
+        <i class="fa fa-address-book" aria-hidden="true"></i>
+        Today's Artists
+      </a>
+
+      <a href="{{ url_for('spotify.art_cat_landing_page') }}">
+        <i class="fa fa-list" aria-hidden="true"></i>
+        Artist Catalog
+      </a>
+
+      <a href="{{ url_for('spotify.track_cat_landing_page') }}">
+        <i class="fa fa-sign" aria-hidden="true"></i>
+        Track Catalog
+      </a>
+
+      <a href="https://fredlambuth.com/spotify/global/">
+        <i class="fa fa-globe" aria-hidden="true"></i>
+        Global Stats
+      </a>
+    </nav>
   </div>
+</div>
   

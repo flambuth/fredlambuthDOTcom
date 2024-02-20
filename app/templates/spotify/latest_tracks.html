@@ -1,15 +1,12 @@
 {% include 'base.html' %}
 
 {% block content %}
-<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/sidebar.css') }}">
 <link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/spotify.css') }}">
 
 <title>Today's Top Tracks</title>
 
 <style>
-    .container {
-  max-width: 59%;
-}
+
 </style>
 
 {% include 'spotify/spotify_header.html' %}
