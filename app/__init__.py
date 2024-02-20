@@ -16,12 +16,9 @@ def create_app(config_class=Config):
     app = Flask(__name__, static_url_path='/static')
     app.config.from_object(config_class)
     app.config['SECRET_KEY'] = SECRET_KEY
-    #app.config['SERVER_NAME'] = 'localhost:5000'
 
     login_manager.init_app(app)
     login_manager.login_view = 'blog.login'
-
-    #cache = Cache(app, config={'CACHE_TYPE':'simple'})
 
     db.init_app(app)
     #migrate = Migrate(app, db)
@@ -30,8 +27,6 @@ def create_app(config_class=Config):
     cache.init_app(app)
     from app.spotify import bp as main_bp
     app.register_blueprint(main_bp)
-    #from app.spotify import init_app as init_spotify_app
-    #init_spotify_app(app)
 
     from app.blog import bp as blog_bp
     app.register_blueprint(blog_bp)

@@ -4,6 +4,7 @@ from app.extensions import db
 from app.models.blog import blog_posts, blog_users, blog_comments
 from app.models.charts import daily_tracks
 
+from operator import attrgetter
 from urllib.parse import urlsplit
 import random
 from datetime import datetime
@@ -14,7 +15,7 @@ from flask import render_template, request, redirect, url_for, flash, current_ap
 
 ###########################
 #######LOGIN, LOGOUT, Register_new_user
-@bp.route('/blog/login', methods=['GET', 'POST'])
+@bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('blog.blog_landing_page'))
@@ -38,7 +39,7 @@ def login():
 
     return render_template('blog/blog_login.html', title='Sign In', form=form)
 
-@bp.route('/blog/logout', methods=['GET', 'POST'])
+@bp.route('/logout', methods=['GET', 'POST'])
 def logout():
     
     if request.method == 'POST':
@@ -48,7 +49,7 @@ def logout():
 
     return render_template('blog/blog_logout.html')
 
-@bp.route('/blog/register', methods=['GET', 'POST'])
+@bp.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('blog.blog_landing_page'))
@@ -84,6 +85,29 @@ def register():
         return redirect(url_for('blog.login'))
 
     return render_template('blog/blog_register.html', title='Register', form=form)
+
+@bp.route('/user_page')
+@login_required
+def user_page():
+    # Retrieve the user's comments from the database
+    user_comments = blog_comments.query.filter_by(user_id=current_user.id).all()
+    sorted_user_comments = sorted(user_comments, key=attrgetter('post.title', 'post.title'))
+
+    comments_by_post_id = {}
+
+    # Organize comments by post_id
+    for comment in sorted_user_comments:
+        post_id = comment.post.id
+        if post_id not in comments_by_post_id:
+            comments_by_post_id[post_id] = []
+        comments_by_post_id[post_id].append(comment)
+
+    context = {
+        'user_comments':sorted_user_comments,
+        'comments_by_post_id':comments_by_post_id
+    }
+
+    return render_template('blog/user_comments.html', **context)
 
 
 #################################################
