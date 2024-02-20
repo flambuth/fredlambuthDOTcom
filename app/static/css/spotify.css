@@ -9,8 +9,6 @@ body {
     background-color: rgba(0, 255, 128, 0.06); /* Reduce opacity of the background color */
   }
   
-
-
   .hex {
       display: block;
       margin: 0 auto;
@@ -86,7 +84,7 @@ body {
     .image-container {
         /* Ensure the container expands to accommodate the image */
         width: 84%;
-        height: 90px;
+        height: auto;
         text-align: center; /* Optionally center the image horizontally */
         overflow: hidden;
         }
@@ -141,4 +139,8 @@ body {
         /* Add any specific styles for hover state in the streak list */
         background-color: aliceblue; /* Set the background color to transparent or the desired color */
         cursor: default; /* Change the cursor back to default for the streak list items */
+    }
+
+    .container {
+      width: 95%;
     }

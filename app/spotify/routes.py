@@ -108,8 +108,6 @@ def index_by_letter(letter):
 
     return render_template('spotify/art_cat/art_cat_index.html', **context)
 
-
-
 @bp.route('/spotify/art_cat/genre/<string:master_genre>', methods=('GET','POST'))
 @bp.route('/spotify/art_cat/genre', defaults={'master_genre': None}, methods=('GET','POST'))
 def index_by_genre(master_genre):
@@ -147,6 +145,7 @@ def index_by_search(search_term):
     return render_template('spotify/art_cat/art_cat_search.html', **context)
 
 ###########################################
+###########################################
 #track_cat routes
 
 @bp.route('/spotify/track_cat/', methods=('GET','POST'))
@@ -173,10 +172,8 @@ def index_tracks_by_letter(letter):
 
     return render_template('spotify/track_cat/track_index.html', **context)
 
+
 ###############
-##this should let me distribute this variable to all the routes
-
-
 ###########################################
 #rp routes
 @bp.route('/spotify/rp')
