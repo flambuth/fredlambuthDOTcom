@@ -18,7 +18,7 @@ from flask import render_template, request, redirect, url_for, flash, current_ap
 @bp.route('/login', methods=['GET', 'POST'])
 def login():
     if current_user.is_authenticated:
-        return redirect(url_for('blog.blog_landing_page'))
+        return redirect(url_for('user_page'))
 
     form = LoginForm()
 
@@ -49,10 +49,17 @@ def logout():
 
     return render_template('blog/blog_logout.html')
 
+@bp.route('/account', methods=['GET', 'POST'])
+def account():
+    '''
+    Login or make a new account.
+    '''
+    return render_template('blog/blog_account_options.html')
+
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('blog.blog_landing_page'))
+        return redirect(url_for('user_page'))
 
     form = RegistrationForm()
 
