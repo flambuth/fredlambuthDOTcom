@@ -1,5 +1,8 @@
 from app.spotify import bp, cache
 from flask import render_template, request, redirect, url_for, render_template_string
+from flask_login import login_required
+
+
 from app.models.charts import recently_played, daily_artists ,daily_tracks
 from app.models.catalogs import track_catalog
 
@@ -17,6 +20,7 @@ from datetime import datetime
 #latest_date_obj = datetime.strptime(latest_daily_date, "%Y-%m-%d").date()
 
 @bp.route('/spotify/top_five_artists')
+@login_required
 def top_five_artist_plot():
     '''
     Temp install!
@@ -27,6 +31,7 @@ def top_five_artist_plot():
     return render_template_string(html)
 
 @bp.route('/spotify/top_five_tracks')
+@login_required
 def top_five_tracks_plot():
     '''
     No sidebar!

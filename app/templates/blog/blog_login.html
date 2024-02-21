@@ -2,7 +2,11 @@
 
 {% block content%}
 
+<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/blog.css') }}">
+
 <title>Untold Blog Pleasures Await You</title>
+
+<body class="w3-black">
 
 <div class="container">
     <h1>Sign In</h1>
@@ -15,10 +19,13 @@
         
         {% with messages = get_flashed_messages() %}
         {% if messages %}
+            <div class="image-div">
+                <img src="{{ url_for('static', filename='img/magic_word.jpg') }}" alt="Your Image">
+            </div>
             <ul class="flashes">
-            {% for message in messages %}
-                <li>{{ message }}</li>
-            {% endfor %}
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
             </ul>
         {% endif %}
         {% endwith %}
