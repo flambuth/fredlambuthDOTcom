@@ -46,17 +46,12 @@ def create_app(config_class=Config):
         return render_template('about_me.html')
     
     @app.route('/resume')
-    def serve_pdf():
-        filename = 'static/resume.pdf'
-        return send_file(filename, as_attachment=False)
-    
-    @app.route('/big_resume')
-    def serve_big_pdf():
+    def serve_resume_pdf():
         filename = 'static/resume_AST.pdf'
         return send_file(filename, as_attachment=False)
 
     @app.route('/online_resume')
-    def big_resume():
+    def online_resume():
         return render_template('online_resume.html')
 
 
