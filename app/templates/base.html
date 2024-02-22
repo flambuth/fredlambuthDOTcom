@@ -68,7 +68,7 @@
                         {% if current_user.is_authenticated %}
                             <!-- User is logged in, show link to user page -->
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url_for('user_page') }}"><i class="fas fa-user"></i> Account</a>
+                                <a class="nav-link" href="{{ url_for('blog.user_page') }}"><i class="fas fa-user"></i> Account</a>
                             </li>
                         {% else %}
                             <!-- User is not logged in, show link to register page -->
