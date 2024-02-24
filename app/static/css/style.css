@@ -40,28 +40,119 @@ text-shadow: -2px -2px 0 rgb(121, 204, 252), 2px 2px 0 rgb(238, 124, 190);
 color: wheat; /* Set the text color to white */
 }       
 
+:root {
+  --pop-color: rgb(253, 136, 224);
+  --electronic-color: rgb(91, 233, 243);
+  --rock-color: rgb(214, 75, 11);
+  --punk-color: rgb(158, 247, 85);
+  --funk-color: rgb(92, 117, 75);
+  --indie-color: rgb(123, 85, 145);
+  --old-color: rgb(189, 184, 118);
+  --country-color: rgb(214, 214, 205);
+}
+
+.pop-border {
+  border: solid 2px var(--pop-color);
+  padding: 14px;
+}
+
+.pop-border h2 {
+  background-color: var(--pop-color);
+  color: #17241f;
+}
+
+.electronic-border {
+  border: solid 2px var(--electronic-color);
+  padding: 14px;
+}
+
+.electronic-border h2 {
+  background-color: var(--electronic-color);
+  color: #17241f;
+}
+
+.rock-border {
+  border: solid 2px var(--rock-color);
+  padding: 14px;
+}
+
+.rock-border h2 {
+  background-color: var(--rock-color);
+  color: #17241f;
+}
+
+.punk-border {
+  border: solid 2px var(--punk-color);
+  padding: 14px;
+}
+
+.punk-border h2 {
+  background-color: var(--punk-color);
+  color: #17241f;
+}
+
+.funk-border {
+  border: solid 2px var(--funk-color);
+  padding: 14px;
+}
+
+.funk-border h2 {
+  background-color: var(--funk-color);
+  color: #17241f;
+}
+
+.indie-border {
+  border: solid 2px var(--indie-color);
+  padding: 14px;
+}
+
+.indie-border h2 {
+  background-color: var(--indie-color);
+  color: #17241f;
+}
+
+.old-border {
+  border: solid 2px var(--old-color);
+  padding: 14px;
+}
+
+.old-border h2 {
+  background-color: var(--old-color);
+  color: #17241f;
+}
+
+.country-border {
+  border: solid 2px var(--country-color);
+  padding: 14px;
+}
+
+.country-border h2 {
+  background-color: var(--country-color);
+  color: #17241f;
+}
+
 
 .pop {
-  background-color: rgb(253, 136, 224);
+  background-color: var(--pop-color);
 }
 .electronic {
-  background-color: rgb(91, 233, 243);
+  background-color: var(--electronic-color);
 }
 .rock {
-  background-color: rgb(214, 75, 11);
+  background-color: var(--rock-color);
 }
 .punk {
-  background-color: rgb(158, 247, 85);
+  background-color: var(--punk-color);
 }
 .funk {
-  background-color: rgb(92, 117, 75);
+  background-color: var(--funk-color);
 }
 .indie {
-  background-color: rgb(123, 85, 145);
+  background-color: var(--indie-color);
 }
 .old {
-  background-color: rgb(189, 184, 118);
+  background-color: var(--old-color);
 }
 .country {
-  background-color: rgb(214, 214, 205);
+  background-color: var(--country-color);
 }
