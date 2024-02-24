@@ -16,6 +16,7 @@ def create_app(config_class=Config):
     app = Flask(__name__, static_url_path='/static')
     app.config.from_object(config_class)
     app.config['SECRET_KEY'] = SECRET_KEY
+    app.config['ALLOWED_EXTENSIONS'] = {'jpg', 'png'}
 
     login_manager.init_app(app)
     login_manager.login_view = 'blog.login'

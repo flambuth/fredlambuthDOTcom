@@ -2,26 +2,31 @@
 
 {% block content %}
 
-<title>{{ user_comments[0].user.username }} Homepage</title>
+<title>{% if user_comments %}{{ user_comments[0].user.username }} Homepage{% else %}Homepage{% endif %}</title>
 
 <link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/blog.css') }}">
 <link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/spotify.css') }}">
 
 <div class="container">
     <h2>Your Comments</h2>
-    <img src="{{ url_for('static', filename='img/user_pics/' + user_comments[0].user.username + '.jpg') }}" alt="User Profile Image">
-    {% for post_id, comments in comments_by_post_id.items() %}
-        <div style="background-color: #296c6e; padding: 10px; margin-bottom: 10px;">
-            <a href="{{ url_for('blog.blog_single', post_id=post_id) }}">
-            <h3>Post {{ post_id }}</h3></a>
-            {% for comment in comments %}                
-                <div class="w3-row" style="padding: 10px; margin-bottom: 10px; background-color: #2a797c;">
-                    <p>{{ comment.content }}</p>
-                    <small>{{ comment.user.username }} - <span class="white-pill">{{ comment.comment_date }}</span></small>
-                </div>
-            {% endfor %}
-        </div>
-    {% endfor %}
+    <img src="{{ url_for('static', filename='img/user_pics/' + current_user_username + '.jpg') }}" alt="User Profile Image">
+    
+    {% if comments_by_post_id %}
+        {% for post_id, comments in comments_by_post_id.items() %}
+            <div style="background-color: #296c6e; padding: 10px; margin-bottom: 10px;">
+                <a href="{{ url_for('blog.blog_single', post_id=post_id) }}">
+                <h3>Post {{ post_id }}</h3></a>
+                {% for comment in comments %}                
+                    <div class="w3-row" style="padding: 10px; margin-bottom: 10px; background-color: #2a797c;">
+                        <p>{{ comment.content }}</p>
+                        <small>{{ comment.user.username }} - <span class="white-pill">{{ comment.comment_date }}</span></small>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endfor %}
+    {% else %}
+        <p>No comments to display.</p>
+    {% endif %}
 </div>
 
 {% endblock %}

@@ -1,4 +1,5 @@
 from flask_wtf import FlaskForm
+from flask_wtf.file import FileAllowed, FileField
 from wtforms import StringField, PasswordField, BooleanField, SubmitField, TextAreaField
 from wtforms.validators import InputRequired, Length, DataRequired, Email, EqualTo, ValidationError
 from flask import current_app
@@ -25,9 +26,13 @@ class RegistrationForm(FlaskForm):
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
     confirm_password = PasswordField('Confirm Password', validators=[DataRequired(), EqualTo('password')])
     account_creation_password = PasswordField('Account Creation Password', validators=[DataRequired()])
+    profile_picture = FileField('Profile Picture', validators=[FileAllowed(['jpg', 'png'], 'Only .jpg and .png files allowed!')])
     submit = SubmitField('Register')
 
     def validate_account_creation_password(self, field):
+        '''
+        method used for only requiring the user to submit a user_account_creation password.
+        '''
         required_password = current_app.config.get('BLOG_PSWD')
         if field.data != required_password:
             raise ValidationError('Invalid account creation password.')

@@ -1,6 +1,7 @@
 from app.blog import bp
 from app.blog.forms import SearchForm, LoginForm, RegistrationForm, CommentForm
 from app.extensions import db
+from app.utils import resize_image
 from app.models.blog import blog_posts, blog_users, blog_comments
 from app.models.charts import daily_tracks
 
@@ -8,6 +9,8 @@ from operator import attrgetter
 from urllib.parse import urlsplit
 import random
 from datetime import datetime
+from werkzeug.utils import secure_filename
+import os
 
 from sqlalchemy import func, desc
 from flask_login import current_user, login_user, logout_user, login_required
@@ -59,12 +62,13 @@ def account():
 @bp.route('/register', methods=['GET', 'POST'])
 def register():
     if current_user.is_authenticated:
-        return redirect(url_for('user_page'))
+        return redirect(url_for('blog.user_page'))
 
     form = RegistrationForm()
 
     if form.validate_on_submit():
-        print(form.data)
+        print("Form data:", form.data)
+
         # Check if the provided account creation password is correct
         account_creation_password = form.account_creation_password.data
         required_password = current_app.config.get('BLOG_PSWD')
@@ -73,22 +77,39 @@ def register():
             flash('Invalid account creation password.')
             return redirect(url_for('blog.register'))
 
-        
-        rando_id = random_number = random.randint(100000, 999999)
+        # because the auto_increasing id stopped for this table. I dunno why? 2024_02_24
+        rando_id = random.randint(100000, 999999)
+
+        if form.profile_picture.data:
+            filename = secure_filename(form.username.data + '.' + form.profile_picture.data.filename.rsplit('.', 1)[1].lower())
+
+            # Constructing the final paths
+            input_path = '/home/flambuth/fredlambuthDOTcom/app/static/img/user_pics/placeholder.jpg'  # Placeholder file
+            output_path = '/home/flambuth/fredlambuthDOTcom/app/static/img/user_pics/' + filename
+
+            print("Input Path:", input_path)
+            print("Output Path:", output_path)
+
+            # Save and resize the uploaded file
+            form.profile_picture.data.save(input_path)
+            print("File saved to input path")
+
+            resize_image(input_path, output_path)
+            print("File resized and saved to output path")
+
         password_hash = blog_users.set_password(form.password.data)
 
         new_user = blog_users(
             id=rando_id,
-            username=form.username.data, 
-            email=form.email.data, 
+            username=form.username.data,
+            email=form.email.data,
             password_hash=password_hash)
-        
 
         db.session.add(new_user)
         db.session.commit()
 
         flash('Congratulations, you are now a registered user!')
-        #login_user(new_user)  # Automatically log in the new user after registration
+        # login_user(new_user)  # Automatically log in the new user after registration
         return redirect(url_for('blog.login'))
 
     return render_template('blog/blog_register.html', title='Register', form=form)
@@ -111,7 +132,8 @@ def user_page():
 
     context = {
         'user_comments':sorted_user_comments,
-        'comments_by_post_id':comments_by_post_id
+        'comments_by_post_id':comments_by_post_id,
+        'current_user_username': current_user.username
     }
 
     return render_template('blog/user_comments.html', **context)
