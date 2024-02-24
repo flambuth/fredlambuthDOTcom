@@ -4,7 +4,7 @@ from flask_login import login_required
 
 
 from app.models.charts import recently_played, daily_artists ,daily_tracks
-from app.models.catalogs import track_catalog
+from app.models.catalogs import track_catalog, artist_catalog
 
 from app.dash_plotlys.plotly_figures import chart_scatter_plotly
 
@@ -192,13 +192,19 @@ def yesterday():
     yesterday_records = recently_played.past_24_hrs_rps()
     song_count_yesterday = len(yesterday_records)
     distinct_arts = len(list(set([i.art_name for i in yesterday_records])))
-    known, unknown = recently_played.scan_for_art_cat_awareness()
+    known, unknown = recently_played.scan_for_art_cat_awareness(yesterday_records)
+    known_cats = list(map(
+        artist_catalog.name_to_art_cat,
+        known,
+    ))
+    sorted_known_cats = sorted(known_cats, key=lambda x: x.master_genre)
     context = {
         'last_three' : three_ago,
         'yesterday_song_count' : song_count_yesterday,
         'distinct_arts' : distinct_arts,
         'known':known,
         'unknown':unknown,
+        'known_cats':sorted_known_cats,
     }
     return render_template('spotify/recently_played.html', **context)
 
