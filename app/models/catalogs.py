@@ -83,6 +83,16 @@ class artist_catalog(db.Model):
             return None
 
         return result
+    
+    @staticmethod
+    def name_to_art_cat(art_id):
+        '''
+        Takes an art_id, returns the art_cat record if there is one.
+        '''
+        result = artist_catalog.art_id_to_art_cat(
+            artist_catalog.find_name_in_art_cat(art_id)
+        )
+        return result
 
 class track_catalog(db.Model):
     id = db.Column(db.Integer, primary_key=True)

@@ -20,13 +20,17 @@
         color: aliceblue;
     }
 
+    .subtitle {
+    display: block;
+    margin-top: 15px; /* Adjust the margin to create space between h2 and small */
+}
+
 </style>
 
 <br>
 <div class="container">
     <div class="row align-items-center">
         <h2 class="whitie">Spotify Stats from the Past 24 Hours</h2>
-        <p>A sliding 24 hour window look into what I've been listening to</p>
     </div>
 
     <div class="outer-row">
@@ -85,9 +89,16 @@
         <div class="col-6">
             <h2>Familiar Ones: <span class='whitie'>{{ known|length }}</span></h2>
             <div class="grid-container">
-            {% for art_name in known %}
-                <div class="grid-item">{{ art_name }}</div>
-            {% endfor %}
+                {% for master_genre, cats in known_cats|groupby('master_genre') %}
+                    <div class="genre-group {{ master_genre|lower }}-border">
+                        <h2>{{ master_genre }}</h2>
+                        <div class="grid-container">
+                            {% for cat in cats %}
+                                <div class="grid-item">{{ cat.art_name }}</div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>

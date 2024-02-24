@@ -184,12 +184,27 @@ class recently_played(db.Model):
         return rps_from_past24
     
     @classmethod
-    def scan_for_art_cat_awareness(cls):
+    def get_rps_from_n_days_ago(cls, n):
+        delta = timedelta(days=n)
+        start_date = cls.latest_played_datetime() - delta
+        rps = cls.get_timeframe_of_rp_records(
+            start_date,
+            cls.latest_played_datetime()
+        )
+        return rps
+
+    @classmethod
+    def scan_for_art_cat_awareness(
+        cls,
+        rps):
         '''
         Returns a 2-tuple. Each element is a list. First is art_names found in the past_24_hrs_rps, 
         second are the art_names that do not
+        
+        art_names = cls.past_24_hrs_rps()]
         '''
-        yesterday_art_names=list(set([i.art_name for i in cls.past_24_hrs_rps()]))
+
+        yesterday_art_names=list(set([i.art_name for i in rps]))
         heard_of_em = artist_catalog.query.filter(artist_catalog.art_name.in_(yesterday_art_names)).all()
         heard_of_em_names = list(set([i.art_name for i in heard_of_em]))
         not_heard_of_em_names = list(set([i for i in yesterday_art_names if i not in heard_of_em_names]))
@@ -200,7 +215,6 @@ class recently_played(db.Model):
         '''
         This only goes back 100 days now, so this should be retitled to 100 day average
         '''
-
         result = db.session.query(
         func.date(cls.last_played).label('play_date'),
         func.count().label('record_count')
@@ -216,15 +230,7 @@ class recently_played(db.Model):
         else:
             return None
     
-    @classmethod
-    def get_rps_from_n_days_ago(cls, n):
-        delta = timedelta(days=n)
-        start_date = cls.latest_played_datetime() - delta
-        rps = cls.get_timeframe_of_rp_records(
-            start_date,
-            cls.latest_played_datetime()
-        )
-        return rps
+
 
     def __repr__(self):
         return f'<recently_played for "{self.last_played}">'
