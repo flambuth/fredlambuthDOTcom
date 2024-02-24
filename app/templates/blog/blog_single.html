@@ -23,12 +23,39 @@
         background-color: #023022; 
     }
 
+
+    .comment {
+        background-color: #296c6e;
+        padding: 10px;
+        margin-bottom: 10px;
+        border-radius: 7%;
+        border: 1px solid wheat;
+    }
+
+    .comment p {
+        background-color: wheat;
+        color: #020f0b;
+        padding: 10px;
+        border-radius: 5%; 
+    }
+
+    .comment img {
+        width: 80px;
+        height: 80px;
+        border: 2px solid #43f1d4;
+        
+    }
+
+    .comment small {
+        color: wheat;
+    }
 </style>
+
 
 
 <body class="w3-black">
 
-<div class="w3-container">
+<div class="container" style="width: 92%;">
         
     {% include 'blog/blog_header.html' %}
 
@@ -39,16 +66,8 @@
         <div class="col-md d-flex align-items-center justify-content-center">
             <img src="{{url_for('static', filename='img/blog_pics/pic_' + post.id|string + '.jpg')}}" width="360" title="Rando off the street.">
         </div>
-        <div class="col"> 
+        <div class="col" style="padding: 5px;"> 
             <section class="text-end w3-teal w3-margin-top"> 
-                <h4 style="padding-left: 10px;"><b>{{ post.title }}</b></h4>
-                
-                <small style='padding-left: 10px;' class="date-pill">
-                    <a href="{{ url_for('spotify.tracks_prev', year=post.iso_date.split('-')[0], month=post.iso_date.split('-')[1], day=post.iso_date.split('-')[2]) }}">
-                        {{ post.post_date }}
-                    </a>
-                </small>
-                
                 <div class="list-group">
                     <h6 class="list-group-item list-group-item-primary">Top Tracks on {{ post.iso_date }}</h6>
                     {% for track in top_3_songs %}
@@ -64,18 +83,38 @@
         </div>
     </div>
     <hr>
-        <div class="w3-container w3-pale-green" style="border: solid 4px #296c6e; padding: 55px;">
+    <div class="w3-container w3-pale-green" style="border: solid 4px #296c6e; padding: 5px; display: flex; align-items: center;">
+        <h4 style="margin: 0;"><b>{{ post.title }}</b></h4>
+        <h5 class="date-pill" style="margin-left: auto;">
+            <a href="{{ url_for('spotify.tracks_prev', year=post.iso_date.split('-')[0], month=post.iso_date.split('-')[1], day=post.iso_date.split('-')[2]) }}" title="Link to Spotify charts on this day">
+                {{ post.post_date }}
+            </a>
+        </h5>
+    </div>
+    <br>
+    
+
+        <div class="w3-container w3-pale-green" style="border: solid 4px #296c6e; padding: 35px;">
             <p>{% autoescape false %} {{ post.content | replace('\n', '<br>') }} {% endautoescape %}</p>
         </div>
     <hr>
 
     {% for comment in comments %}
-    <div style="background-color: #296c6e; padding: 10px; margin-bottom: 10px;">
-        <p style="background-color: wheat; color: #020f0b;">{{ comment.content }}</p>
-        <img src="{{ url_for('static', filename='img/user_pics/' + comment.user.username + '.jpg') }}" alt="User Profile Image" style="width: 100px; height: 100px;">
-        <small style="color: wheat;">{{ comment.user.username }} - {{ comment.comment_date }}</small>
+    <div class="comment">
+        <div class="row">
+            <div class="col-2 text-center">
+                <img src="{{ url_for('static', filename='img/user_pics/' + comment.user.username + '.jpg') }}" alt="One of our lovely Fredlambuth.com users!" class="circular-image">
+                <br>
+                <small>{{ comment.user.username }}</small>
+            </div>
+            <div class="col-10">
+                <p>{{ comment.content }}</p>
+                <small>{{ comment.comment_date }}</small>
+            </div>
+        </div>
     </div>
     {% endfor %}
+
     <a href="{{ url_for('blog.blog_add_comment', post_id=post.id) }}" class="btn btn-primary">Add Comment</a>
 
     <!-- Next and Previous Post Links -->

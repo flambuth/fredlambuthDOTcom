@@ -1,4 +1,5 @@
 from datetime import timedelta
+from PIL import Image
 
 def find_streaks_in_dates(dates):
     '''
@@ -48,3 +49,17 @@ def evaluate_longest_streak(streaks1, streaks2):
     all_streaks = {**streaks1, **streaks2}
     longest_streak = max(all_streaks.items(), key=lambda x: x[1])
     return longest_streak
+
+
+def resize_image(input_path, output_path, size=(100, 100)):
+    """
+    Resize an image to a specified size.
+
+    Parameters:
+    - input_path (str): Path to the input image file.
+    - output_path (str): Path to save the resized image.
+    - size (tuple): Desired size in pixels (width, height). Default is (100, 100).
+    """
+    with Image.open(input_path) as img:
+        img = img.resize(size)
+        img.save(output_path)
