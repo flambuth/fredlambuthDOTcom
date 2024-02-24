@@ -72,6 +72,7 @@
     {% for comment in comments %}
     <div style="background-color: #296c6e; padding: 10px; margin-bottom: 10px;">
         <p style="background-color: wheat; color: #020f0b;">{{ comment.content }}</p>
+        <img src="{{ url_for('static', filename='img/user_pics/' + comment.user.username + '.jpg') }}" alt="User Profile Image" style="width: 100px; height: 100px;">
         <small style="color: wheat;">{{ comment.user.username }} - {{ comment.comment_date }}</small>
     </div>
     {% endfor %}
