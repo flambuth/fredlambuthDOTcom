@@ -2,7 +2,7 @@
 
 {% block content %}
 
-<title>{% if user_comments %}{{ user_comments[0].user.username }} Homepage{% else %}Homepage{% endif %}</title>
+<title>User Activity</title>
 
 <link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/blog.css') }}">
 <link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/spotify.css') }}">
@@ -14,11 +14,23 @@
     border: 2px solid #073a33;
     background-image: linear-gradient(to bottom, #045335, #073a33);
 }
+
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px; /* Adjust the margin as needed */
+    }
+
+    .white-pill {
+        /* Add any styling you want for your white-pill class */
+        margin: 0 5px; /* Adjust the margin as needed */
+    }
 </style>
 
 <div class="container">
-    <h2>Five Most Recent Comments:</h2>
-    
+
     <hr>
 
     {% for post_id, group in user_comments|groupby('post.id') %}
@@ -39,6 +51,29 @@
     {% endfor %}
 </div>
 
+
+<div class="pagination">
+    <span class="step-links">
+        {% if user_comments.has_prev %}
+        <div class="white-pill">
+            <a href="?page=1">Latest << </a>
+            <a href="?page={{ user_comments.prev_num }}">< Next</a>
+        </div>
+        {% endif %}
+    
+        <div class="white-pill">
+            {{ user_comments.page }} of {{ user_comments.pages }}
+        </div>
+    
+        <div class="white-pill">
+            {% if user_comments.has_next %}
+            <a href="?page={{ user_comments.next_num }}">Prev ></a>
+            <a href="?page={{ user_comments.pages }}">>> Oldest</a>
+            {% endif %}
+        </div>
+
+    </span>
+</div>
 
 
 

@@ -67,7 +67,7 @@ def register():
     form = RegistrationForm()
 
     if form.validate_on_submit():
-        print("Form data:", form.data)
+        #print("Form data:", form.data)
 
         # Check if the provided account creation password is correct
         account_creation_password = form.account_creation_password.data
@@ -87,15 +87,15 @@ def register():
             input_path = '/home/flambuth/fredlambuthDOTcom/app/static/img/user_pics/placeholder.jpg'  # Placeholder file
             output_path = '/home/flambuth/fredlambuthDOTcom/app/static/img/user_pics/' + filename
 
-            print("Input Path:", input_path)
-            print("Output Path:", output_path)
+            #print("Input Path:", input_path)
+            #print("Output Path:", output_path)
 
             # Save and resize the uploaded file
             form.profile_picture.data.save(input_path)
-            print("File saved to input path")
+            #print("File saved to input path")
 
             resize_image(input_path, output_path)
-            print("File resized and saved to output path")
+            #print("File resized and saved to output path")
 
         password_hash = blog_users.set_password(form.password.data)
 
@@ -132,15 +132,26 @@ def user_page():
 @login_required
 def comment_activity():
     # Retrieve the user's comments from the database
-    user_comments = blog_comments.query.all()
-    last_five_comments = user_comments[::-1][:5]
+    #user_comments = blog_comments.query.all()
+    #last_five_comments = user_comments[::-1][:5]
+    page = request.args.get('page', 1, type=int)
+    per_page = 5
+    comments = blog_comments.query.order_by(blog_comments.comment_date.desc()).paginate(page=page, per_page=per_page, error_out=False)
 
     context = {
-        'user_comments':last_five_comments,
+        'user_comments':comments,
     }
 
     return render_template('blog/all_users_comments.html', **context)
 
+@bp.route('/users_page')
+def all_users_page():
+    stats = blog_users.all_user_stats()
+
+    context = {
+        'user_stats':stats,
+    }
+    return render_template('blog/all_users_showcase.html', **context)
 
 #################################################
 @bp.route('/blog', methods=['GET', 'POST'])
