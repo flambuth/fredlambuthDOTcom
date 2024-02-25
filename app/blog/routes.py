@@ -119,24 +119,27 @@ def register():
 def user_page():
     # Retrieve the user's comments from the database
     user_comments = blog_comments.query.filter_by(user_id=current_user.id).all()
-    sorted_user_comments = sorted(user_comments, key=attrgetter('post.title', 'post.title'))
-
-    comments_by_post_id = {}
-
-    # Organize comments by post_id
-    for comment in sorted_user_comments:
-        post_id = comment.post.id
-        if post_id not in comments_by_post_id:
-            comments_by_post_id[post_id] = []
-        comments_by_post_id[post_id].append(comment)
+    sorted_user_comments = sorted(user_comments, key=attrgetter('post.title'))
 
     context = {
         'user_comments':sorted_user_comments,
-        'comments_by_post_id':comments_by_post_id,
-        'current_user_username': current_user.username
+        'current_user_username': current_user.username,
     }
 
     return render_template('blog/user_comments.html', **context)
+
+@bp.route('/user_activity')
+@login_required
+def comment_activity():
+    # Retrieve the user's comments from the database
+    user_comments = blog_comments.query.all()
+    last_five_comments = user_comments[::-1][:5]
+
+    context = {
+        'user_comments':last_five_comments,
+    }
+
+    return render_template('blog/all_users_comments.html', **context)
 
 
 #################################################

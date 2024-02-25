@@ -9,22 +9,16 @@
 
 <style>
     .outer-row {
-    background-image: linear-gradient(to bottom, #045335, #073a33);
+    
     border-radius: 2%;
     border: 2px solid #073a33;
-     /* Add this line to reset the right margin to 0 */
+    background-image: linear-gradient(to bottom, #045335, #073a33);
 }
 </style>
 
 <div class="container">
-    <h2>Your Comments</h2>
-        <div class="col">
-            <img src="{{ url_for('static', filename='img/user_pics/' + current_user_username + '.jpg') }}" alt="User Profile Image">
-            <br>
-            <br>
-            <a href="{{ url_for('blog.comment_activity') }}" class="btn btn-primary">See All User Comments</a>
-            <br>
-        </div>
+    <h2>Five Most Recent Comments:</h2>
+    
     <hr>
 
     {% for post_id, group in user_comments|groupby('post.id') %}
