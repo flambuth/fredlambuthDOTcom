@@ -19,10 +19,11 @@
 <div class="container">
     <h2>Your Comments</h2>
         <div class="col">
-            <img src="{{ url_for('static', filename='img/user_pics/' + current_user_username + '.jpg') }}" alt="User Profile Image">
+            <a href="{{ url_for('blog.comment_activity') }}" class="btn btn-primary">See All Comments</a>
+            <a href="{{ url_for('blog.all_users_page') }}" class="btn btn-secondary">See All Users</a>
             <br>
             <br>
-            <a href="{{ url_for('blog.comment_activity') }}" class="btn btn-primary">See All User Comments</a>
+            <img src="{{ url_for('static', filename='img/user_pics/' + current_user_username + '.jpg') }}" title="{{ current_user_username }}">
             <br>
         </div>
     <hr>

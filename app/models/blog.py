@@ -48,7 +48,28 @@ class blog_users(UserMixin, db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password_hash = db.Column(db.String(128), nullable=False)
 
+    #User stats
+    @classmethod
+    def blog_user_stats(cls, blog_user_id):
+        blog_user_comments = blog_comments.query.filter(blog_comments.user_id == blog_user_id).all()
+        comment_count = len(blog_user_comments)
+        start_date = blog_user_comments[0].comment_date
+        start_date = start_date.isoformat()[:10]
+        return comment_count, start_date
 
+    @classmethod
+    def all_user_stats(cls):
+        users = cls.query.with_entities(cls.id, cls.username).all()
+        users_ids = [i[0] for i in users]
+        users_names = [i[1] for i in users]
+        user_stats = list(map(
+            cls.blog_user_stats,
+            users_ids
+        ))
+        user_stats = list(zip(users_names, user_stats))
+        return user_stats
+
+    #PASSWORD STUFF
     @classmethod
     def set_password(cls, password):
         return generate_password_hash(password)
@@ -79,6 +100,8 @@ class blog_users(UserMixin, db.Model):
     def __repr__(self):
         return f'<blog_user: "{self.username}">'
     
+
+
 class blog_comments(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     content = db.Column(db.String(500), nullable=False)
