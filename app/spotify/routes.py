@@ -1,7 +1,7 @@
 from app.spotify import bp, cache
 from flask import render_template, request, redirect, url_for, render_template_string, session
 from flask_login import login_required
-
+from sqlalchemy import desc
 
 from app.models.charts import recently_played, daily_artists ,daily_tracks
 from app.models.catalogs import track_catalog, artist_catalog
@@ -217,7 +217,7 @@ def right_now():
     '''
     page = request.args.get('page', 1, type=int)
     per_page = 3
-    pagination = recently_played.query.paginate(page=page, per_page=per_page, error_out=False)
+    pagination = recently_played.query.order_by(desc(recently_played.id)).paginate(page=page, per_page=per_page, error_out=False)
     three_ago = pagination.items
 
     context = {
