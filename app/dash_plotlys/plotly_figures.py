@@ -36,6 +36,9 @@ def year_month_line_chart(
         positions,
         art_names
 ):
+    
+    year_month = dates[0].strftime("%Y-%b")
+
     fig = px.line(
     x=dates,
     y=positions,
@@ -50,6 +53,8 @@ def year_month_line_chart(
         yaxis_title="Chart Position",
         template='plotly_dark',
         showlegend=False,
+        title=year_month,
+        title_font=dict(size=20, family='Arial', color='#CEFCBA'),
     )
 
     

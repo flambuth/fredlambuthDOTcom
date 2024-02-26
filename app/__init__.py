@@ -1,6 +1,7 @@
-from flask import Flask, render_template, send_file, session
+from flask import Flask, render_template, send_file, g
 from flask_login import LoginManager
 #from flask_caching import Cache
+from datetime import datetime
 
 from config import Config
 from config import SECRET_KEY
@@ -26,6 +27,7 @@ def create_app(config_class=Config):
 
     from app.spotify import cache
     cache.init_app(app)
+
     from app.spotify import bp as main_bp
     app.register_blueprint(main_bp)
 
@@ -55,6 +57,10 @@ def create_app(config_class=Config):
     def online_resume():
         return render_template('online_resume.html')
 
+    @app.before_request
+    def before_request():
+        g.current_year = datetime.now().year
+        g.current_month = datetime.now().month
 
     from app.dash_plotlys.year_month_line_chart import Add_Dash_year_month
     Add_Dash_year_month(app)
