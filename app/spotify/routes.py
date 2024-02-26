@@ -1,5 +1,5 @@
 from app.spotify import bp, cache
-from flask import render_template, request, redirect, url_for, render_template_string
+from flask import render_template, request, redirect, url_for, render_template_string, session
 from flask_login import login_required
 
 
@@ -181,14 +181,14 @@ def index_tracks_by_letter(letter):
 ###############
 ###########################################
 #rp routes
-@bp.route('/spotify/rp')
-@bp.route('/spotify/rp/')
+@bp.route('/spotify/yesterday')
+@bp.route('/spotify/yesterday/')
 @cache.cached(timeout=3600)
 def yesterday():
     '''
     Route to the recent template.
     '''
-    three_ago = recently_played.query.all()[-3:]
+    #three_ago = recently_played.query.all()[-3:]
     yesterday_records = recently_played.past_24_hrs_rps()
     song_count_yesterday = len(yesterday_records)
     distinct_arts = len(list(set([i.art_name for i in yesterday_records])))
@@ -197,16 +197,40 @@ def yesterday():
         artist_catalog.name_to_art_cat,
         known,
     ))
-    sorted_known_cats = sorted(known_cats, key=lambda x: x.master_genre)
+    sorted_known_cats = sorted(known_cats, key=lambda x: (x.master_genre.lower(), x.art_name.lower()))
     context = {
-        'last_three' : three_ago,
+        #'last_three' : three_ago,
         'yesterday_song_count' : song_count_yesterday,
         'distinct_arts' : distinct_arts,
         'known':known,
-        'unknown':unknown,
+        'unknown':sorted(unknown, key=lambda x: (x.lower(), x)),
         'known_cats':sorted_known_cats,
     }
     return render_template('spotify/recently_played.html', **context)
+
+@bp.route('/spotify/right_now')
+@bp.route('/spotify/right_now/')
+#@cache.cached(timeout=3600)
+def right_now():
+    '''
+    Route to the recent template.
+    '''
+    page = request.args.get('page', 1, type=int)
+    per_page = 3
+    pagination = recently_played.query.paginate(page=page, per_page=per_page, error_out=False)
+    three_ago = pagination.items
+
+    context = {
+        'last_three': three_ago,
+        'pagination': pagination,
+    }
+
+        # Check if there are more items to paginate
+    #if pagination.has_next:
+        # Increment the page for the next request
+    #    session['page'] = page + 1
+
+    return render_template('spotify/recently_playing.html', **context)
 
 
 #############################################

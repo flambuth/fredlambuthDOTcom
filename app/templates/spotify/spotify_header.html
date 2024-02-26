@@ -40,9 +40,14 @@
 
     <!-- Navigation Links -->
     <nav class="myDiv-nav">
+      <a href="{{ url_for('spotify.right_now') }}">
+        <i class="fa fa-bolt" aria-hidden="true"></i>
+        Right Now
+      </a>
+
       <a href="{{ url_for('spotify.yesterday') }}">
         <i class="fa fa-clock" aria-hidden="true"></i>
-        The Last 24 Hrs
+        Yesterday
       </a>
 
       <a href="{{ url_for('spotify.latest_daily_tracks') }}">

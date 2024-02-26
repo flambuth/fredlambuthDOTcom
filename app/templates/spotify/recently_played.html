@@ -4,7 +4,7 @@
 
 <link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/spotify.css') }}">
 
-<title>Recently Played</title>
+<title>Yesterday</title>
 
 {% include 'spotify/spotify_header.html' %}
 
@@ -16,10 +16,6 @@
      /* Add this line to reset the right margin to 0 */
 }
 
-    .white {
-        color: aliceblue;
-    }
-
     .subtitle {
     display: block;
     margin-top: 15px; /* Adjust the margin to create space between h2 and small */
@@ -28,39 +24,18 @@
 </style>
 
 <br>
-<div class="container">
-    <div class="row align-items-center">
-        <h2 class="whitie">Spotify Stats from the Past 24 Hours</h2>
-    </div>
-
-    <div class="outer-row">
-        <div class="row mt-2 mb-2">
-            <h5>Last Three Songs I Listened To:</h5>
+<div class="container align-items-center">
+    <div class="row align-items-center mx-auto" style="width: 44%;">
+        <div class="col-12 text-center">
+            <h2 class="font-weight-bold mb-3">Yesterday</h2>
+            <p class="subtitle">My Troubles Seemed So Far Away</p>
         </div>
-        <div class="row" style="background-color: #0f1f19; white-space: nowrap;">
-            {% for track in last_three[::-1] %}
-            <div class="col rp_card" style="width: 200px; width: 100%; margin-right: 10px;">
-                <span class="white-pill">{{ track.song_name }}</span> 
-                <div class="hex">
-                    <a href="{{ track.song_link }}">
-                        <div class="hex-background">
-                            <img src="{{ track.image }}" style="max-width: 100%; height: auto;">
-                        </div>
-                    </a>
-                </div>
-                <div style="display: flex; justify-content: space-between;"> 
-                    by<span class='white-pill'>{{ track.art_name }}</span>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-    </div>
-    
+    </div>     
     <hr>
 
     <div class="row align-items-center">
         <div class="col-6">
-            <h2>Song count yesterday:</h2>
+            <h2>Total Songs:</h2>
         </div>
         <div class="col-6">
             <h2 class="white-pill" style="text-align: center;">{{ yesterday_song_count }}</h2>
@@ -69,7 +44,7 @@
 
     <div class="row align-items-center">
         <div class="col-6">
-            <h2>Distinct artist count yesterday:</h2>
+            <h2>Distinct Artists:</h2>
         </div>
         <div class="col-6" style="text-align: center;">
             <h2 class="white-pill">{{ distinct_arts }}</h2>
@@ -78,7 +53,7 @@
 
     <div class="row align-items-center">  
         <div class="col-6">
-            <h2>New Artist Names: <span class="whitie">{{ unknown|length }}</span></h2>
+            <h2>New Artist Names: {{ unknown|length }}</h2>
             <div class="grid-container">
                 {% for art_name in unknown %}
                     <div class="grid-item">{{ art_name }}</div>
@@ -87,7 +62,7 @@
         </div>
 
         <div class="col-6">
-            <h2>Familiar Ones: <span class='whitie'>{{ known|length }}</span></h2>
+            <h2>Familiar Ones: {{ known|length }}</h2>
             <div class="grid-container">
                 {% for master_genre, cats in known_cats|groupby('master_genre') %}
                     <div class="genre-group {{ master_genre|lower }}-border">
