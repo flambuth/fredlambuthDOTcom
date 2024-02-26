@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<link rel='stylesheet' type='text/css' href="{{ url_for('static', filename='css/spotify.css') }}">
+
+<title>The Last Few Songs I Listened To</title>
+
+{% include 'spotify/spotify_header.html' %}
+
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<script>
+    // Initialize a variable to track the current page
+    var currentPage = {{ pagination.page }};
+
+    $(document).ready(function() {
+        $('.load-more-btn').on('click', function() {
+            console.log("Button clicked!");
+
+            // Increment the current page for the next request
+            currentPage++;
+
+            $.ajax({
+                url: '{{ url_for("spotify.right_now") }}?page=' + currentPage,
+                method: 'GET',
+                success: function(data) {
+                    // Append the new content
+                    $('#track-container').append($(data).find('#track-container').html());
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error:", status, error);
+                }
+            });
+        });
+    });
+</script>
+
+<div class="container">
+    <div class="row" id="track-container" style="background-color: #0f1f19; white-space: nowrap;">
+        {% for track in last_three[::-1] %}
+        <div class="col rp_card" style="width: 200px; width: 100%; margin-right: 10px;">
+            <span class="white-pill">{{ track.song_name }}</span> 
+            <div class="hex">
+                <a href="{{ track.song_link }}">
+                    <div class="hex-background">
+                        <img src="{{ track.image }}" style="max-width: 100%; height: auto;">
+                    </div>
+                </a>
+            </div>
+            <div style="display: flex; justify-content: space-between;"> 
+                by<span class='white-pill'>{{ track.art_name }}</span>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if pagination.has_next %}
+    <div class="text-center mt-3">
+        <button class="load-more-btn btn btn-primary" data-next-page="{{ pagination.next_num }}">Load More</button>
+    </div>    
+    {% endif %}
+</div>
+
+{% endblock %}
