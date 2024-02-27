@@ -21,6 +21,10 @@ class LoginForm(FlaskForm):
     submit = SubmitField('Sign In')
 
 class RegistrationForm(FlaskForm):
+    '''
+    New Users make one of these. The data collected from this will match with the required fields of
+    the blog_user model
+    '''
     username = StringField('Username', validators=[DataRequired(), Length(min=4, max=50)])
     email = StringField('Email', validators=[DataRequired(), Email()])
     password = PasswordField('Password', validators=[DataRequired(), Length(min=6)])
@@ -38,5 +42,31 @@ class RegistrationForm(FlaskForm):
             raise ValidationError('Invalid account creation password.')
         
 class CommentForm(FlaskForm):
+    '''
+    Form generated when the 'add a comment' button is used in the blog_single template
+    '''
     content = TextAreaField('Comment', validators=[DataRequired()])
     submit = SubmitField('Submit Comment')
+
+class SubmitPictureForm(FlaskForm):
+    '''
+    Just for the change_profile_picture route available to logged in users
+    '''
+    allowed_extensions = ['jpg', 'png']
+    max_file_size = 5 * 1024 * 1024  # 5 MB
+
+    pic_file = FileField(
+        'Profile Picture',
+        validators=[
+            FileAllowed(allowed_extensions, 'Only .jpg and .png files under 5mb allowed!'),
+            lambda form, field: form.validate_file_size(field)
+        ]
+    )
+    submit = SubmitField('Submit Photo')
+
+    def validate_file_size(self, field):
+        if field.data:
+            file_size = len(field.data.read())
+            field.data.seek(0)  # Reset file pointer to the beginning
+            if file_size > self.max_file_size:
+                raise ValidationError('File size exceeds the maximum allowed (5 MB). Please choose a smaller file.')

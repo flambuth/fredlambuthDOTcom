@@ -12,20 +12,28 @@
     background-image: linear-gradient(to bottom, #045335, #073a33);
     border-radius: 2%;
     border: 2px solid #073a33;
-     /* Add this line to reset the right margin to 0 */
 }
 </style>
 
 <div class="container">
-    <h2>Your Comments</h2>
+    <h2>{{ current_user_username }}</h2>
+    <div class="row">
         <div class="col">
             <a href="{{ url_for('blog.comment_activity') }}" class="btn btn-primary">See All Comments</a>
             <a href="{{ url_for('blog.all_users_page') }}" class="btn btn-secondary">See All Users</a>
-            <br>
-            <br>
-            <img src="{{ url_for('static', filename='img/user_pics/' + current_user_username + '.jpg') }}" title="{{ current_user_username }}">
-            <br>
+            <a href="{{ url_for('blog.logout') }}" class="btn btn-warning">Logout</a>
+            <br><br>
         </div>
+    </div>
+    
+    <hr>
+
+    <div class="row">
+        <div class="col">
+            <img src="{{ url_for('static', filename='img/user_pics/' + current_user_username + '.jpg') }}" title="{{ current_user_username }}">
+            <a href="{{ url_for('blog.change_profile_picture') }}" class="btn btn-info">Change Profile Picture</a>
+        </div>
+    </div>
     <hr>
 
     {% for post_id, group in user_comments|groupby('post.id') %}

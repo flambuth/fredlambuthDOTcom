@@ -2,6 +2,7 @@ from app.extensions import db
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import func, extract
 
+import random
 from datetime import datetime, timedelta
 
 from app.models.catalogs import artist_catalog
@@ -43,6 +44,24 @@ class daily_tracks(db.Model):
             cls.date == iso_date
         ).all()[:n]
         return top_n_songs
+
+    @classmethod
+    def random_n_tracks_that_day(cls, iso_date, n=3):
+        '''
+        Returns a random selection of n songs on a given iso-date.
+        '''
+        print(f"Calling random_n_tracks_that_day with iso_date: {iso_date}")
+        
+        # Fetch all songs for the given iso_date
+        all_songs_that_day = cls.query.filter(cls.date == iso_date).all()
+
+        # Ensure that n is not greater than the total number of songs available
+        n = min(n, len(all_songs_that_day))
+
+        # Randomly select n songs
+        random_songs = random.sample(all_songs_that_day, n)
+
+        return random_songs
 
     @classmethod
     def filter_by_year_month(cls, year, month):

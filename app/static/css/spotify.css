@@ -13,8 +13,8 @@ body {
       display: block;
       margin: 0 auto;
       position: relative;
-      width: 213px;
-      height: 185px; /* width * 0.866 */
+      width: 150px;
+      height: 130px; /* width * 0.866 */
       background: #238a6b;
       box-sizing: border-box;
       -webkit-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
@@ -25,8 +25,8 @@ body {
       position: absolute;
       top: 2px; /* equal to border thickness */
       left: 2px; /* equal to border thickness */
-      width: 213px; /* container height - (border thickness * 2) */
-      height: 185px; /* container height - (border thickness * 2) */
+      width: 150px; /* container height - (border thickness * 2) */
+      height: 130px; /* container height - (border thickness * 2) */
       -webkit-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
       -moz-clip-path: polygon(0% 50%, 25% 0%, 75% 0%, 100% 50%, 75% 100%, 25% 100%);
     }
