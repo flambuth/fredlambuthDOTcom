@@ -1,10 +1,11 @@
 from app.blog import bp
-from app.blog.forms import SearchForm, LoginForm, RegistrationForm, CommentForm
+from app.blog.forms import SearchForm, LoginForm, RegistrationForm, CommentForm, SubmitPictureForm
 from app.extensions import db
 from app.utils import resize_image
 from app.models.blog import blog_posts, blog_users, blog_comments
 from app.models.charts import daily_tracks
 
+from werkzeug.exceptions import RequestEntityTooLarge
 from operator import attrgetter
 from urllib.parse import urlsplit
 import random
@@ -114,7 +115,8 @@ def register():
 
     return render_template('blog/blog_register.html', title='Register', form=form)
 
-@bp.route('/user_page')
+@bp.route('/user')
+@bp.route('/user/')
 @login_required
 def user_page():
     # Retrieve the user's comments from the database
@@ -126,7 +128,41 @@ def user_page():
         'current_user_username': current_user.username,
     }
 
-    return render_template('blog/user_comments.html', **context)
+    return render_template('blog/user_page.html', **context)
+
+@bp.route('/user/change_profile_picture', methods=['GET', 'POST'])
+def change_profile_picture():
+    if not current_user.is_authenticated:
+        return redirect(url_for('blog.user_page'))
+
+    form = SubmitPictureForm()
+
+    try:
+        if form.validate_on_submit():
+            if form.pic_file.data:
+                # You can use the current user's username for the filename
+                filename = secure_filename(current_user.username + '.' + form.pic_file.data.filename.rsplit('.', 1)[1].lower())
+
+                input_path = '/home/flambuth/fredlambuthDOTcom/app/static/img/user_pics/placeholder.jpg'
+                output_path = '/home/flambuth/fredlambuthDOTcom/app/static/img/user_pics/' + filename
+
+                form.pic_file.data.save(input_path)
+                resize_image(input_path, output_path)
+
+                # Update the user's profile picture path in the database
+                current_user.profile_picture = output_path
+                db.session.commit()
+
+                flash('Profile picture updated successfully!')
+
+                return redirect(url_for('blog.user_page'))
+
+    except RequestEntityTooLarge:
+        # Handle file size error
+        error_message = 'File size is too large. Please choose a smaller file.'
+        return render_template('error_page.html', error_message=error_message)
+
+    return render_template('blog/user_change_profile_picture.html', title='Change Profile Picture', form=form)
 
 @bp.route('/user_activity')
 @login_required
@@ -200,7 +236,7 @@ def blog_single(post_id):
     else:
         prev_post = blog_posts.query.filter(blog_posts.id==post_id-1).all()[0]
 
-    top_3_songs = daily_tracks.top_n_tracks_that_day(post.iso_date)
+    top_3_songs = daily_tracks.random_n_tracks_that_day(post.iso_date)
     post_comments = blog_comments.query.filter_by(post_id=post_id).all()
 
     context = {

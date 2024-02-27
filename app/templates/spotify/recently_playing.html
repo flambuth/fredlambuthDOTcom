@@ -8,7 +8,19 @@
 
 {% include 'spotify/spotify_header.html' %}
 
+<style>
+    .track-col {
+        width: 200px;
+        margin-right: 20px;
+        margin-bottom: 20px; /* Added margin-bottom for space between rows */
+        background-color: #14281f;
+        border: 1px dotted #028874;
+    }
 
+    .track-col:hover {
+        background-color: #1a3a30; /* Change this to your desired hover color */
+    }
+</style>
 
 <script>
     // Initialize a variable to track the current page
@@ -37,10 +49,15 @@
 </script>
 
 <div class="container">
+
+    <div class="text-center mt-3" style="margin-bottom: 6%;">
+        <h2 style="color: #fff;">Endless Stream of What I'm Listening To</h2>
+    </div>
+
     <div class="row" id="track-container" style="background-color: #0f1f19; white-space: nowrap;">
-        {% for track in last_three[::-1] %}
-        <div class="col rp_card" style="width: 200px; width: 100%; margin-right: 10px;">
-            <span class="white-pill">{{ track.song_name }}</span> 
+        {% for track in last_three %}
+        <div class="col track-col">
+            {{ track.song_name[:35] }}
             <div class="hex">
                 <a href="{{ track.song_link }}">
                     <div class="hex-background">
@@ -49,11 +66,11 @@
                 </a>
             </div>
             <div style="display: flex; justify-content: space-between;"> 
-                by<span class='white-pill'>{{ track.art_name }}</span>
+                by {{ track.art_name }}
             </div>
         </div>
         {% endfor %}
-    </div>
+    </div>    
 
     {% if pagination.has_next %}
     <div class="text-center mt-3">
