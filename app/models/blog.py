@@ -52,9 +52,12 @@ class blog_users(UserMixin, db.Model):
     @classmethod
     def blog_user_stats(cls, blog_user_id):
         blog_user_comments = blog_comments.query.filter(blog_comments.user_id == blog_user_id).all()
-        comment_count = len(blog_user_comments)
-        start_date = blog_user_comments[0].comment_date
-        start_date = start_date.isoformat()[:10]
+        if blog_user_comments:
+            comment_count = len(blog_user_comments)
+            start_date = blog_user_comments[0].comment_date.isoformat()[:10]
+        else:
+            comment_count = 0
+            start_date = datetime.now().isoformat()[:10]
         return comment_count, start_date
 
     @classmethod
