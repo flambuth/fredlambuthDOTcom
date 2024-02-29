@@ -216,7 +216,7 @@ def right_now():
     Route to the recent template.
     '''
     page = request.args.get('page', 1, type=int)
-    per_page = 4
+    per_page = 5
     pagination = recently_played.query.order_by(desc(recently_played.id)).paginate(page=page, per_page=per_page, error_out=False)
     three_ago = pagination.items
 
