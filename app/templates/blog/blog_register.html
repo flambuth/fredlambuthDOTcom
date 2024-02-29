@@ -33,9 +33,11 @@
                 {{ form.account_creation_password.label(class="form-label") }}
                 {{ form.account_creation_password(class="form-control") }}
                 {% for error in form.account_creation_password.errors %}
-                <span class="text-danger">{{ error }}</span>
+                    <span class="text-danger">{{ error }}</span>
                 {% endfor %}
+                <small class="form-text text-muted">Ask Fred for this!</small>
             </div>
+            
 
             <div class="form-group">
                 {{ form.profile_picture.label(class="form-label") }}
