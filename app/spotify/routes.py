@@ -5,6 +5,7 @@ from sqlalchemy import desc
 
 from app.models.charts import recently_played, daily_artists ,daily_tracks
 from app.models.catalogs import track_catalog, artist_catalog
+from app.models.playlists import Playlists
 
 from app.dash_plotlys.plotly_figures import chart_scatter_plotly
 
@@ -19,6 +20,35 @@ from datetime import datetime
 #latest_daily_date = daily_tracks.query.order_by(daily_tracks.id.desc()).first().date
 #latest_date_obj = datetime.strptime(latest_daily_date, "%Y-%m-%d").date()
 
+
+###############################
+##Playlists
+#@bp.route('/spotify/playlist/<string:playlist_id>', methods=('GET','POST'))
+@bp.route('/spotify/playlist', methods=('GET','POST'))
+def playlist_homepage():
+    '''
+    Temp install!
+    '''
+    #fig = top_5_artists_fig()
+    #html = fig.to_html()
+
+    return render_template('spotify/playlist/playlist_timeline.html')
+
+@bp.route('/spotify/playlist/<string:playlist_id>', methods=('GET','POST'))
+def playlist_timeline(playlist_id):
+    '''
+    Temp install!
+    '''
+    playlist_records = Playlists.filtered_enriched_playlist(playlist_id)
+    
+    context = {
+        'tracks':playlist_records,
+    }
+
+    return render_template('spotify/playlist/playlist_timeline.html', **context)
+
+
+##############################
 @bp.route('/spotify/top_five_artists')
 @login_required
 def top_five_artist_plot():
@@ -41,6 +71,8 @@ def top_five_tracks_plot():
 
     return render_template_string(html)
 
+
+#############################################
 @bp.route('/spotify')
 @bp.route('/spotify/')
 def spotify_landing_page():

@@ -9,6 +9,16 @@ sp = spotipy.Spotify(auth_manager=SpotifyOAuth(
         client_secret=SPOTIPY_CLIENT_SECRET,
         redirect_uri=SPOTIPY_REDIRECT_URI))
 
+#####
+#Playlist
+def my_playlist_list():
+    playlist_jsons = sp.user_playlists('lambuth')
+    my_playlist_jsons = [i for i in playlist_jsons['items'] if i['owner']['id']=='lambuth']
+    name_id_tuples = [(i['name'],i['id']) for i in
+    my_playlist_jsons]
+    return name_id_tuples
+
+
 ####
 #Track Catalog
 
