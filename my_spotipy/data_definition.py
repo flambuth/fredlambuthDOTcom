@@ -57,7 +57,16 @@ table_schemas = {
             ('song_name', 'TEXT'),
             ('song_link', 'TEXT'),
             ('image', 'TEXT'),
-            ('last_played', 'TEXT'),]
+            ('last_played', 'TEXT'),],
+
+        'playlists':[('playlist_name', 'TEXT'),
+            ('playlist_id', 'TEXT'),        
+            ('track_id', 'TEXT'),
+            ('track_name', 'TEXT'),
+            ('art_id', 'TEXT'),
+            ('art_name', 'TEXT'),
+            ('duration', 'INTEGER'),
+            ('added_at', 'datetime'),],
                 }
 
 #functions to make the SQLITE queries that do the CRUD operations
@@ -78,6 +87,21 @@ def make_insert_query(table, col_names):
     col_string = ','.join(col_names)
     insert_sql = f'''INSERT INTO {table} ({col_string}) VALUES ({marks}) '''
     return insert_sql
+
+def save_to_db(
+        query,
+        records,
+        db=database,
+):
+        sqliteConnection = sqlite3.connect(db)
+        cursor = sqliteConnection.cursor()
+        #executemany takes a lists of lists, not the usualy dictionary of lists
+        cursor.executemany(query, records)
+            
+        sqliteConnection.commit()
+        cursor.close()
+        sqliteConnection.close()
+        print('Records Inserted!')
 
 def query_db(
         query,
@@ -132,6 +156,7 @@ class Data_Definition:
 
         '''
         header = f'DROP TABLE IF EXISTS {table_name};\n'
+        #YOU DAMN FOOL! 2024_02_29. 
         header += f'CREATE TABLE {table_name} ( id INTEGER PRIMARY KEY,'
         footer = ');'
         col_tuples = table_schemas[table_name]

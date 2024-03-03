@@ -7,7 +7,7 @@ Base = declarative_base()
 
 class artist_catalog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    art_id = db.Column(db.String())
+    art_id = db.Column(db.String(22))
     art_name = db.Column(db.String(150))
     followers = db.Column(db.Integer)
     genre = db.Column(db.String(70))
