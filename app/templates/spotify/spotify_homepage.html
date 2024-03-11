@@ -11,13 +11,15 @@
 <style>
     /* General styles */
     .image-container {
-        overflow: hidden;
-        height: 300px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 175px;
     }
 
     .image-container img {
         width: 100%;
-        object-fit: cover;
+        object-fit: fill;
     }
 
     .w3-card,
@@ -25,6 +27,7 @@
         box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
         background-color: rgba(255, 255, 255, 0.03);
         padding: 10px;
+        border-radius: 5%;
     }
 
     .w3-card:hover {
@@ -32,58 +35,12 @@
         transition: background-color 0.3s ease;
     }
 
-    /* Media query for smaller screens */
-    @media (max-width: 767px) {
-        .w3-row {
-            flex-direction: column-reverse; /* Change the flex direction to reverse the order */
-        }
-
-        .w3-col.l4 {
-            order: 1; /* Change the order of the left column content to 1 */
-        }
-
-        .w3-col.l8 {
-            order: 2; /* Change the order of the right column content to 2 */
-        }
-    }
 </style>
 
 <body style="background-color: #000c0a;">
 
 <div class="w3-content" style="max-width:1400px; padding: 50px;">
     <div class="w3-row">
-        <div class="w3-col l4" style="padding-right: 20px;">
-            <div class="w3-card w3-margin w3-margin-top">
-                <h2 style="margin-right: 30px;">Average Song Count per Day: <span class="white-pill">{{ daily_rp_avg }}</span></h2>
-            </div>
-            
-            <div >
-                <h2>Newest Additions:</h2>
-                
-                {% for new_artist in latest_artists %}
-                    <div class="row mb-3" style="background-color: #012b25; border-radius: 12%; border: solid 2px #028874; padding-right: 19px;">
-                        <div class="col-md-2 d-flex align-items-center">
-                            <img src="https://i.scdn.co/image/{{ new_artist.img_url_sml }}" alt="Tiny Image" class="circular-image">
-                        </div>
-                        <div class="col-md-10" style="color: wheat; padding-left: 50px;">
-                            <a href="https://open.spotify.com/artist/{{ new_artist.art_id }}">
-                                <h5>{{ new_artist.art_name }}</h5>
-                            </a>
-                            <p>
-                                {% if new_artist.genre2 %}
-                                    <a href="{{ url_for('spotify.index_by_genre', master_genre=new_artist.genre) }}">{{ new_artist.genre }}</a>,
-                                    <a href="{{ url_for('spotify.index_by_genre', master_genre=new_artist.genre2) }}">{{ new_artist.genre2 }}</a>
-                                {% else %}
-                                    <a href="{{ url_for('spotify.index_by_genre', master_genre=new_artist.genre) }}">{{ new_artist.genre }}</a>
-                                {% endif %}
-                            </p>
-                            
-                        </div>
-                    </div>
-                {% endfor %}
-            </div>
-            
-        </div>
 
         <div class="w3-col l8 s12">
             <div class="w3-card w3-margin w3-margin-top">
@@ -93,10 +50,9 @@
                 <div class="w3-container w3-teal">
                     <h2>Welcome to the Spotify section of the website!</h2>
                 </div>
-                <p style="text-align: center;">Everyday I collect my listening data from Spotify. The 'Spotify' section is where I keep my records of what I was listening to on what day. On the sidebar, you can find different timeframes of what I was listening to.</p>
+                <p style="text-align: center;">Everyday I collect my listening data from Spotify. This section has views into what I was listening to on what day.</p>
             </div>
             
-
             <div class="row">
                 <a href="{{ url_for('spotify.top_five_artist_plot') }}" title="Scatter Plot of Top 5 Artist History">
                 <div class="w3-card w3-margin">
@@ -116,6 +72,40 @@
                 </a>
                 </div>
                 
+            </div>
+            
+        </div>
+
+        <div class="w3-col l4" style="padding-right: 20px;">
+            <div class="w3-card w3-margin w3-margin-top">
+                <h2 style="margin-right: 30px;">Average Song Count per Day: <span class="white-pill">{{ daily_rp_avg }}</span></h2>
+            </div>
+            
+            <div >
+                <h2>Newest Additions:</h2>
+                
+                {% for new_artist in latest_artists %}
+                    <div class="row mb-3" style="background-color: #012b25; border-radius: 12%; border: solid 2px #028874; padding-right: 19px;">
+                        
+                        <div class="col-md-10" style="color: wheat; padding-left: 50px;">
+                            <a href="https://open.spotify.com/artist/{{ new_artist.art_id }}">
+                                <h5>{{ new_artist.art_name }}</h5>
+                            </a>
+                            <p>
+                                {% if new_artist.genre2 %}
+                                    <a href="{{ url_for('spotify.index_by_genre', master_genre=new_artist.genre) }}">{{ new_artist.genre }}</a>,
+                                    <a href="{{ url_for('spotify.index_by_genre', master_genre=new_artist.genre2) }}">{{ new_artist.genre2 }}</a>
+                                {% else %}
+                                    <a href="{{ url_for('spotify.index_by_genre', master_genre=new_artist.genre) }}">{{ new_artist.genre }}</a>
+                                {% endif %}
+                            </p>
+                            
+                        </div>
+                        <div class="col-md-2 d-flex ml-auto">
+                            <img src="https://i.scdn.co/image/{{ new_artist.img_url_sml }}" alt="Tiny Image" class="circular-image">
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
             
         </div>

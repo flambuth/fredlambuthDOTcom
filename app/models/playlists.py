@@ -31,7 +31,7 @@ class Playlists(db.Model):
 
         artist_alias = aliased(artist_catalog)
         result = filter_query\
-            .join(artist_alias, Playlists.art_id == artist_alias.art_id)\
+            .outerjoin(artist_alias, Playlists.art_id == artist_alias.art_id)\
             .add_columns(
                 artist_alias.img_url,  # Replace with the actual columns from artist_catalog
                 artist_alias.master_genre,
