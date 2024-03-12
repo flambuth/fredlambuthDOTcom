@@ -72,7 +72,13 @@ def artist_card(art_cat):
         dbc.CardImgOverlay(
             dbc.CardBody(
                 [
-                    html.H4(art_cat.art_name, className="card-title"),
+                    html.H4(
+                        html.A(
+                            children=art_cat.art_name,
+                            href=f"https://fredlambuth.com/spotify/art_cat/artist/{art_cat.art_id}"
+                        ),
+                        className="card-title",
+                    ),
                     html.P(
                         art_cat.genre,
                         className="card-text",
@@ -80,7 +86,7 @@ def artist_card(art_cat):
                     dbc.Button(
                         art_cat.master_genre,
                         color='primary',
-                        href='https://fredlambuth.com/spotify/artists/genre/'+art_cat.master_genre),
+                        href='https://fredlambuth.com/spotify/art_cat/genre/'+art_cat.master_genre),
                 ]
             ),
         ),
