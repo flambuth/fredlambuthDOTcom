@@ -7,7 +7,7 @@ import app.dash_plotlys.global_stats as global_stats
 from app.dash_plotlys.layouts import create_navbar, my_icon
 import dash_bootstrap_components as dbc
 from dash_bootstrap_templates import load_figure_template
-load_figure_template('LUX')
+load_figure_template('VAPOR')
 navbar = create_navbar()
 
 countries = list(global_stats.country_codes.values())
@@ -17,7 +17,10 @@ def Add_Dash_global_view_lite(flask_app):
     dash_app = Dash(
         server=flask_app, name="global", 
         url_base_pathname="/spotify/global/",
-        external_stylesheets=[dbc.themes.LUX])
+        external_stylesheets=[dbc.themes.VAPOR,
+                              '/static/css/style.css',
+                              'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css',
+                              ])
 # App layout
     dash_app.layout = html.Div([
         navbar,
@@ -25,7 +28,9 @@ def Add_Dash_global_view_lite(flask_app):
             dcc.Dropdown(
                 id='category-dropdown',
                 options=dropdown_options,
-                value=countries[4]
+                value=countries[4],
+                style={'color': 'black'},
+                
             ),
             
             dcc.Graph(id='hbar-plot',config={'displayModeBar': False}),

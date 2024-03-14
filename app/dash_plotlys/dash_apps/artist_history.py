@@ -5,7 +5,7 @@ from dash import Input, Output
 
 import dash_bootstrap_components as dbc
 from dash_bootstrap_templates import load_figure_template
-load_figure_template('LUX')
+load_figure_template('VAPOR')
 
 from flask import request
 
@@ -18,7 +18,7 @@ def Add_Dash_art_cat(flask_app):
     dash_app = Dash(
         server=flask_app, name="art_cat", 
         url_base_pathname="/spotify/art_cat/artist/dash/",
-        external_stylesheets=[dbc.themes.LUX])
+        external_stylesheets=[dbc.themes.VAPOR, '/static/css/style.css','https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'])
     
     dash_app.layout = html.Div(
         style={'backgroundColor': 'black'},

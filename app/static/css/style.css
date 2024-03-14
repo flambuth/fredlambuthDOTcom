@@ -13,12 +13,12 @@
 }
 
 .navbar-dark-bg {
-    background-color: #17241f; /* Use the hex color code for black */
+    background-color: #1c0829; /* Use the hex color code for black */
     }
 
 .navbar-brand {
 color: white; /* Set the text color to white */
-text-shadow: -2px -2px 0 blue, 2px 2px 0 red;
+text-shadow: -4px -4px 0 blue, 4px 4px 0 red;
 }
 
 /* Custom styles for the pill shape */
@@ -165,3 +165,5 @@ color: wheat; /* Set the text color to white */
   background-color: #17241f;
   
 }
+
+@import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css');

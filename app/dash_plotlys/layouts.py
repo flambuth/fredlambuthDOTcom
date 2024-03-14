@@ -1,8 +1,6 @@
 import dash_bootstrap_components as dbc
 from dash import html, dcc
-
-from flask import url_for
-
+#from flask import url_for
 from datetime import datetime
 
 this_year = datetime.today().year
@@ -17,43 +15,79 @@ colors = {
 my_icon = html.Header([
             html.Link(
                 rel='icon',
-                href=image_url,  # Replace with the actual path
+                href=image_url, 
                 type='image/x-icon'
             ),
         ])
 
-dash_links = dbc.DropdownMenu(
-                            children=[
-                                dbc.DropdownMenuItem("Blog", href='https://fredlambuth.com/blog'),
-                                dbc.DropdownMenuItem("Spotify Stuff", href="https://fredlambuth.com/spotify"),
-                                dbc.DropdownMenuItem("Contact", href="https://fredlambuth.com/contact"),
-                                    ],
-                                nav=True,
-                                in_navbar=True,
-                                label="Links")
+
 
 def create_navbar():
-    # Create the brand element with the image and text
-    #root_url = url_for('homepage')
+    navbar = html.Nav(className="navbar navbar-expand-lg navbar-dark bg-dark", children=[
+        html.A(className="navbar-brand", href="https://fredlambuth.com", children=[
+            html.Img(src=image_url, height="30px", title=image_alt),
+            html.Span("fredlambuth", className="pill-text"),  # Apply custom class to this part
+            html.Span(".com", className="nav-link-text")      # Keep the default class for this part
+        ]),
+        html.Button(className="navbar-toggler", type="button", **{'data-toggle': "collapse", 'data-target': "#navbarNav", 'aria-controls': "navbarNav", 'aria-expanded': "false", 'aria-label': "Toggle navigation"}, children=[
+            html.Span(className="navbar-toggler-icon")
+        ]),
+        html.Div(id="navbarNav", className="collapse navbar-collapse justify-content-end", children=[
+            dbc.Nav(className="navbar-nav", children=[
+                dbc.NavItem(html.A([
+                    html.I(className="fab fa-spotify"),
+                    html.Span(" Spotify", className="nav-link-text"),
+                ], className="nav-link", href="/spotify")),
+                dbc.NavItem(html.A([
+                    html.I(className="fas fa-book-open"),
+                    html.Span(" Blog", className="nav-link-text"),
+                ], className="nav-link", href="/blog")),
+                dbc.NavItem(html.A([
+                    html.I(className="fas fa-bullhorn"),
+                    html.Span(" Contact", className="nav-link-text"),
+                ], className="nav-link", href="/contact")),
+                dbc.NavItem(html.A([
+                    html.I(className="fas fa-user"),
+                    html.Span(" Account", className="nav-link-text"),
+                ], className="nav-link", href="/user_page")),
+                # Add more links as needed
+            ]),
+        ])
+    ])
 
-    brand_element = dbc.NavbarBrand(
-        children=[
-            html.Img(src=image_url, height="30px", title=image_alt),  # Adjust the height as needed
-            " Fredlambuth.com",
-        ],
-        #href='url_for('homepage')',
-        href="https://fredlambuth.com",
-    )
+    return navbar
 
-    navbar = dbc.NavbarSimple(
-        children=[
-            dash_links,
-        ],
-        brand=brand_element,  # Use the brand element with the image and text
-        color="primary",
-        dark=True,
-        style={'borderBottom':'5px solid #238a6b'}
-    )
+def create_navbarICON():
+    navbar = html.Nav(className="navbar navbar-expand-lg navbar-dark bg-dark", children=[
+        html.A(className="navbar-brand", href="https://fredlambuth.com", children=[
+            html.Img(src=image_url, height="30px", title=image_alt),
+            " fredlambuth.com"
+        ]),
+        html.Button(className="navbar-toggler", type="button", **{'data-toggle': "collapse", 'data-target': "#navbarNav", 'aria-controls': "navbarNav", 'aria-expanded': "false", 'aria-label': "Toggle navigation"}, children=[
+            html.Span(className="navbar-toggler-icon")
+        ]),
+        html.Div(id="navbarNav", className="collapse navbar-collapse justify-content-end", children=[
+            dbc.Nav(className="navbar-nav", children=[
+                dbc.NavItem(html.A([
+                    html.I(className="fab fa-spotify"),
+                    html.Span(" Spotify", className="nav-link-text"),
+                ], className="nav-link", href="/spotify")),
+                dbc.NavItem(html.A([
+                    html.I(className="fas fa-book-open"),
+                    html.Span(" Blog", className="nav-link-text"),
+                ], className="nav-link", href="/blog")),
+                dbc.NavItem(html.A([
+                    html.I(className="fas fa-bullhorn"),
+                    html.Span(" Contact", className="nav-link-text"),
+                ], className="nav-link", href="/contact")),
+                dbc.NavItem(html.A([
+                    html.I(className="fas fa-user"),
+                    html.Span(" Account", className="nav-link-text"),
+                ], className="nav-link", href="/user_page")),
+                # Add more links as needed
+            ]),
+        ])
+    ])
 
     return navbar
 
@@ -128,13 +162,12 @@ def rp_artists_card(truple):
                 [
                     html.H4(
                         children=truple[0],
-                        className="card-title",
-                        style={'font-size': '16px', 'color':'palegreen','text-shadow': '0px 2px 15px black'},  # Adjust font size as desired
+                        className="pill-text",
+                        style={'font-size': '16px', 'text-shadow': '0px 2px 25px black'},  # Adjust font size as desired
                     ),
                     html.P(
                         truple[1],
-                        className="card-text",
-                        style={'font-size': '14px', 'color':'wheat','text-shadow': '0px 2px 15px black'},  # Adjust font size as desired
+                        style={'font-size': '14px', 'color':'wheat','text-shadow': '0px 2px 25px black'},  # Adjust font size as desired
                     ),
                 ]
             ),
@@ -143,7 +176,7 @@ def rp_artists_card(truple):
     return this_card
 
 
-def top_3_imgs_column(truples):
+def top_3_imgs(truples):
     totem_div = html.Div(children=[
         html.H4('Top Three Artists'),
         dbc.Row([
