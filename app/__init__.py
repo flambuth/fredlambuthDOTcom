@@ -62,16 +62,16 @@ def create_app(config_class=Config):
         g.current_year = datetime.now().year
         g.current_month = datetime.now().month
 
-    from app.dash_plotlys.year_month_line_chart import Add_Dash_year_month
+    from app.dash_plotlys.dash_apps.year_month_line_chart import Add_Dash_year_month
     Add_Dash_year_month(app)
 
-    from app.dash_plotlys.artist_history import Add_Dash_art_cat
+    from app.dash_plotlys.dash_apps.artist_history import Add_Dash_art_cat
     Add_Dash_art_cat(app)
 
     from app.dash_plotlys.dash_apps.big_dash import Add_Big_Dash
     Add_Big_Dash(app)
 
-    from app.dash_plotlys.global_dash_lite import Add_Dash_global_view_lite
+    from app.dash_plotlys.dash_apps.global_dash_lite import Add_Dash_global_view_lite
     Add_Dash_global_view_lite(app)
         
     return app

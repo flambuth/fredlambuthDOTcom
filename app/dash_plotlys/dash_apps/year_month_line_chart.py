@@ -8,10 +8,11 @@ from datetime import date, timedelta
 from app.dash_plotlys.layouts import create_navbar, my_icon, artist_card_row
 
 import dash_bootstrap_components as dbc
-from dash_bootstrap_templates import load_figure_template
 
 from app.dash_plotlys import data_sources, plotly_figures
-load_figure_template('LUX')
+
+from dash_bootstrap_templates import load_figure_template
+load_figure_template('VAPOR')
 
 navbar = create_navbar()
 
@@ -19,7 +20,8 @@ def Add_Dash_year_month(flask_app):
     dash_app = Dash(
         server=flask_app, name="art_cat", 
         url_base_pathname="/spotify/monthly/",
-        external_stylesheets=[dbc.themes.LUX])
+        external_stylesheets=[dbc.themes.VAPOR, '/static/css/style.css','https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css']
+        )
     dash_app.layout = html.Div(
         style={'backgroundColor': 'black'},
         children=[

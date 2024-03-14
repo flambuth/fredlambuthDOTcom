@@ -5,19 +5,27 @@ from dash import Input, Output
 
 import dash_bootstrap_components as dbc
 from dash_bootstrap_templates import load_figure_template
-load_figure_template('LUX')
+load_figure_template('VAPOR')
 
 from app.dash_plotlys import data_sources, plotly_figures, layouts
 
+
+
 navbar = layouts.create_navbar()
+#navbar_style = {
+#    'backgroundColor': 'white',  # Change this to your desired color
+    # Add other styles as needed
+#}
+#navbar = dbc.Navbar(navbar, style=navbar_style)
 
 def Add_Big_Dash(flask_app):
     dash_app = Dash(
-        server=flask_app, name="bid_dash", 
+        server=flask_app, name="big_dash", 
         url_base_pathname="/spotify/big_dash/",
-        external_stylesheets=[dbc.themes.PULSE, '/static/css/style.css'])
+        external_stylesheets=[dbc.themes.VAPOR, '/static/css/style.css','https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'])
     
     dash_app.layout = dbc.Container([
+    navbar,
     # headline column
     dbc.Row([
         dbc.Col([
@@ -37,7 +45,10 @@ def Add_Big_Dash(flask_app):
                 children='My Spotify Stats',
                 style={'textAlign': 'center'},
                 className="dash-div",),
-            html.Div(id='date-range-info'),
+            html.Div(
+                id='date-range-info',
+                style={'textAlign':'center'}
+                ),
         ], width=10),
     ], className="dash-div",),
 
@@ -51,6 +62,7 @@ def Add_Big_Dash(flask_app):
     dbc.Row([
         dbc.Col(html.Div(id='top-3-cards')),  
     ], className="dash-div",),
+    layouts.my_icon,
 ], fluid=True,)
 
     dash_app.title = 'The Big Fred Dashboard'
@@ -66,7 +78,7 @@ def Add_Big_Dash(flask_app):
     )
     def update_graph(value):
         rp_stuff = data_sources.Fred_Big_Dash_Stuff(int(value))
-        top_3_imgs_div = layouts.top_3_imgs_column(rp_stuff.top_tuples)
+        top_3_imgs_div = layouts.top_3_imgs(rp_stuff.top_tuples)
 
         day_of_week_fig = plotly_figures.day_of_week_bars(rp_stuff.dts, rp_stuff.mean_song_per_day)
         known_pie_fig = plotly_figures.un_known_pie_chart(rp_stuff.known, rp_stuff.unknown)
