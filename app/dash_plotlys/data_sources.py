@@ -2,6 +2,7 @@ from app.models.catalogs import artist_catalog
 from app.models.charts import daily_artists, daily_tracks, recently_played
 from app import utils
 from collections import Counter
+import pandas as pd
 
 class Chart_Year_Month_Stats:
 
@@ -93,6 +94,13 @@ class Fred_Big_Dash_Stuff:
         self.top_artists = self.top_artists_in_rps(n_artists)
         self.top_tuples = self.top_n_counts_and_imgs(n_artists)
         self.mean_song_per_day = len(self.rps)/days_back_from_today
+        self.top_rp = [i for i in self.rps if i.song_link[-22:] == self.song_counts()[0][0]][0]
+        self.rando_master_genre_ac = artist_catalog.random_artist_in_genre(
+            self.known_genre_counts()[0][0][0]
+        )
+        self.rando_subgenre_ac = artist_catalog.random_artist_in_subgenre(
+            self.known_genre_counts()[1][0][0]
+        )
 
     def top_artists_in_rps(self, n_artists=3):
         the_counter = Counter([
@@ -116,3 +124,40 @@ class Fred_Big_Dash_Stuff:
                     rps_of_name[0].image
                 ))
         return counts_imgs_tuples
+    
+    def known_genre_counts(self):
+        known_acs = list(map(
+            artist_catalog.name_to_art_cat,
+            self.known
+        ))
+        known_master_genres = [i.master_genre for i in known_acs]
+
+        known_genre_tuples = [(i.genre,i.genre2,i.genre3) for i in known_acs]
+        eric_holder = []
+        for tuplo in known_genre_tuples:
+            for genre in tuplo:
+                if genre != None:
+                    eric_holder.append(genre)
+        sub_count = Counter(eric_holder).most_common(10)
+        master_count = Counter(known_master_genres).most_common(10)
+        return master_count, sub_count
+    
+    def song_counts(self):
+        top_songs = Counter(
+            [i.song_link[-22:] for i in self.rps]
+        ).most_common(10)
+        return top_songs
+
+    def avg_song_per_hour_Series(self):
+        '''
+        Returns a pandas series of float values of songs per hour, 24 items with 0 imputed
+        for the missing values
+        '''
+        series_dts = pd.Series(self.dts)
+        n_weeks = int(series_dts.dt.date.nunique() / 7)
+        grouped_by_day_count = series_dts.groupby(series_dts.dt.hour).count()
+        grouped_by_day = grouped_by_day_count / n_weeks
+
+        # Reindex to include all hours of the day and fill missing values with 0
+        grouped_by_day = grouped_by_day.reindex(range(24), fill_value=0)
+        return grouped_by_day

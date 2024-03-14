@@ -57,39 +57,6 @@ def create_navbar():
 
     return navbar
 
-def create_navbarICON():
-    navbar = html.Nav(className="navbar navbar-expand-lg navbar-dark bg-dark", children=[
-        html.A(className="navbar-brand", href="https://fredlambuth.com", children=[
-            html.Img(src=image_url, height="30px", title=image_alt),
-            " fredlambuth.com"
-        ]),
-        html.Button(className="navbar-toggler", type="button", **{'data-toggle': "collapse", 'data-target': "#navbarNav", 'aria-controls': "navbarNav", 'aria-expanded': "false", 'aria-label': "Toggle navigation"}, children=[
-            html.Span(className="navbar-toggler-icon")
-        ]),
-        html.Div(id="navbarNav", className="collapse navbar-collapse justify-content-end", children=[
-            dbc.Nav(className="navbar-nav", children=[
-                dbc.NavItem(html.A([
-                    html.I(className="fab fa-spotify"),
-                    html.Span(" Spotify", className="nav-link-text"),
-                ], className="nav-link", href="/spotify")),
-                dbc.NavItem(html.A([
-                    html.I(className="fas fa-book-open"),
-                    html.Span(" Blog", className="nav-link-text"),
-                ], className="nav-link", href="/blog")),
-                dbc.NavItem(html.A([
-                    html.I(className="fas fa-bullhorn"),
-                    html.Span(" Contact", className="nav-link-text"),
-                ], className="nav-link", href="/contact")),
-                dbc.NavItem(html.A([
-                    html.I(className="fas fa-user"),
-                    html.Span(" Account", className="nav-link-text"),
-                ], className="nav-link", href="/user_page")),
-                # Add more links as needed
-            ]),
-        ])
-    ])
-
-    return navbar
 
 ########################
 #Monthly view
@@ -150,6 +117,76 @@ def artist_card(art_cat):
     return this_card
 ##########################
 #the big dash figures
+def side_cardOLD(
+        img_url,
+        title,
+
+):
+    this_card = dbc.Card([
+        dbc.CardImg(
+            src=f'https://i.scdn.co/image/{img_url}',
+            top=True,
+            style={'opacity': 0.9, 'width': '99%', 'height':'99%','max-height': '150px'},  # Set width to 100%
+        ),
+        dbc.CardImgOverlay(
+            dbc.CardBody(
+                [
+                    html.H4(
+                        children=title,
+                        className="pill-text",
+                        style={'font-size': '16px', 'text-shadow': '0px 2px 25px black'},  # Adjust font size as desired
+                    ),
+                ]
+            ),
+        ),
+    ])
+    return this_card
+
+def side_card(headline, img_url, title):
+    """
+    Generate a card with an image, title, and headline.
+    
+    Args:
+    - img_url (str): URL of the image.
+    - title (str): Title of the card.
+    - headline (str): Headline text.
+    
+    Returns:
+    - dbc.Card: Card containing the specified image, title, and headline.
+    """
+    card_content = [
+        html.P(headline, className="card-headline"),
+        dbc.CardImg(
+            src=f'https://i.scdn.co/image/{img_url}',
+            top=True,
+            style={'opacity': 0.9, 'width': '99%', 'height': '99%', 'max-height': '150px'}  # Set width to 100%
+        ),
+        dbc.CardImgOverlay(
+            dbc.CardBody([
+                html.H4(
+                    children=title,
+                    className="pill-text",
+                    style={'font-size': '16px', 'text-shadow': '0px 2px 25px black'}  # Adjust font size as desired
+                )
+            ])
+        )
+    ]
+    return dbc.Card(card_content)
+
+
+def multiple_side_cards(cards):
+    """
+    Generate a column with multiple cards.
+    
+    Args:
+    - cards (list): List of cards to be included in the column.
+    
+    Returns:
+    - dbc.Col: Column containing the specified cards.
+    """
+    column_content = [dbc.Row(dbc.Col(card, width=12)) for card in cards]
+    return dbc.Col(column_content, width=2, className="dash-div")
+
 def rp_artists_card(truple):
     this_card = dbc.Card([
         dbc.CardImg(
@@ -178,7 +215,7 @@ def rp_artists_card(truple):
 
 def top_3_imgs(truples):
     totem_div = html.Div(children=[
-        html.H4('Top Three Artists'),
+        html.H4('Top Artists'),
         dbc.Row([
             dbc.Col([
                 rp_artists_card(truple),

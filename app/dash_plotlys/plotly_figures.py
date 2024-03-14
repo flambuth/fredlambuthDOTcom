@@ -171,8 +171,11 @@ def day_of_week_bars(
         color_discrete_sequence=['green'])
     fig.update_layout(
         title='Average Songs By Day of Week',
-        xaxis={'categoryorder': 'array', 'categoryarray': day_order}
+        xaxis={'categoryorder': 'array', 'categoryarray': day_order},
+        #displayModeBar=False,
     )
+    fig.update_xaxes(title='')
+    fig.update_yaxes(title='')
     fig.add_hline(y=y_threshold, 
                   line_dash='dot', 
                   line_color='red', 
@@ -180,15 +183,22 @@ def day_of_week_bars(
                   annotation_position='top right')
     return fig
 
+
 def un_known_pie_chart(known, unknown):
     names = ['Known', 'Unknown']
     lengths = [len(known), len(unknown)]
     
     # Create a pie chart using Plotly Graph Objects
-    fig = go.Figure(data=[go.Pie(labels=names, values=lengths, hole=0.3, marker=dict(colors=['green', 'darkgreen']))])
+    fig = go.Figure(data=[go.Pie(labels=names, values=lengths, hole=0.3, marker=dict(colors=['palegreen', 'darkgreen']))])
     
     # Update layout to remove the legend outside the figure
-    fig.update_layout(showlegend=False, template='plotly_dark', title=f'{len(known) + len(unknown)} distinct artists')
+    fig.update_layout(
+        showlegend=False, 
+        template='plotly_dark', 
+        title=f'{len(known) + len(unknown)} distinct artists', 
+        width=500,
+        #displayModeBar=False
+        )
     
     # Add text labels inside each pie slice
     fig.update_traces(textinfo='percent+label', textposition='inside')
@@ -196,10 +206,20 @@ def un_known_pie_chart(known, unknown):
     return fig
 
 
+def hourly_listening_line_chart(series_of_avgs):
 
-
-
-
-
-
-
+    fig = px.line(
+        x=series_of_avgs.index, 
+        y=series_of_avgs.values,
+        height=200, 
+    )
+    # Update layout to remove the legend outside the figure
+    fig.update_layout(
+        showlegend=False, 
+        template='plotly_dark', 
+        title='Daily Listening Pattern',
+        xaxis=dict(showgrid=False, title='Hour of Day', linecolor='rgba(0,0,0,0)'),  # Remove x-axis grid lines and set title
+        yaxis=dict(showgrid=False, title='Songs', linecolor='rgba(0,0,0,0)'),  # Remove y-axis grid lin
+        #displayModeBar=False,
+        )   
+    return fig

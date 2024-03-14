@@ -74,17 +74,11 @@
                 </a>
             </li>
 
-            <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="todayDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <i class="fa fa-microphone" aria-hidden="true"></i>
-                    Today
+            <li class="nav-item">
+                <a class="nav-link" href="https://fredlambuth.com/spotify/big_dash/">
+                    <i class="fa fa-chart-line" aria-hidden="true"></i>
+                    Weekly
                 </a>
-
-                <!-- Dropdown Menu -->
-                <div class="dropdown-menu" aria-labelledby="todayDropdown" style="width: 120px;">
-                    <a class="dropdown-item" href="{{ url_for('spotify.latest_daily_tracks') }}">Tracks</a>
-                    <a class="dropdown-item" href="{{ url_for('spotify.latest_daily_artists') }}">Artists</a>
-                </div>
             </li>
 
             <li class="nav-item">
@@ -105,6 +99,19 @@
                   <a class="dropdown-item" href="{{ url_for('spotify.art_cat_landing_page') }}">Artists</a>
                   <a class="dropdown-item" href="{{ url_for('spotify.track_cat_landing_page') }}">Tracks</a>
               </div>
+            </li>
+
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="todayDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-archive" aria-hidden="true"></i>
+                    Archives
+                </a>
+
+                <!-- Dropdown Menu -->
+                <div class="dropdown-menu" aria-labelledby="todayDropdown" style="width: 120px;">
+                    <a class="dropdown-item" href="{{ url_for('spotify.latest_daily_tracks') }}">Tracks</a>
+                    <a class="dropdown-item" href="{{ url_for('spotify.latest_daily_artists') }}">Artists</a>
+                </div>
             </li>
 
             <li class="nav-item">
