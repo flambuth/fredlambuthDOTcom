@@ -85,14 +85,43 @@ class artist_catalog(db.Model):
         return result
     
     @staticmethod
-    def name_to_art_cat(art_id):
+    def name_to_art_cat(art_name):
         '''
         Takes an art_id, returns the art_cat record if there is one.
         '''
         result = artist_catalog.art_id_to_art_cat(
-            artist_catalog.find_name_in_art_cat(art_id)
+            artist_catalog.find_name_in_art_cat(art_name)
         )
         return result
+
+    @staticmethod
+    def random_artist_in_genre(genre):
+        '''
+        Adds some randomness to pick from one genre.
+        '''
+        rando = (
+        artist_catalog.query.filter(artist_catalog.master_genre == genre
+        ).order_by(func.random()
+        ).limit(1).first()
+        )
+        return rando
+    
+    @staticmethod
+    def random_artist_in_subgenre(genre):
+        '''
+        Adds some randomness to pick from one genre.
+        '''
+        rando = (
+            artist_catalog.query.filter(
+                or_(
+                    artist_catalog.genre == genre,
+                    artist_catalog.genre2 == genre,
+                    artist_catalog.genre3 == genre
+                )
+            ).order_by(func.random()
+            ).limit(1).first()
+        )
+        return rando
 
 class track_catalog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -144,6 +173,35 @@ class track_catalog(db.Model):
         )
         return rando
     
+    @staticmethod
+    def find_song_in_track_cat(test_name):
+        '''
+        Accepts a test string to search in the song_name field of the track catalog.
+        Returns None if nothing is found
+        '''
+        #both lowered before evaluating for match
+        test_name_lowered = test_name.lower()
+        results = track_catalog.query.filter(
+            func.lower(track_catalog.song_name) == test_name_lowered
+    ).all()
+        if not results:
+            # Handle the case where no match is found
+            return None
+        
+        #returns the art_id if there is a match
+        return results[0].song_id
+    
+    @staticmethod
+    def song_id_to_track_cat(song_id):
+        '''
+        '''
+        result = track_catalog.query.filter(track_catalog.song_id==song_id).first()
+        if not result:
+            # Handle the case where no match is found
+            return None
+
+        return result
+
     @classmethod
     def track_cat_landing_thruples(cls):
         '''
