@@ -71,8 +71,18 @@ def Add_Big_Dash(flask_app):
 
                 #2graphs
                 dbc.Row([
-                    dbc.Col(dcc.Graph(id='known-pie-graph', config={'displayModeBar': False}), style={'padding': '10px'}, className="dash-div",),  
-                    dbc.Col(dcc.Graph(id='day-of-week-graph', config={'displayModeBar': False}), style={'padding': '10px'}, class_name="dash-div"),
+                    dbc.Col(dcc.Graph(
+                        id='known-pie-graph', 
+                        config={'displayModeBar': False}), 
+                        style={'padding': '10px'}, 
+                        className="dash-div",
+                        width=3),  
+                    dbc.Col(dcc.Graph(
+                        id='day-of-week-graph', 
+                        config={'displayModeBar': False}), 
+                        style={'padding': '10px'}, 
+                        class_name="dash-div",
+                        width=9),
                 ],  style={'margin-bottom': '20px', 'padding': '10px'}),
             ], width=10),
         ]),
