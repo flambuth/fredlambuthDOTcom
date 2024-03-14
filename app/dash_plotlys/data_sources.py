@@ -1,9 +1,8 @@
 from app.models.catalogs import artist_catalog
-from app.models.charts import daily_artists, daily_tracks
+from app.models.charts import daily_artists, daily_tracks, recently_played
 from app import utils
-from sqlalchemy import func
+from collections import Counter
 
-#from sqlalchemy import func
 class Chart_Year_Month_Stats:
 
     def __init__(self, year, month):
@@ -75,3 +74,45 @@ class Artist_Catalog_Enriched:
         y = [i[1] for i in both]
         z = [i[2] for i in both]
         return x,y,z
+    
+class Fred_Big_Dash_Stuff:
+    '''
+    Collects the data for populating the figures in the big_dash
+    '''
+
+    def __init__(
+            self, 
+            days_back_from_today,
+            n_artists=3,
+            ):
+        self.rps = recently_played.get_rps_from_n_days_ago(days_back_from_today)
+        self.dts = [i.last_played for i in self.rps]
+        self.first_day = self.dts[0].date().isoformat()
+        self.last_day = self.dts[-1].date().isoformat()
+        self.known, self.unknown = recently_played.scan_for_art_cat_awareness(self.rps)
+        self.top_artists = self.top_artists_in_rps(n_artists)
+        self.top_tuples = self.top_n_counts_and_imgs(n_artists)
+        self.mean_song_per_day = len(self.rps)/days_back_from_today
+
+    def top_artists_in_rps(self, n_artists=3):
+        the_counter = Counter([
+            i.art_name for i in self.rps
+        ])
+        art_names_tuples = the_counter.most_common(n_artists)
+        art_names_in_order = [i[0] for i in art_names_tuples]
+        return art_names_in_order
+    
+    def top_n_counts_and_imgs(self, n_artists=3):
+        counts_imgs_tuples = []
+        top_n_names = self.top_artists_in_rps(n_artists)
+        for name in top_n_names:
+            rps_of_name = [i for i in self.rps if i.art_name == name]
+            top_song = Counter([i.song_name for i in rps_of_name]).most_common(1)[0][0]
+            counts_imgs_tuples.append(
+                (
+                    name,
+                    len(rps_of_name),
+                    top_song,
+                    rps_of_name[0].image
+                ))
+        return counts_imgs_tuples
