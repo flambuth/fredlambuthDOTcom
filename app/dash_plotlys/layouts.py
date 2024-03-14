@@ -59,6 +59,28 @@ def create_navbar():
 
 ########################
 #Monthly view
+def artist_card_row(art_cats):
+    ''''
+    List comprehension of the input art_cats. Creates a row with the layout.artist_card, for each
+    art_cat from the parameter.
+    '''
+    colors = ['blue', 'red', 'green', 'gold', 'cyan']
+
+    totem_div = html.Div(children=[
+        dbc.Row([
+            dbc.Col([
+                artist_card(artist),
+            ], style={
+                    'border': f'2px solid {colors[i % len(colors)]}',  # Border style with color
+                    'border-radius': '10px',  # Optional: Add rounded corners
+                    'padding': '10px',
+                    'height': '60%',
+                })  
+            for i, artist in enumerate(art_cats)
+        ])
+    ])
+    return totem_div
+
 def artist_card(art_cat):
     '''
     Returns a DBC.card object. Accepts the art_cat models as input
@@ -92,26 +114,43 @@ def artist_card(art_cat):
         ),
     ])
     return this_card
+##########################
+#the big dash figures
+def rp_artists_card(truple):
+    this_card = dbc.Card([
+        dbc.CardImg(
+            src=truple[3],
+            top=True,
+            style={'opacity': 0.9, 'width': '99%', 'height':'99%','max-height': '150px'},  # Set width to 100%
+        ),
+        dbc.CardImgOverlay(
+            dbc.CardBody(
+                [
+                    html.H4(
+                        children=truple[0],
+                        className="card-title",
+                        style={'font-size': '16px', 'color':'palegreen','text-shadow': '0px 2px 15px black'},  # Adjust font size as desired
+                    ),
+                    html.P(
+                        truple[1],
+                        className="card-text",
+                        style={'font-size': '14px', 'color':'wheat','text-shadow': '0px 2px 15px black'},  # Adjust font size as desired
+                    ),
+                ]
+            ),
+        ),
+    ])
+    return this_card
 
 
-def artist_card_row(art_cats):
-    ''''
-    List comprehension of the input art_cats. Creates a row with the layout.artist_card, for each
-    art_cat from the parameter.
-    '''
-    colors = ['blue', 'red', 'green', 'gold', 'cyan']
-
+def top_3_imgs_column(truples):
     totem_div = html.Div(children=[
+        html.H4('Top Three Artists'),
         dbc.Row([
             dbc.Col([
-                artist_card(artist),
-            ], style={
-                    'border': f'2px solid {colors[i % len(colors)]}',  # Border style with color
-                    'border-radius': '10px',  # Optional: Add rounded corners
-                    'padding': '10px',
-                    'height': '60%',
-                })  
-            for i, artist in enumerate(art_cats)
+                rp_artists_card(truple),
+            ])  
+            for truple in truples
         ])
     ])
     return totem_div

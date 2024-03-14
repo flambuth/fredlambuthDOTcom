@@ -156,3 +156,12 @@ color: wheat; /* Set the text color to white */
 .country {
   background-color: var(--country-color);
 }
+
+
+.dash-div {
+  border: 2px solid teal;  /* Solid 2px border */
+  border-radius: 5px; /* 15% border radius */
+  color:palegreen;
+  background-color: #17241f;
+  
+}
