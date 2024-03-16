@@ -73,14 +73,16 @@ def songs_line_chart(df):
     cut_off_at=30
     #df['name_truncated'] = df['name'].str.slice(0, 30)
     df['name_truncated'] = df['name'].apply(lambda x: x[:cut_off_at] if '(' not in x else x.split('(')[0][:cut_off_at])
-    df['name_artists'] = df['name_truncated'] + ' - ' + df['artists']
+    df['name_artists'] = df['name_truncated']# + ' - ' + df['artists']
     first_date = min(df.snapshot_date)
     last_date = max(df.snapshot_date)
 
     fig = px.line(
+        data_frame=df,
         x=df.snapshot_date,
         y=df.daily_rank,
         color=df.name_artists,
+        hover_data={'name_artists': True, 'artists': True},
         template='plotly_dark',
         #title=f"The Top 10 Songs Since {first_date}"
     )
@@ -100,7 +102,21 @@ def songs_line_chart(df):
             itemsizing="constant",  # Ensure constant item size across legends
             itemwidth=31,
             tracegroupgap=20,
-        )
+        ),
+        annotations=[
+            dict(
+                text="Artist name can be found in hover text. Double Legend to Isolate Line",
+                x=0.5,
+                y=-0.12,
+                showarrow=False,
+                xref="paper",
+                yref="paper",
+                font=dict(
+                    size=8,
+                    color="limegreen"
+                )
+            )
+        ],
     )
     # Invert the y-axis
     fig.update_yaxes(autorange="reversed",)
