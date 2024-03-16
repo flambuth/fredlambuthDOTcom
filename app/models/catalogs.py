@@ -122,6 +122,17 @@ class artist_catalog(db.Model):
             ).limit(1).first()
         )
         return rando
+    
+    @staticmethod
+    def artists_within_genre(genre):
+        '''
+        Returns a list of artist names that have the same master_genre as the input parameter.
+        '''
+        genre_ac_names = [
+            i[0] for i in
+            artist_catalog.query.filter(artist_catalog.master_genre==genre).with_entities(artist_catalog.art_name).distinct().all()
+        ]
+        return genre_ac_names
 
 class track_catalog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
