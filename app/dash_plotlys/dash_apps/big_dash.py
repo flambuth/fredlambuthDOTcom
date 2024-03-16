@@ -22,7 +22,10 @@ def Add_Big_Dash(flask_app):
     dash_app = Dash(
         server=flask_app, name="big_dash", 
         url_base_pathname="/spotify/big_dash/",
-        external_stylesheets=[dbc.themes.VAPOR, '/static/css/style.css','https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'])
+        external_stylesheets=layouts.external_stylesheets,
+        external_scripts=layouts.external_scripts,
+    )
+            
     
     dash_app.layout = dbc.Container([
     navbar,

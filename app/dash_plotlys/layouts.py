@@ -1,5 +1,5 @@
 import dash_bootstrap_components as dbc
-from dash import html, dcc
+from dash import html
 #from flask import url_for
 from datetime import datetime
 
@@ -11,6 +11,14 @@ colors = {
     'background': '#111111',
     'text': '#238a6b'
 }
+external_stylesheets=[
+    dbc.themes.VAPOR, 
+    '/static/css/style.css',
+    'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css']
+external_scripts=[
+    'https://code.jquery.com/jquery-3.5.1.slim.min.js',
+    'https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js',
+    'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js']
 
 my_icon = html.Header([
             html.Link(
@@ -61,26 +69,36 @@ def create_navbar():
 ########################
 #Monthly view
 def artist_card_row(art_cats):
-    ''''
+    '''
     List comprehension of the input art_cats. Creates a row with the layout.artist_card, for each
     art_cat from the parameter.
     '''
     colors = ['blue', 'red', 'green', 'gold', 'cyan']
 
     totem_div = html.Div(children=[
-        dbc.Row([
-            dbc.Col([
-                artist_card(artist),
-            ], style={
-                    'border': f'2px solid {colors[i % len(colors)]}',  # Border style with color
-                    'border-radius': '10px',  # Optional: Add rounded corners
-                    'padding': '10px',
-                    'height': '60%',
-                })  
-            for i, artist in enumerate(art_cats)
-        ])
+        dbc.Row(
+            justify="center",  # Center the contents horizontally
+            children=[
+                dbc.Col(
+                    [
+                        artist_card(artist),
+                    ],
+                    xs=12,
+                    md=5,
+                    lg=2,
+                    style={
+                        'border': f'2px solid {colors[i % len(colors)]}',  # Border style with color
+                        'border-radius': '10px',  # Optional: Add rounded corners
+                        'padding': '10px',
+                        'height': '60%',
+                    }
+                )  
+                for i, artist in enumerate(art_cats)
+            ]
+        )
     ])
     return totem_div
+
 
 def artist_card(art_cat):
     '''
@@ -90,7 +108,7 @@ def artist_card(art_cat):
         dbc.CardImg(
             src=f"https://i.scdn.co/image/{art_cat.img_url_mid}",
             top=True,
-            style={'opacity': 0.3, 'width': '100%', 'heighth':'80%',},  # Set width to 100%
+            style={'opacity': 0.3, 'width': '100%', 'height':'80%',},  # Set width to 100%
         ),
         dbc.CardImgOverlay(
             dbc.CardBody(
@@ -115,6 +133,8 @@ def artist_card(art_cat):
         ),
     ])
     return this_card
+
+
 ##########################
 #the big dash figures
 def side_card(headline, img_url, title):
