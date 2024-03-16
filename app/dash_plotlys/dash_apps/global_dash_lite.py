@@ -33,13 +33,13 @@ def Add_Dash_global_view_lite(flask_app):
                 dcc.Graph(id='hbar-plot', config={'displayModeBar': False}),
                 dbc.ListGroup(
                     id='top10-today-list',
-                    children=[dbc.ListGroupItem("Top 10 Songs Today", style={'font-weight': 'bold', 'color': 'teal', 'background-color': '#343a40'})],  # Title
-                    style={'height': '400px', 'overflowY': 'auto', 'color': 'teal', 'background-color': '#343a40'}
+                    children=[dbc.ListGroupItem("Top 10 Songs Today", style={'font-weight': 'bold', 'color': 'teal',})],  # Title
+                    style={'height': '400px', 'overflowY': 'auto',}
                 ),
-            ], width={'xs': 12, 'md': 5, 'lg': 2}, style={'border': '3px solid teal', 'height': '88vh'}),
+            ], width=12, lg=4,),
             dbc.Col([
                 dcc.Graph(id='line-plot', config={'displayModeBar': False}),
-            ], width={'xs': 12, 'md': 7, 'lg': 10}, style={'border': '3px solid teal', 'height': '88vh'}),
+            ], style={'border':'2px solid teal'}, width=12, lg=8,),
         ]),
         my_icon
     ])
