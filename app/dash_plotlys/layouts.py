@@ -117,45 +117,13 @@ def artist_card(art_cat):
     return this_card
 ##########################
 #the big dash figures
-def side_cardOLD(
-        img_url,
-        title,
-
-):
-    this_card = dbc.Card([
-        dbc.CardImg(
-            src=f'https://i.scdn.co/image/{img_url}',
-            top=True,
-            style={'opacity': 0.9, 'width': '99%', 'height':'99%','max-height': '150px'},  # Set width to 100%
-        ),
-        dbc.CardImgOverlay(
-            dbc.CardBody(
-                [
-                    html.H4(
-                        children=title,
-                        className="pill-text",
-                        style={'font-size': '16px', 'text-shadow': '0px 2px 25px black'},  # Adjust font size as desired
-                    ),
-                ]
-            ),
-        ),
-    ])
-    return this_card
-
 def side_card(headline, img_url, title):
     """
-    Generate a card with an image, title, and headline.
-    
-    Args:
-    - img_url (str): URL of the image.
-    - title (str): Title of the card.
-    - headline (str): Headline text.
-    
-    Returns:
-    - dbc.Card: Card containing the specified image, title, and headline.
+    One of the three HTML cards used in the side of the weekly_big_dash app
     """
     card_content = [
-        html.P(headline, className="card-headline"),
+        html.H4(headline, className="card-headline", style={'color':'palegreen'}),
+        html.P(title, className="card-headline"),
         dbc.CardImg(
             src=f'https://i.scdn.co/image/{img_url}',
             top=True,
@@ -163,15 +131,11 @@ def side_card(headline, img_url, title):
         ),
         dbc.CardImgOverlay(
             dbc.CardBody([
-                html.H4(
-                    children=title,
-                    className="pill-text",
-                    style={'font-size': '16px', 'text-shadow': '0px 2px 25px black'}  # Adjust font size as desired
-                )
+
             ])
         )
     ]
-    return dbc.Card(card_content)
+    return dbc.Card(card_content, style={'backgroundColor':colors['background']})
 
 
 def multiple_side_cards(cards):
@@ -194,14 +158,11 @@ def rp_artists_card(truple):
             top=True,
             style={'opacity': 0.9, 'width': '99%', 'height':'99%','max-height': '150px'},  # Set width to 100%
         ),
+        html.H4(truple[0]),
         dbc.CardImgOverlay(
             dbc.CardBody(
                 [
-                    html.H4(
-                        children=truple[0],
-                        className="pill-text",
-                        style={'font-size': '16px', 'text-shadow': '0px 2px 25px black'},  # Adjust font size as desired
-                    ),
+
                     html.P(
                         truple[1],
                         style={'font-size': '14px', 'color':'wheat','text-shadow': '0px 2px 25px black'},  # Adjust font size as desired

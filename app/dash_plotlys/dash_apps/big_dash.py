@@ -25,75 +25,79 @@ def Add_Big_Dash(flask_app):
         external_stylesheets=[dbc.themes.VAPOR, '/static/css/style.css','https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'])
     
     dash_app.layout = dbc.Container([
-        navbar,
-        # headline row
-        dbc.Row([
-            dbc.Col([
-                html.Label('Week(s) Ago', style={'marginRight': '10px'}),
-                dcc.RadioItems(
-                    options=[
-                        {'label': ' One', 'value': '7'},
-                        {'label': ' Two', 'value': '14'},
-                        {'label': ' Three', 'value': '21'}
-                    ],
-                    value='7',
-                    id='daterange-selection'
+    navbar,
+    # headline row
+    dbc.Row([
+        dbc.Col([
+            html.Label('Week(s) Ago', style={'marginRight': '10px'}),
+            dcc.RadioItems(
+                options=[
+                    {'label': ' One', 'value': '7'},
+                    {'label': ' Two', 'value': '14'},
+                    {'label': ' Three', 'value': '21'}
+                ],
+                value='7',
+                id='daterange-selection'
+            ),
+        ], width=12, lg=1, class_name="dash-div"),
+        dbc.Col([
+            html.H1(
+                children='Some Spotify Stats',
+                style={'textAlign': 'center'},
+                className="dash-div"),
+            html.Div(
+                id='date-range-info',
+                style={'textAlign':'center'}
+            ),
+            html.Small(
+                "Please hit refresh after resizing (or resize after refreshing).",
+                style={'display': 'block', 'textAlign': 'center', 'margin-top': '5px', 'color': 'gray'}
+            ),
+        ], width=12, lg=11),
+    ], className="dash-div"),
+
+    # middle row
+    dbc.Row([
+        dbc.Col([
+            html.Div(id='top-subgenre-card', style={'padding':'10px'}),
+            html.Div(id='top-master-genre-card', style={'padding':'10px'}),
+            html.Div(id='top-song-card', style={'padding':'10px'}),
+        ], width=12, lg=3, className="dash-div"),
+        dbc.Col([
+            # 1 line graph
+            dbc.Row([
+                dbc.Col(dcc.Graph(id='hourly-line-graph', config={'displayModeBar': False}), style={'padding': '10px'}),  
+            ], className="dash-div", style={'margin-bottom': '20px', 'padding': '10px'}),
+
+            # 2 graphs
+            dbc.Row([
+                dbc.Col(dcc.Graph(
+                    id='known-pie-graph', 
+                    config={'displayModeBar': False}), 
+                    style={'padding': '10px'}, 
+                    className="dash-div",
+                    width=12,
+                    lg=4,
                 ),
-            ], width=2, class_name="dash-div",),
-            dbc.Col([
-                html.H1(
-                    children='Some Spotify Stats',
-                    style={'textAlign': 'center'},
-                    className="dash-div",),
-                html.Div(
-                    id='date-range-info',
-                    style={'textAlign':'center'}
-                    ),
-                    html.Small(
-                        "Please hit refresh after resizing (or resize after refreshing).",
-                        style={'display': 'block', 'textAlign': 'center', 'margin-top': '5px', 'color': 'gray'}
-                    ),
-            ], width=10),
-        ], className="dash-div",),
+                dbc.Col(dcc.Graph(
+                    id='day-of-week-graph', 
+                    config={'displayModeBar': False}), 
+                    style={'padding': '10px'}, 
+                    class_name="dash-div",
+                    width=12,
+                    lg=8,
+                ),
+            ],  style={'margin-bottom': '20px', 'padding': '10px'}),
+        ], width=12, lg=9),
+    ]),
 
-        #middle row
-        dbc.Row([
-            dbc.Col([
-                html.Div(id='top-subgenre-card', style={'padding':'10px'}),
-                html.Div(id='top-master-genre-card', style={'padding':'10px'}),
-                html.Div(id='top-song-card', style={'padding':'10px'}),
-            ], width=2, className="dash-div"),
-            dbc.Col([
-                #1linegraph
-                dbc.Row([
-                    dbc.Col(dcc.Graph(id='hourly-line-graph', config={'displayModeBar': False}), style={'padding': '10px'}),  
-                ], className="dash-div", style={'margin-bottom': '20px', 'padding': '10px'}),
-
-                #2graphs
-                dbc.Row([
-                    dbc.Col(dcc.Graph(
-                        id='known-pie-graph', 
-                        config={'displayModeBar': False}), 
-                        style={'padding': '10px'}, 
-                        className="dash-div",
-                        width=3),  
-                    dbc.Col(dcc.Graph(
-                        id='day-of-week-graph', 
-                        config={'displayModeBar': False}), 
-                        style={'padding': '10px'}, 
-                        class_name="dash-div",
-                        width=9),
-                ],  style={'margin-bottom': '20px', 'padding': '10px'}),
-            ], width=10),
-        ]),
-
-    
-        # cards row
-        dbc.Row([
-            dbc.Col(html.Div(id='top-3-cards'), style={'padding': '10px'}),  
-        ], className="dash-div", style={'padding': '10px'}),
-        layouts.my_icon,
+    # cards row
+    dbc.Row([
+        dbc.Col(html.Div(id='top-3-cards'), style={'padding': '10px'}),  
+    ], className="dash-div", style={'padding': '10px'}),
+    layouts.my_icon,
     ], fluid=True,)
+
 
     dash_app.title = 'Every Whizbang Plotly Can Muster'
 
@@ -128,7 +132,7 @@ def Add_Big_Dash(flask_app):
         )
         top_master_genre_card = layouts.side_card(
             'Top Genre',
-            rp_stuff.rando_master_genre_ac.img_url_mid,
+            rp_stuff.rando_master_genre_ac.img_url,
             rp_stuff.rando_master_genre_ac.master_genre
         )
         top_song_card = layouts.side_card(
