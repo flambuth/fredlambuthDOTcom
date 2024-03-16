@@ -5,7 +5,7 @@ from dash import Input, Output
 from datetime import date, timedelta
 
 #from dash import url
-from app.dash_plotlys.layouts import create_navbar, my_icon, artist_card_row
+from app.dash_plotlys.layouts import create_navbar, my_icon, artist_card_row, external_scripts, external_stylesheets
 
 import dash_bootstrap_components as dbc
 
@@ -20,7 +20,8 @@ def Add_Dash_year_month(flask_app):
     dash_app = Dash(
         server=flask_app, name="art_cat", 
         url_base_pathname="/spotify/monthly/",
-        external_stylesheets=[dbc.themes.VAPOR, '/static/css/style.css','https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css']
+        external_stylesheets=external_stylesheets,
+        external_scripts=external_scripts,
         )
     dash_app.layout = html.Div(
         style={'backgroundColor': 'black'},

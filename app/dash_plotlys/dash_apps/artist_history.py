@@ -18,7 +18,9 @@ def Add_Dash_art_cat(flask_app):
     dash_app = Dash(
         server=flask_app, name="art_cat", 
         url_base_pathname="/spotify/art_cat/artist/dash/",
-        external_stylesheets=[dbc.themes.VAPOR, '/static/css/style.css','https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css'])
+        external_stylesheets=layouts.external_stylesheets,
+        external_scripts=layouts.external_scripts,
+        )
     
     dash_app.layout = html.Div(
         style={'backgroundColor': 'black'},

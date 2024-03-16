@@ -4,7 +4,7 @@ from dash.dependencies import Input, Output
 #import plotly.express as px
 #import pandas as pd
 import app.dash_plotlys.global_stats as global_stats
-from app.dash_plotlys.layouts import create_navbar, my_icon
+from app.dash_plotlys.layouts import create_navbar, my_icon, external_scripts, external_stylesheets
 import dash_bootstrap_components as dbc
 from dash_bootstrap_templates import load_figure_template
 load_figure_template('VAPOR')
@@ -17,35 +17,33 @@ def Add_Dash_global_view_lite(flask_app):
     dash_app = Dash(
         server=flask_app, name="global", 
         url_base_pathname="/spotify/global/",
-        external_stylesheets=[dbc.themes.VAPOR,
-                              '/static/css/style.css',
-                              'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css',
-                              ])
+        external_stylesheets=external_stylesheets,
+        external_scripts=external_scripts)
 # App layout
     dash_app.layout = html.Div([
         navbar,
-        html.Div([
-            dcc.Dropdown(
-                id='category-dropdown',
-                options=dropdown_options,
-                value=countries[4],
-                style={'color': 'black'},
-                
-            ),
-            
-            dcc.Graph(id='hbar-plot',config={'displayModeBar': False}),
-            dbc.ListGroup(
-                id='top10-today-list',
-                children=[dbc.ListGroupItem("Top 10 Songs Today", style={'font-weight': 'bold', 'color': 'teal', 'background-color': '#343a40'})],  # Title
-                style={'height': '400px', 'overflowY': 'auto', 'color': 'teal', 'background-color': '#343a40'}
-            ),
-        ], style={'width': '20%', 'display': 'inline-block', 'verticalAlign': 'top', 'border': '3px solid teal', 'height': '88vh'}),
-
-        html.Div([
-            dcc.Graph(id='line-plot',config={'displayModeBar': False}),
-        ], style={'width': '80%', 'display': 'inline-block', 'verticalAlign': 'top', 'border': '3px solid teal', 'height': '88vh'}),
+        dbc.Row([
+            dbc.Col([
+                dcc.Dropdown(
+                    id='category-dropdown',
+                    options=dropdown_options,
+                    value=countries[4],
+                    style={'color': 'black'},
+                ),
+                dcc.Graph(id='hbar-plot', config={'displayModeBar': False}),
+                dbc.ListGroup(
+                    id='top10-today-list',
+                    children=[dbc.ListGroupItem("Top 10 Songs Today", style={'font-weight': 'bold', 'color': 'teal', 'background-color': '#343a40'})],  # Title
+                    style={'height': '400px', 'overflowY': 'auto', 'color': 'teal', 'background-color': '#343a40'}
+                ),
+            ], width={'xs': 12, 'md': 5, 'lg': 2}, style={'border': '3px solid teal', 'height': '88vh'}),
+            dbc.Col([
+                dcc.Graph(id='line-plot', config={'displayModeBar': False}),
+            ], width={'xs': 12, 'md': 7, 'lg': 10}, style={'border': '3px solid teal', 'height': '88vh'}),
+        ]),
         my_icon
     ])
+
     dash_app.title = 'Spotify Data Around The World in 90 Days'
 
 
