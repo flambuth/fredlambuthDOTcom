@@ -50,7 +50,7 @@ def Add_Big_Dash(flask_app):
                     style={'textAlign':'center'}
                     ),
                     html.Small(
-                        "Please hit refresh after resizing.",
+                        "Please hit refresh after resizing (or resize after refreshing).",
                         style={'display': 'block', 'textAlign': 'center', 'margin-top': '5px', 'color': 'gray'}
                     ),
             ], width=10),
@@ -95,7 +95,7 @@ def Add_Big_Dash(flask_app):
         layouts.my_icon,
     ], fluid=True,)
 
-    dash_app.title = 'The Big Fred Dashboard'
+    dash_app.title = 'Every Whizbang Plotly Can Muster'
 
     #the component_ids are referenced in the dash_app.layout. There are dcc or html objects that have 
     #the same id as the component ids in this dash callback.

@@ -196,7 +196,8 @@ def un_known_pie_chart(known, unknown):
         showlegend=False, 
         template='plotly_dark', 
         title=f'{len(known) + len(unknown)} distinct artists', 
-        width=500,
+        width=250,
+        #height=400,
         #displayModeBar=False
         )
     
