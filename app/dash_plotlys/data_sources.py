@@ -121,7 +121,8 @@ class Fred_Big_Dash_Stuff:
                     name,
                     len(rps_of_name),
                     top_song,
-                    rps_of_name[0].image
+                    rps_of_name[0].image,
+                    rps_of_name[0].song_link
                 ))
         return counts_imgs_tuples
     

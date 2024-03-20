@@ -134,28 +134,37 @@ def artist_card(art_cat):
     ])
     return this_card
 
-
+####################################
 ##########################
 #the big dash figures
-def side_card(headline, img_url, title):
+def side_card(headline, img_url, title, url_link, art_name):
     """
     One of the three HTML cards used in the side of the weekly_big_dash app
     """
     card_content = [
         html.H4(headline, className="card-headline", style={'color':'palegreen'}),
-        html.P(title, className="card-headline"),
-        dbc.CardImg(
-            src=f'https://i.scdn.co/image/{img_url}',
-            top=True,
-            style={'opacity': 0.9, 'width': '99%', 'height': '99%', 'max-height': '150px'}  # Set width to 100%
+        html.Hr(),
+        dbc.Row(
+            #justify="center",
+            children=[
+                dbc.Col(
+                    dbc.CardImg(
+                        src=f'https://i.scdn.co/image/{img_url}',
+                        top=True,
+                        title=art_name,
+                        style={'opacity': 0.9, 'width': '99%', 'height': '99%', 'max-height': '150px', 'max-width':'320px',}  
+                    )
+                )
+            ]
         ),
         dbc.CardImgOverlay(
             dbc.CardBody([
-
+                html.A(title, href=url_link)
             ])
         )
     ]
     return dbc.Card(card_content, style={'backgroundColor':colors['background']})
+
 
 
 def multiple_side_cards(cards):
@@ -171,30 +180,46 @@ def multiple_side_cards(cards):
     column_content = [dbc.Row(dbc.Col(card, width=12)) for card in cards]
     return dbc.Col(column_content, width=2, className="dash-div")
 
-def rp_artists_card(truple):
-    this_card = dbc.Card([
-        dbc.CardImg(
-            src=truple[3],
-            top=True,
-            style={'opacity': 0.9, 'width': '99%', 'height':'99%','max-height': '150px'},  # Set width to 100%
-        ),
-        html.H4(truple[0]),
-        dbc.CardImgOverlay(
-            dbc.CardBody(
-                [
 
-                    html.P(
-                        truple[1],
-                        style={'font-size': '14px', 'color':'wheat','text-shadow': '0px 2px 25px black'},  # Adjust font size as desired
+#############
+#bottom row of weekly big_dash
+def rp_artists_card(truple):
+    '''
+    the ones at the bottom of the dash
+    '''
+    this_card = html.A(
+        dbc.Card(
+            style={'background-color': colors['background']},
+            children=[
+                dbc.CardImg(
+                    src=truple[3],
+                    top=True,
+                    style={'opacity': 0.9, 'width': '99%', 'height':'99%','max-height': '150px'},
+                ),
+                html.H4(truple[0]),
+                dbc.CardImgOverlay(
+                    dbc.CardBody(
+                        [
+                            html.P(
+                                truple[1],
+                                style={'font-size': '14px', 'color':'wheat','text-shadow': '0px 2px 25px black'},
+                            ),
+                        ]
                     ),
-                ]
-            ),
+                ),
+            ]
         ),
-    ])
+        href=truple[4],
+        target="_blank",
+        title="Link to song from artist in Spotify",
+    )
     return this_card
 
 
-def top_3_imgs(truples):
+def top_artists_imgs(truples):
+    '''
+    Iterates through rp_artists_cards. Adds a headline.
+    '''
     totem_div = html.Div(children=[
         html.H4('Top Artists'),
         dbc.Row([
@@ -202,7 +227,7 @@ def top_3_imgs(truples):
                 rp_artists_card(truple),
             ])  
             for truple in truples
-        ])
+        ][::-1])
     ])
     return totem_div
 
