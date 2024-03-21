@@ -57,7 +57,7 @@ def create_navbar():
                 dbc.NavItem(html.A([
                     html.I(className="fas fa-user"),
                     html.Span(" Account", className="nav-link-text"),
-                ], className="nav-link", href="/user_page")),
+                ], className="nav-link", href="/account")),
                 # Add more links as needed
             ]),
         ])

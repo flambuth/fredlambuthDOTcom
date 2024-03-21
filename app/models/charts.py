@@ -204,12 +204,10 @@ class recently_played(db.Model):
     
     @classmethod
     def get_rps_from_n_days_ago(cls, n):
-        delta = timedelta(days=n)
+        delta = timedelta(days=n-1)
         start_date = cls.latest_played_datetime() - delta
-        rps = cls.get_timeframe_of_rp_records(
-            start_date,
-            cls.latest_played_datetime()
-        )
+        #end_date = cls.latest_played_datetime()
+        rps = cls.query.filter(cls.last_played >= start_date).all()
         return rps
 
     @classmethod
