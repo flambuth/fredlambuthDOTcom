@@ -50,7 +50,7 @@ def create_app(config_class=Config):
     
     @app.route('/resume')
     def serve_resume_pdf():
-        filename = 'static/resume_AST.pdf'
+        filename = 'static/Fredrick_Lambuth_Resume.pdf'
         return send_file(filename, as_attachment=False)
 
     @app.route('/online_resume')
