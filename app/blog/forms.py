@@ -70,3 +70,13 @@ class SubmitPictureForm(FlaskForm):
             field.data.seek(0)  # Reset file pointer to the beginning
             if file_size > self.max_file_size:
                 raise ValidationError('File size exceeds the maximum allowed (5 MB). Please choose a smaller file.')
+
+class SubmitBlogForm(FlaskForm):
+    '''
+    THIS ONE
+    '''
+    title = StringField('Title', validators=[DataRequired(), Length(min=4, max=50)])
+    content = TextAreaField('Content', validators=[DataRequired()])
+
+    picture = FileField('Picture', validators=[FileAllowed(['jpg', 'jpeg', 'png'], 'Only jpg, jpeg, and png files under 5mb')])
+    submit = SubmitField('Register')
