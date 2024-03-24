@@ -52,6 +52,11 @@ def create_app(config_class=Config):
     def serve_resume_pdf():
         filename = 'static/Fredrick_Lambuth_Resume.pdf'
         return send_file(filename, as_attachment=False)
+    
+    @app.route('/podcast')
+    def serve_podcast_file():
+        filename = 'static/podcast_1.m4a'
+        return send_file(filename, as_attachment=False)
 
     @app.route('/online_resume')
     def online_resume():
